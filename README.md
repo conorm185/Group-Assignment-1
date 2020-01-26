@@ -16,7 +16,7 @@
 
 8. Click add external JAR and navigate to where you have your group project repositiry
 
-9. Select json-simple-1.1 and open it
+9. Select json-simple-1.1 (or gson if we decide to use that) and open it 
 
 10. Apply and close.
 
