@@ -15,7 +15,7 @@ public class Main {
 		// typecasting obj to JSONObject
 		JSONObject jo = (JSONObject) obj;
 
-		// ShippingUI ui = new ShippingUI();
+		ShippingUI ui = new ShippingUI();
 		////////////////////////
 		Gson gson = new Gson();
 		Object object = gson.fromJson(new FileReader("example.json"), Object.class);

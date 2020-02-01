@@ -2,17 +2,26 @@ package ics372.assignment1.controller;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
+import javax.swing.JTextArea;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import ics372.assignment1.model.Company;
 
 public class ShippingUI {
+	private Company company;
+	private String[] warehouseIdList;
 
 	public ShippingUI() {
+		// company = Company.getInstance();
+
 		JFrame mainFrame = new JFrame();
 		mainFrame.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
 
@@ -23,6 +32,9 @@ public class ShippingUI {
 		JPanel panel_1 = new JPanel();
 		panel.add(panel_1, BorderLayout.WEST);
 		panel_1.setLayout(new GridLayout(5, 1, 0, 0));
+
+		JTextArea textArea = new JTextArea();
+		panel.add(textArea, BorderLayout.CENTER);
 
 		JButton btnAddIncomingShipment = new JButton("Add Incoming Shipment");
 		panel_1.add(btnAddIncomingShipment);
@@ -44,13 +56,27 @@ public class ShippingUI {
 		panel_2.add(comboBox);
 
 		JButton btnImportJson = new JButton("Import JSON");
+		btnImportJson.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON Shipment Files", "json");
+				chooser.setFileFilter(filter);
+
+				int returnVal = chooser.showOpenDialog(mainFrame);
+
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					textArea.append("File selected: " + chooser.getSelectedFile().getName());
+					// Company.importShipments();
+				}
+			}
+		});
 		panel_2.add(btnImportJson);
 
-		JScrollPane scrollPane = new JScrollPane();
-		panel.add(scrollPane, BorderLayout.CENTER);
-
-		JTextPane textPane = new JTextPane();
-		scrollPane.setViewportView(textPane);
+		mainFrame.setSize(900, 500);
+		mainFrame.setVisible(true);
 	}
 
+	public void actionPerformed(ActionEvent e) {
+
+	}
 }
