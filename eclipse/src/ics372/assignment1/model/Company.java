@@ -17,16 +17,20 @@ public class Company {
 	 * 
 	 * public static Company getInstance()
 	 * 
+	 * public String[] getWarehouseIds()
+	 * 
 	 * public Warehouse[] getWarehouses()
 	 * 
 	 * public Warehouse getWarehouse(String warehouseId)
 	 * 
 	 * public void addIncomingShipment(Shipment shipment)
 	 * 
-	 * public void enableFreightReciept(String warehouseId)
+	 * public void toggleFreightReciept(String warehouseId)
 	 * 
-	 * public void disableFreightReciept(String warehouseId)
+	 * public String getFreightRecieptStatus(String WarehouseId)
 	 * 
-	 * public void importShipments(String jsonShipmentList)
+	 * public void importShipments(File jsonShipmentList)
+	 * 
+	 * public void exportContentToJSON(String warehouseId)
 	 */
 }
