@@ -91,7 +91,7 @@ public class Company {
 			} else {
 				log(String.format("Shipment: %s denied at Warehouse: %s", shipment.getShipment_id(),
 						warehouse.getWarehouse_id()));
-				// throw exception
+				throw new IllegalArgumentException();
 			}
 		} else {
 			addWarehouse(shipment.getWarehouse_id());
@@ -156,7 +156,7 @@ public class Company {
 	 * 
 	 * @param entry
 	 */
-	public void log(String entry) {
+	private void log(String entry) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(company_log, true));) {
