@@ -3,6 +3,6 @@ module GroupAssignment1 {
 	requires json.simple;
 	requires java.desktop;
 	requires com.google.gson;
-	exports ics372.assignment1.model;
+	//exports ics372.assignment1.model;
 
 }

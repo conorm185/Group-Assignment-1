@@ -1,5 +1,6 @@
 package ics372.assignment1.model;
 
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
