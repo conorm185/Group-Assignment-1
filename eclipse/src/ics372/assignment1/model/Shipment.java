@@ -129,4 +129,19 @@ public class Shipment {
 				warehouse_id, shipment_method, shipment_id, weight, formatter.format(receipt));
 		return outputString;
 	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}		
+		if (!(obj instanceof Shipment)) { 
+            return false; 
+        } 		
+		Shipment shipment = (Shipment) obj;
+		return this.shipment_id.equalsIgnoreCase(shipment.shipment_id);
+	}
 }

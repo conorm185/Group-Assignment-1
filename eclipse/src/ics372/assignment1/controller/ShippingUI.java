@@ -164,7 +164,7 @@ public class ShippingUI {
 	 * 
 	 */
 	private void listenerHelperAddShipment() {
-		textArea.append(String.format("adding Shipment to %s\n", warehouse_selector.getSelectedItem()));
+		log(String.format("adding Shipment to %s\n", warehouse_selector.getSelectedItem()));
 		AddShipmentUI ui = new AddShipmentUI((String) warehouse_selector.getSelectedItem());
 	}
 
@@ -192,10 +192,13 @@ public class ShippingUI {
 	 * 
 	 */
 	private void listenerHelperAddWarehouse() {
-		company.addWarehouse(warehouse_id_field.getText());
-		log(String.format("warehouse: %s added to company", warehouse_id_field.getText()));
+		if (company.addWarehouse(warehouse_id_field.getText())) {
+			log(String.format("warehouse: %s added to company", warehouse_id_field.getText()));
+			comboBoxRefresh();
+		} else {
+			log(String.format("warehouse: %s already in list", warehouse_id_field.getText()));
+		}
 		warehouse_id_field.setText("");
-		comboBoxRefresh();
 	}
 
 	/**
@@ -323,22 +326,19 @@ public class ShippingUI {
 		 */
 		private void addShipment(String warehouse_id) {
 			try {
-
 				double weight = Double.parseDouble(weight_field.getText());
 				ShippingMethod method = (ShippingMethod) comboBox.getSelectedItem();
 				String shipment_id = shipment_id_field.getText();
 				Shipment thisShipment = new Shipment(warehouse_id, method, shipment_id, weight,
 						System.currentTimeMillis());
-				try {
-					company.addIncomingShipment(thisShipment);
+				if (company.addIncomingShipment(thisShipment)) {
 					log(String.format("shipment: %s added to warehouse: %s", shipment_id, warehouse_id));
-				} catch (IllegalArgumentException e) {
+				} else {
 					log(String.format("shipment: %s denied reciept at warehouse: %s", shipment_id, warehouse_id));
 				}
 				mainFrame.dispose();
 			} catch (NumberFormatException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				log(String.format("shipment denied invalid input."));
 			}
 		}
 	}

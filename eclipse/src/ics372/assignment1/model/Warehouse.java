@@ -77,7 +77,7 @@ public class Warehouse {
 	 * @return
 	 */
 	public boolean addShipment(Shipment shipment) {
-		if (receiving_freight == true) {
+		if (receiving_freight == true && !(warehouse_contents.contains(shipment))) {
 			warehouse_contents.add(shipment);
 			return true;
 		} else {
@@ -113,5 +113,20 @@ public class Warehouse {
 		outputString.substring(0, outputString.length() - 1);// remove last comma
 		outputString += "]";
 		return outputString;
+	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}		
+		if (!(obj instanceof Warehouse)) { 
+            return false; 
+        } 		
+		Warehouse warehouse = (Warehouse) obj;
+		return this.warehouse_id.equalsIgnoreCase(warehouse.warehouse_id);
 	}
 }

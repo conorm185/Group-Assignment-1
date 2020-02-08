@@ -80,22 +80,28 @@ public class Company {
 	/**
 	 * 
 	 * @param shipment
+	 * @return
 	 */
-	public void addIncomingShipment(Shipment shipment) {
+	public boolean addIncomingShipment(Shipment shipment) {
+		if (shipment.getWarehouse_id() == null) {
+			log(String.format("Shipment: %s denied.  warehouse_id cannot be null", shipment.getShipment_id()));
+			return false;
+		}
+		
 		Warehouse warehouse = this.getWarehouse(shipment.getWarehouse_id());
 		if (warehouse != null) {
-			if (warehouse.isReceiving_freight()) {
-				warehouse.addShipment(shipment);
+			if (warehouse.isReceiving_freight() && warehouse.addShipment(shipment)) {
 				log(String.format("Shipment: %s added to Warehouse: %s", shipment.getShipment_id(),
 						warehouse.getWarehouse_id()));
+				return true;
 			} else {
-				log(String.format("Shipment: %s denied at Warehouse: %s", shipment.getShipment_id(),
+				log(String.format("Shipment: %s denied at Warehouse: %s ", shipment.getShipment_id(),
 						warehouse.getWarehouse_id()));
-				throw new IllegalArgumentException();
+				return false;
 			}
 		} else {
 			addWarehouse(shipment.getWarehouse_id());
-			addIncomingShipment(shipment);
+			return addIncomingShipment(shipment);
 		}
 	}
 
@@ -112,10 +118,15 @@ public class Company {
 	 * 
 	 * @param warehouse_id
 	 */
-	public synchronized void addWarehouse(String warehouse_id) {
-		if (this.getWarehouse(warehouse_id) == null) {
-			warehouses.add(new Warehouse(warehouse_id));
+	public synchronized boolean addWarehouse(String warehouse_id) {
+		Warehouse warehouse = new Warehouse(warehouse_id);
+		if (warehouse_id != null && !(warehouses.contains(warehouse))) {
+			warehouses.add(warehouse);
 			log(String.format("Warehouse: %s added to warehouse list", warehouse_id));
+			return true;
+		} else {
+			log(String.format("Warehouse: %s already on list", warehouse_id));
+			return false;
 		}
 	}
 
