@@ -27,7 +27,6 @@ class ShippingTest {
 	 */
 	@BeforeEach
 	void setUp() throws Exception {
-		assert true;
 	}
 
 	@Test
