@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -116,7 +117,12 @@ public class ShippingUI {
 
 		btnExportContent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				company.exportContentToJSON((String) warehouse_selector.getSelectedItem());
+				try {
+					company.exportContentToJSON((String) warehouse_selector.getSelectedItem());
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 
