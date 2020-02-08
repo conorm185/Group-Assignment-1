@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * Shipment class composed of getters and setters to access the different attributes of a shipment
  * 
  * @author nicole
  *
@@ -16,7 +17,7 @@ public class Shipment {
 	private Long receipt_date;
 
 	/**
-	 * 
+	 * ShippingMethod enum
 	 * 
 	 */
 	public enum ShippingMethod {
@@ -24,6 +25,7 @@ public class Shipment {
 	}
 
 	/**
+	 * Shipment constructor
 	 * 
 	 * @param warehouse_id
 	 * @param shipment_method
@@ -41,7 +43,7 @@ public class Shipment {
 	}
 
 	/**
-	 * 
+	 * Default constructor
 	 */
 	public Shipment() {
 		this(null, null, null, 0, (long) 0);
@@ -118,7 +120,7 @@ public class Shipment {
 	}
 
 	/**
-	 * 
+	 * returns a String containing the information of a shipment
 	 */
 	public String toString() {
 		Date receipt = new Date(receipt_date);

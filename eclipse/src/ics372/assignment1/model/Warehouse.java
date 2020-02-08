@@ -3,6 +3,7 @@ package ics372.assignment1.model;
 import java.util.ArrayList;
 
 /**
+ * Warehouse class that holds a collection of shipments 
  * 
  * @author nicole
  *
@@ -13,7 +14,7 @@ public class Warehouse {
 	private transient boolean receiving_freight;
 
 	/**
-	 * 
+	 * Warehouse constructor 
 	 * @param warehouse_id
 	 */
 	public Warehouse(String warehouse_id) {
@@ -23,7 +24,7 @@ public class Warehouse {
 	}
 
 	/**
-	 * 
+	 * Default constructor 
 	 */
 	public Warehouse() {
 		this(null);
@@ -58,6 +59,7 @@ public class Warehouse {
 	}
 
 	/**
+	 * receiving flag for a new shipment
 	 * @return the receiving_freight
 	 */
 	public boolean isReceiving_freight() {
@@ -65,16 +67,16 @@ public class Warehouse {
 	}
 
 	/**
-	 * @param receiving_freight the receiving_freight to set
+	 * @param receiving_freight the receiving_freight to be set
 	 */
 	public void setReceiving_freight(boolean receiving_freight) {
 		this.receiving_freight = receiving_freight;
 	}
 
 	/**
-	 * 
+	 * method used to add a shipment to the warehouse_contents collection
 	 * @param shipment
-	 * @return
+	 * @return true if shipment was added to the warehouse_contents, and false if the shipment was not added
 	 */
 	public boolean addShipment(Shipment shipment) {
 		if (receiving_freight == true) {
@@ -86,9 +88,9 @@ public class Warehouse {
 	}
 
 	/**
-	 * 
+	 * method used to remove a shipment from the warehouse_contents collection
 	 * @param shipment_id
-	 * @return
+	 * @return true if the shipment was removed from the warehouse_contents, and false if the shipment was not removed
 	 */
 	public boolean removeShipment(String shipment_id) {
 		for (Shipment s : warehouse_contents) {
@@ -101,7 +103,7 @@ public class Warehouse {
 	}
 
 	/**
-	 * 
+	 * method that returns a String of the contents within a warehouse
 	 */
 	public String toString() {
 		String outputString = String.format(
