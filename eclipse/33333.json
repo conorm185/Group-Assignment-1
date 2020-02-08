@@ -1,0 +1,25 @@
+{
+  "warehouse_contents": [
+    {
+      "warehouse_id": "33333",
+      "shipment_method": "air",
+      "shipment_id": "22",
+      "weight": 22.0,
+      "receipt_date": 1581176968621
+    },
+    {
+      "warehouse_id": "33333",
+      "shipment_method": "air",
+      "shipment_id": "33",
+      "weight": 33.0,
+      "receipt_date": 1581176970701
+    },
+    {
+      "warehouse_id": "33333",
+      "shipment_method": "air",
+      "shipment_id": "44",
+      "weight": 44.0,
+      "receipt_date": 1581176973141
+    }
+  ]
+}

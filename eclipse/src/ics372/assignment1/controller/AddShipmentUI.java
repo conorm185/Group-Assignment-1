@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDateTime;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -104,7 +103,7 @@ public class AddShipmentUI {
 			double weight = Double.parseDouble(weight_field.getText());
 			ShippingMethod method = (ShippingMethod) comboBox.getSelectedItem();
 			String shipment_id = shipment_id_field.getText();
-			Shipment thisShipment = new Shipment(warehouse_id, method, shipment_id, weight, LocalDateTime.now());
+			Shipment thisShipment = new Shipment(warehouse_id, method, shipment_id, weight, System.currentTimeMillis());
 			company.addIncomingShipment(thisShipment);
 			mainFrame.dispose();
 		} catch (NumberFormatException e1) {

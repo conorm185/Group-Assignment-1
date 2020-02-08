@@ -1,6 +1,7 @@
 package ics372.assignment1.model;
 
-import java.time.LocalDateTime;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 
@@ -8,11 +9,11 @@ import java.time.LocalDateTime;
  *
  */
 public class Shipment {
-	String warehouse_id;
-	ShippingMethod shipment_method;
-	String shipment_id;
-	double weight;
-	LocalDateTime receipt_date;
+	private String warehouse_id;
+	private ShippingMethod shipment_method;
+	private String shipment_id;
+	private double weight;
+	private Long receipt_date;
 
 	/**
 	 * 
@@ -31,12 +32,19 @@ public class Shipment {
 	 * @param receipt_date
 	 */
 	public Shipment(String warehouse_id, ShippingMethod shipment_method, String shipment_id, double weight,
-			LocalDateTime receipt_date) {
+			Long receipt_date) {
 		this.warehouse_id = warehouse_id;
 		this.shipment_method = shipment_method;
 		this.shipment_id = shipment_id;
 		this.weight = weight;
 		this.receipt_date = receipt_date;
+	}
+
+	/**
+	 * 
+	 */
+	public Shipment() {
+		this(null, null, null, 0, (long) 0);
 	}
 
 	/**
@@ -98,14 +106,14 @@ public class Shipment {
 	/**
 	 * @return the receipt_date
 	 */
-	public LocalDateTime getReceipt_date() {
+	public Long getReceipt_date() {
 		return receipt_date;
 	}
 
 	/**
 	 * @param receipt_date the receipt_date to set
 	 */
-	public void setReceipt_date(LocalDateTime receipt_date) {
+	public void setReceipt_date(Long receipt_date) {
 		this.receipt_date = receipt_date;
 	}
 
@@ -113,8 +121,12 @@ public class Shipment {
 	 * 
 	 */
 	public String toString() {
-		String outputString = "";
-
+		Date receipt = new Date(receipt_date);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		String outputString = String.format(
+				"\n\"warehouse_id\":\"%s\",\n" + "\"shipment_method\":\"%s\",\n" + "\"shipment_id\":\"%s\",\n"
+						+ "\"weight\":\"%f\",\n" + "\"receipt_date\":\"%s\",\n",
+				warehouse_id, shipment_method, shipment_id, weight, formatter.format(receipt));
 		return outputString;
 	}
 }
