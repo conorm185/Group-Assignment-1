@@ -11,12 +11,17 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/conor/Desktop/java libraries/json-simple-1.1.jar">
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GSON">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GSON">
+	<classpathentry kind="lib" path="C:/Users/ggauc/OneDrive/Desktop/Github/Group-Assignment-1/gson-2.8.6.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/ggauc/OneDrive/Desktop/Github/Group-Assignment-1/json-simple-1.1.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
