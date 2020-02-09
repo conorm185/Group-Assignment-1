@@ -4,7 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Shipment class composed of getters and setters to access the different attributes of a shipment
+ * Shipment class composed of getters and setters to access the different
+ * attributes of a shipment
  * 
  * @author nicole
  *
@@ -35,9 +36,9 @@ public class Shipment {
 	 */
 	public Shipment(String warehouse_id, ShippingMethod shipment_method, String shipment_id, double weight,
 			Long receipt_date) {
-		this.warehouse_id = warehouse_id;
+		this.warehouse_id = (warehouse_id == null) ? "" : warehouse_id;
 		this.shipment_method = shipment_method;
-		this.shipment_id = shipment_id;
+		this.shipment_id = (shipment_id == null) ? "" : shipment_id;
 		this.weight = weight;
 		this.receipt_date = receipt_date;
 	}
@@ -126,12 +127,12 @@ public class Shipment {
 		Date receipt = new Date(receipt_date);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		String outputString = String.format(
-				"\n\"warehouse_id\":\"%s\",\n" + "\"shipment_method\":\"%s\",\n" + "\"shipment_id\":\"%s\",\n"
-						+ "\"weight\":\"%f\",\n" + "\"receipt_date\":\"%s\",\n",
+				"\n\t\"warehouse_id\":\"%s\",\n" + "\t\"shipment_method\":\"%s\",\n" + "\t\"shipment_id\":\"%s\",\n"
+						+ "\t\"weight\":\"%f\",\n" + "\t\"receipt_date\":\"%s\",\n",
 				warehouse_id, shipment_method, shipment_id, weight, formatter.format(receipt));
 		return outputString;
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -139,10 +140,10 @@ public class Shipment {
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
-		}		
-		if (!(obj instanceof Shipment)) { 
-            return false; 
-        } 		
+		}
+		if (!(obj instanceof Shipment)) {
+			return false;
+		}
 		Shipment shipment = (Shipment) obj;
 		return this.shipment_id.equalsIgnoreCase(shipment.shipment_id);
 	}

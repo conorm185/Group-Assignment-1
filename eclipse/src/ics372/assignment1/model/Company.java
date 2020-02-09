@@ -78,24 +78,28 @@ public class Company {
 	}
 
 	/**
+	 * Method to attempt to add a shipment to a corresponding warehouse, or create a
+	 * new warehouse if one does not currently exist. log the outcome.
 	 * 
 	 * @param shipment
 	 * @return
 	 */
 	public boolean addIncomingShipment(Shipment shipment) {
-		
+
 		Warehouse warehouse = this.getWarehouse(shipment.getWarehouse_id());
-		if (warehouse != null) {
-			if (warehouse.isReceiving_freight() && warehouse.addShipment(shipment)) {
+		if (warehouse != null) { // if the warehouse exists
+			if (warehouse.isReceiving_freight() && warehouse.addShipment(shipment)) { // if the warehouse is receiving
+																						// freight and add was succesful
 				log(String.format("Shipment: %s added to Warehouse: %s", shipment.getShipment_id(),
 						warehouse.getWarehouse_id()));
 				return true;
-			} else {
+			} else { // otherwise log the failure
 				log(String.format("Shipment: %s denied at Warehouse: %s ", shipment.getShipment_id(),
 						warehouse.getWarehouse_id()));
 				return false;
 			}
-		} else {
+		} else { // if the warehouse doesn't exist, create one and then attempt add again.
+					// (necessary for importing)
 			addWarehouse(shipment.getWarehouse_id());
 			return addIncomingShipment(shipment);
 		}
@@ -186,9 +190,14 @@ public class Company {
 		Warehouse temp = new Warehouse("tempuse");
 		temp = gson.fromJson(new FileReader(jsonShipmentList), Warehouse.class);
 		log(String.format("importing shipments from %s", jsonShipmentList.getName()));
-		for (Shipment s : temp.getWarehouse_contents()) {
-			addIncomingShipment(s);
+		if (temp != null) { // if the .json was not empty
+			for (Shipment s : temp.getWarehouse_contents()) {
+				addIncomingShipment(s);
+			}
+		} else {
+			log("import empty");
 		}
+
 	}
 
 	/**
@@ -212,6 +221,7 @@ public class Company {
 	 * @return
 	 */
 	public String readWarehouseContent(String warehouse_id) {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		return this.getWarehouse(warehouse_id).toString();
 	}
 }
