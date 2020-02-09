@@ -1,0 +1,11 @@
+{
+  "warehouse_contents": [
+    {
+      "warehouse_id": "33333",
+      "shipment_method": "air",
+      "shipment_id": "66",
+      "weight": 66.0,
+      "receipt_date": 1581184798802
+    }
+  ]
+}
