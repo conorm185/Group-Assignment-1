@@ -164,8 +164,12 @@ public class ShippingUI {
 	 * 
 	 */
 	private void listenerHelperAddShipment() {
-		log(String.format("adding Shipment to %s\n", warehouse_selector.getSelectedItem()));
-		AddShipmentUI ui = new AddShipmentUI((String) warehouse_selector.getSelectedItem());
+		if(warehouse_selector.getSelectedItem() != null) {
+			log(String.format("adding Shipment to %s\n", warehouse_selector.getSelectedItem()));
+			AddShipmentUI ui = new AddShipmentUI((String) warehouse_selector.getSelectedItem());
+		} else {
+			log(String.format("no warehouse selected."));
+		}
 	}
 
 	/**

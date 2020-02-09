@@ -83,10 +83,6 @@ public class Company {
 	 * @return
 	 */
 	public boolean addIncomingShipment(Shipment shipment) {
-		if (shipment.getWarehouse_id() == null) {
-			log(String.format("Shipment: %s denied.  warehouse_id cannot be null", shipment.getShipment_id()));
-			return false;
-		}
 		
 		Warehouse warehouse = this.getWarehouse(shipment.getWarehouse_id());
 		if (warehouse != null) {
@@ -120,7 +116,7 @@ public class Company {
 	 */
 	public synchronized boolean addWarehouse(String warehouse_id) {
 		Warehouse warehouse = new Warehouse(warehouse_id);
-		if (warehouse_id != null && !(warehouses.contains(warehouse))) {
+		if (!(warehouses.contains(warehouse))) {
 			warehouses.add(warehouse);
 			log(String.format("Warehouse: %s added to warehouse list", warehouse_id));
 			return true;
@@ -135,9 +131,7 @@ public class Company {
 	 * @param warehouse_id
 	 */
 	private void removeWarehouse(String warehouse_id) {
-		Warehouse warehouse = this.getWarehouse(warehouse_id);
-		warehouses.remove(warehouse);
-
+		warehouses.remove(new Warehouse(warehouse_id));
 	}
 
 	/**
