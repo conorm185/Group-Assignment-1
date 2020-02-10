@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -15,6 +14,43 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
+
+/*
+ * Model Constraints: 
+ * Company constraints:
+ * 
+ * 		Only one Company Object may exist at a time (a singleton)
+ * 
+ * 		a company may not have two Warehouses with the same company_id (enforced by Company.addWarehouse())
+ * 
+ * Warehouse constraints:
+ * 
+ * 		warehouse_id may not be null. (enforced by Warehouse.Warehouse() and Warehouse.setWarehouse_id())
+ * 
+ * 		warehouse_id may not be changed once set. (private setter)
+ * 
+ * 		a warehouse may not contain two Shipments with the same shpiment_id. (enforced by Warehouse.addShipment())
+ * 
+ * 		a warehouse may not receive a shipment if receiving_freight is set to false. (enforced by Warehouse.addShipment())
+ * 
+ * 		two Warehouses are equal according to .equals() if they have the same warehouse_id
+ * 
+ * Shipment constraints:
+ * 
+ * 		shipment_id may not be null.(enforced by Shipment.Shipment() and Shipment.setShipment_id())
+ * 
+ * 		shipment_id may not be changed, once set (private setter)
+ * 
+ * 		warehouse_id may not be null.(enforced by Shipment.Shipment() and Shipment.setWarehouse_id())
+ * 
+ * 		two Shipments are equal according to .equals() if they have the same shipment_id
+ * 
+ * Potential issues:
+ * 		
+ * 		not exhaustively tested for multi-user thread safety. (not yet a requirement)
+ * 
+ * 		does not enforce unique shipment_ids between warehouses  (will need fixing if moving shipments is allowed)
+ */
 
 /**
  * 
@@ -25,7 +61,6 @@ public class Company {
 
 	private static Company company_instance = null;
 	private File company_log;
-	PrintWriter output;
 	private ArrayList<Warehouse> warehouses;
 
 	/**
@@ -60,7 +95,7 @@ public class Company {
 		for (Warehouse warehouse : warehouses) {
 			ids.add(warehouse.getWarehouse_id());
 		}
-		return ids; // maybe .clone()
+		return ids;
 	}
 
 	/**
@@ -88,8 +123,7 @@ public class Company {
 
 		Warehouse warehouse = this.getWarehouse(shipment.getWarehouse_id());
 		if (warehouse != null) { // if the warehouse exists
-			if (warehouse.isReceiving_freight() && warehouse.addShipment(shipment)) { // if the warehouse is receiving
-																						// freight and add was succesful
+			if (warehouse.addShipment(shipment)) { // if the add was succesful
 				log(String.format("Shipment: %s added to Warehouse: %s", shipment.getShipment_id(),
 						warehouse.getWarehouse_id()));
 				return true;
@@ -110,8 +144,14 @@ public class Company {
 	 * @param shipment_id
 	 * @param warehouse_id
 	 */
-	private void removeShipment(String shipment_id, String warehouse_id) {
-		this.getWarehouse(warehouse_id).removeShipment(shipment_id);
+	private boolean removeShipment(String shipment_id, String warehouse_id) {
+		Warehouse warehouse = this.getWarehouse(warehouse_id);
+		if (warehouse != null) {
+			return warehouse.removeShipment(shipment_id);
+		} else {
+			log(String.format("Warehouse: %s not found", warehouse_id));
+			return false;
+		}
 	}
 
 	/**
@@ -120,7 +160,7 @@ public class Company {
 	 */
 	public synchronized boolean addWarehouse(String warehouse_id) {
 		Warehouse warehouse = new Warehouse(warehouse_id);
-		if (!(warehouses.contains(warehouse))) {
+		if (!(warehouses.contains(warehouse))) { // if the warehouse isn't already on the list
 			warehouses.add(warehouse);
 			log(String.format("Warehouse: %s added to warehouse list", warehouse_id));
 			return true;
@@ -134,8 +174,15 @@ public class Company {
 	 * 
 	 * @param warehouse_id
 	 */
-	private void removeWarehouse(String warehouse_id) {
-		warehouses.remove(new Warehouse(warehouse_id));
+	private boolean removeWarehouse(String warehouse_id) {
+		Warehouse warehouse = new Warehouse(warehouse_id);
+		if (!(warehouses.contains(warehouse))) { // if the warehouse isn't already on the list
+			log(String.format("Warehouse: %s removed from warehouse list", warehouse_id));
+			return warehouses.remove(warehouse);
+		} else {
+			log(String.format("Warehouse: %s not on list", warehouse_id));
+			return false;
+		}
 	}
 
 	/**
@@ -144,12 +191,16 @@ public class Company {
 	 */
 	public void toggleFreightReciept(String warehouseId) {
 		Warehouse warehouse = this.getWarehouse(warehouseId);
-		if (warehouse.isReceiving_freight()) {
-			warehouse.setReceiving_freight(false);
+		if (warehouse != null) {
+			if (warehouse.isReceiving_freight()) {
+				warehouse.setReceiving_freight(false);
+			} else {
+				warehouse.setReceiving_freight(true);
+			}
+			log(String.format("Warehouse: %s freight status set to %b", warehouseId, warehouse.isReceiving_freight()));
 		} else {
-			warehouse.setReceiving_freight(true);
+			log(String.format("Warehouse: %s not found", warehouseId));
 		}
-		log(String.format("Warehouse: %s freight status set to %b", warehouseId, warehouse.isReceiving_freight()));
 	}
 
 	/**
@@ -158,7 +209,13 @@ public class Company {
 	 * @return
 	 */
 	public boolean getFreightReceiptStatus(String warehouseId) {
-		return this.getWarehouse(warehouseId).isReceiving_freight();
+		Warehouse warehouse = this.getWarehouse(warehouseId);
+		if (warehouse != null) {
+			return warehouse.isReceiving_freight();
+		} else {
+			log(String.format("Warehouse: %s not found", warehouseId));
+			return false;
+		}
 	}
 
 	/**
@@ -221,7 +278,11 @@ public class Company {
 	 * @return
 	 */
 	public String readWarehouseContent(String warehouse_id) {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		return this.getWarehouse(warehouse_id).toString();
+		Warehouse warehouse = this.getWarehouse(warehouse_id);
+		if (warehouse != null) {
+			return warehouse.toString();
+		} else {
+			return "Warehouse not found!";
+		}
 	}
 }

@@ -2,6 +2,21 @@ package ics372.assignment1.model;
 
 import java.util.ArrayList;
 
+/*
+ * Warehouse constraints:
+ * 
+ * 		warehouse_id may not be null. (enforced by Warehouse.Warehouse() and Warehouse.setWarehouse_id())
+ * 
+ * 		warehouse_id may not be changed once set. (private setter)
+ * 
+ * 		a warehouse may not contain two Shipments with the same shpiment_id. (enforced by Warehouse.addShipment())
+ * 
+ * 		a warehouse may not receive a shipment if receiving_freight is set to false. (enforced by Warehouse.addShipment())
+ * 
+ * 		two Warehouses are equal according to .equals() if they have the same warehouse_id
+ * 
+ */
+
 /**
  * Warehouse class that holds a collection of shipments
  * 
@@ -55,8 +70,8 @@ public class Warehouse {
 	/**
 	 * @param warehouse_id the warehouse_id to set
 	 */
-	public void setWarehouse_id(String warehouse_id) {
-		this.warehouse_id = warehouse_id;
+	private void setWarehouse_id(String warehouse_id) {
+		this.warehouse_id = (warehouse_id == null) ? "" : warehouse_id;
 	}
 
 	/**

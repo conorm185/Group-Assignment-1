@@ -3,9 +3,23 @@ package ics372.assignment1.model;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/*
+ * Shipment constraints:
+ * 
+ * 		shipment_id may not be null.(enforced by Shipment.Shipment() and Shipment.setShipment_id())
+ * 
+ * 		shipment_id may not be changed, once set (private setter)
+ * 
+ * 		warehouse_id may not be null.(enforced by Shipment.Shipment() and Shipment.setWarehouse_id())
+ * 
+ * 		two Shipments are equal according to .equals() if they have the same shipment_id
+ * 
+ */
+
 /**
  * Shipment class composed of getters and setters to access the different
  * attributes of a shipment
+ * 
  * 
  * @author nicole
  *
@@ -60,8 +74,8 @@ public class Shipment {
 	/**
 	 * @param warehouse_id the warehouse_id to set
 	 */
-	public void setWarehouse_id(String warehouse_id) {
-		this.warehouse_id = warehouse_id;
+	private void setWarehouse_id(String warehouse_id) {
+		this.warehouse_id = (warehouse_id == null) ? "" : warehouse_id;
 	}
 
 	/**
@@ -89,7 +103,7 @@ public class Shipment {
 	 * @param shipment_id the shipment_id to set
 	 */
 	public void setShipment_id(String shipment_id) {
-		this.shipment_id = shipment_id;
+		this.shipment_id = (shipment_id == null) ? "" : shipment_id;
 	}
 
 	/**
