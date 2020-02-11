@@ -65,7 +65,7 @@ public class Company {
 	// private ConcurrentHashMap<Warehouse, Shipment> company_contents;
 
 	/**
-	 * 
+	 * Company constructor
 	 */
 	private Company() {
 		warehouses = new ArrayList<Warehouse>();
@@ -73,8 +73,8 @@ public class Company {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * method that returns an instance of a company
+	 * @return Company 
 	 */
 	public static Company getInstance() {
 		if (company_instance == null) {
@@ -88,8 +88,8 @@ public class Company {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * method that returns an ArrayList of warehouse ids
+	 * @return ids 
 	 */
 	public ArrayList<String> getWarehouseIds() {
 		ArrayList<String> ids = new ArrayList<String>();
@@ -100,9 +100,10 @@ public class Company {
 	}
 
 	/**
-	 * 
+	 * method that takes in a warehouse id and compares it to the collection of 
+	 * warehouses to find a match
 	 * @param warehouse_id
-	 * @return
+	 * @return warehouse
 	 */
 	private Warehouse getWarehouse(String warehouse_id) {
 		for (Warehouse warehouse : warehouses) {
@@ -118,7 +119,7 @@ public class Company {
 	 * new warehouse if one does not currently exist. log the outcome.
 	 * 
 	 * @param shipment
-	 * @return
+	 * @return 
 	 */
 	public boolean addIncomingShipment(Shipment shipment) {
 
@@ -141,7 +142,7 @@ public class Company {
 	}
 
 	/**
-	 * 
+	 * Method used to remove a shipment from a warehouse
 	 * @param shipment_id
 	 * @param warehouse_id
 	 */
@@ -156,7 +157,7 @@ public class Company {
 	}
 
 	/**
-	 * 
+	 * Method used to add a new warehouse
 	 * @param warehouse_id
 	 */
 	public synchronized boolean addWarehouse(String warehouse_id) {
@@ -172,7 +173,7 @@ public class Company {
 	}
 
 	/**
-	 * 
+	 * Method that takes a warehouse id and removes that warehouse
 	 * @param warehouse_id
 	 */
 	private boolean removeWarehouse(String warehouse_id) {
@@ -274,9 +275,9 @@ public class Company {
 	}
 
 	/**
-	 * 
+	 * method that returns a string of the all the contents/shipments in a warehouse
 	 * @param warehouse_id
-	 * @return
+	 * @return String
 	 */
 	public String readWarehouseContent(String warehouse_id) {
 		Warehouse warehouse = this.getWarehouse(warehouse_id);
