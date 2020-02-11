@@ -26,7 +26,14 @@
 			"shipment_id": "85545",
 			"weight": 760,
 			"receipt_date": 1515354694451
-		}
+		},
+		    {
+	      "warehouse_id": "33333",
+	      "shipment_method": "Ship",
+	      "shipment_id": "4567",
+	      "weight": 85.0,
+	      "receipt_date": 1581184798802
+    }
 		
 	]
 }

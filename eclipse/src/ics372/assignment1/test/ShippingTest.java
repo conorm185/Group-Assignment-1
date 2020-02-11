@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.Gson;
@@ -25,6 +24,8 @@ import ics372.assignment1.model.Company;
 import ics372.assignment1.model.Shipment;
 import ics372.assignment1.model.Shipment.ShippingMethod;
 import ics372.assignment1.model.Warehouse;
+
+
 
 /**
  * @author gyan
@@ -137,7 +138,7 @@ class ShippingTest {
 	@Test
 	void testWarehouseCommands() {
 		try {
-			company.importShipments(new File("33333.json"));
+			company.importShipments(new File("test.json"));
 		} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
