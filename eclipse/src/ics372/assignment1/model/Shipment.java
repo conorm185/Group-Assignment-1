@@ -137,6 +137,7 @@ public class Shipment {
 	/**
 	 * returns a String containing the information of a shipment
 	 */
+	@Override
 	public String toString() {
 		Date receipt = new Date(receipt_date);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -160,5 +161,13 @@ public class Shipment {
 		}
 		Shipment shipment = (Shipment) obj;
 		return this.shipment_id.equalsIgnoreCase(shipment.shipment_id);
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public int hashCode() {
+		return shipment_id.hashCode();
 	}
 }

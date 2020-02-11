@@ -62,6 +62,7 @@ public class Company {
 	private static Company company_instance = null;
 	private File company_log;
 	private ArrayList<Warehouse> warehouses;
+	// private ConcurrentHashMap<Warehouse, Shipment> company_contents;
 
 	/**
 	 * 
@@ -100,12 +101,12 @@ public class Company {
 
 	/**
 	 * 
-	 * @param warehouseId
+	 * @param warehouse_id
 	 * @return
 	 */
-	private Warehouse getWarehouse(String warehouseId) {
+	private Warehouse getWarehouse(String warehouse_id) {
 		for (Warehouse warehouse : warehouses) {
-			if (warehouse.getWarehouse_id().equals(warehouseId)) {
+			if (warehouse.getWarehouse_id().equals(warehouse_id)) {
 				return warehouse;
 			}
 		}
@@ -187,33 +188,33 @@ public class Company {
 
 	/**
 	 * 
-	 * @param warehouseId
+	 * @param warehouse_id
 	 */
-	public void toggleFreightReciept(String warehouseId) {
-		Warehouse warehouse = this.getWarehouse(warehouseId);
+	public void toggleFreightReciept(String warehouse_id) {
+		Warehouse warehouse = this.getWarehouse(warehouse_id);
 		if (warehouse != null) {
 			if (warehouse.isReceiving_freight()) {
 				warehouse.setReceiving_freight(false);
 			} else {
 				warehouse.setReceiving_freight(true);
 			}
-			log(String.format("Warehouse: %s freight status set to %b", warehouseId, warehouse.isReceiving_freight()));
+			log(String.format("Warehouse: %s freight status set to %b", warehouse_id, warehouse.isReceiving_freight()));
 		} else {
-			log(String.format("Warehouse: %s not found", warehouseId));
+			log(String.format("Warehouse: %s not found", warehouse_id));
 		}
 	}
 
 	/**
 	 * 
-	 * @param warehouseId
+	 * @param warehouse_id
 	 * @return
 	 */
-	public boolean getFreightReceiptStatus(String warehouseId) {
-		Warehouse warehouse = this.getWarehouse(warehouseId);
+	public boolean getFreightReceiptStatus(String warehouse_id) {
+		Warehouse warehouse = this.getWarehouse(warehouse_id);
 		if (warehouse != null) {
 			return warehouse.isReceiving_freight();
 		} else {
-			log(String.format("Warehouse: %s not found", warehouseId));
+			log(String.format("Warehouse: %s not found", warehouse_id));
 			return false;
 		}
 	}
@@ -236,17 +237,17 @@ public class Company {
 
 	/**
 	 * 
-	 * @param jsonShipmentList
+	 * @param json_shipment_list
 	 * @throws JsonSyntaxException
 	 * @throws JsonIOException
 	 * @throws FileNotFoundException
 	 */
-	public void importShipments(File jsonShipmentList)
+	public void importShipments(File json_shipment_list)
 			throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 		Gson gson = new Gson();
 		Warehouse temp = new Warehouse("tempuse");
-		temp = gson.fromJson(new FileReader(jsonShipmentList), Warehouse.class);
-		log(String.format("importing shipments from %s", jsonShipmentList.getName()));
+		temp = gson.fromJson(new FileReader(json_shipment_list), Warehouse.class);
+		log(String.format("importing shipments from %s", json_shipment_list.getName()));
 		if (temp != null) { // if the .json was not empty
 			for (Shipment s : temp.getWarehouse_contents()) {
 				addIncomingShipment(s);
@@ -259,16 +260,16 @@ public class Company {
 
 	/**
 	 * 
-	 * @param warehouseId
+	 * @param warehouse_id
 	 * @throws IOException
 	 */
-	public void exportContentToJSON(String warehouseId) throws IOException {
-		Warehouse warehouse = this.getWarehouse(warehouseId);
+	public void exportContentToJSON(String warehouse_id) throws IOException {
+		Warehouse warehouse = this.getWarehouse(warehouse_id);
 
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		try (FileWriter writer = new FileWriter(String.format("%s.json", warehouseId));) {
+		try (FileWriter writer = new FileWriter(String.format("%s.json", warehouse_id));) {
 			writer.write(gson.toJson(warehouse));
-			log(String.format("warehouse%s: exported to %s.json", warehouseId, warehouseId));
+			log(String.format("warehouse%s: exported to %s.json", warehouse_id, warehouse_id));
 		}
 	}
 

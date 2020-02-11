@@ -126,6 +126,7 @@ public class Warehouse {
 	/**
 	 * method that returns a String of the contents within a warehouse
 	 */
+	@Override
 	public String toString() {
 		String outputString = String.format(
 				"\n\"warehouse_id\":\"%s\",\n" + "\"receiving_freight\":\"%s\",\n" + "\"warehouse_contents\":[\n",
@@ -151,5 +152,13 @@ public class Warehouse {
 		}
 		Warehouse warehouse = (Warehouse) obj;
 		return this.warehouse_id.equalsIgnoreCase(warehouse.warehouse_id);
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public int hashCode() {
+		return warehouse_id.hashCode();
 	}
 }

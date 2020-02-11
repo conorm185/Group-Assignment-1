@@ -34,25 +34,25 @@ import ics372.assignment1.model.Shipment.ShippingMethod;
 public class ShippingUI {
 	// Instance Variables
 	private Company company;
-	private ArrayList<String> warehouseIdList;
+	private ArrayList<String> warehouse_id_list;
 
 	// Swing Panels
-	JFrame mainFrame;
+	JFrame main_frame;
 	JPanel left_penal;
 	JPanel top_panel;
 
 	// Swing Components
 	private JComboBox<String> warehouse_selector;
 	private JTextField warehouse_id_field;
-	private JTextArea textArea;
-	private JScrollPane scrollPane;
-	private JButton btnImportJson;
-	private JButton btnAddIncomingShipment;
-	private JButton btnFreightRecieptToggle;
-	private JButton btnExportContent;
-	private JButton btnReadWarehouseContent;
-	private JLabel lblWarehouseId;
-	private JLabel lblAddNewWarehouse;
+	private JTextArea text_area;
+	private JScrollPane scroll_pane;
+	private JButton btn_import_json;
+	private JButton btn_add_incoming_shipment;
+	private JButton btn_freight_reciept_toggle;
+	private JButton btn_export_content;
+	private JButton btn_read_warehouse_content;
+	private JLabel lbl_warehouse_id;
+	private JLabel lbl_add_new_warehouse;
 
 	/**
 	 * public constructor to grab an instance of the company singleton and call the
@@ -69,47 +69,47 @@ public class ShippingUI {
 	 */
 	private void init() {
 		// Java Swing Components
-		mainFrame = new JFrame();
+		main_frame = new JFrame();
 		left_penal = new JPanel();
 		top_panel = new JPanel();
 		warehouse_selector = new JComboBox<String>();
-		textArea = new JTextArea();
-		scrollPane = new JScrollPane(textArea);
-		btnImportJson = new JButton("Import JSON");
-		btnAddIncomingShipment = new JButton("Add Incoming Shipment");
-		btnFreightRecieptToggle = new JButton("Toggle Freight Reciept");
-		btnExportContent = new JButton("Export Content to JSON");
-		btnReadWarehouseContent = new JButton("Read Warehouse Content");
-		lblWarehouseId = new JLabel("Warehouse Id");
-		lblAddNewWarehouse = new JLabel("Add New Warehouse:");
+		text_area = new JTextArea();
+		scroll_pane = new JScrollPane(text_area);
+		btn_import_json = new JButton("Import JSON");
+		btn_add_incoming_shipment = new JButton("Add Incoming Shipment");
+		btn_freight_reciept_toggle = new JButton("Toggle Freight Reciept");
+		btn_export_content = new JButton("Export Content to JSON");
+		btn_read_warehouse_content = new JButton("Read Warehouse Content");
+		lbl_warehouse_id = new JLabel("Warehouse Id");
+		lbl_add_new_warehouse = new JLabel("Add New Warehouse:");
 		warehouse_id_field = new JTextField();
 		warehouse_id_field.setColumns(10);
 
 		// Frame and Panel layouts
-		mainFrame.getContentPane().setLayout(new BorderLayout(0, 0));
+		main_frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		left_penal.setLayout(new GridLayout(5, 1, 0, 0));
 		top_panel.setLayout(new GridLayout(0, 4, 0, 0));
 
 		// Component Listeners
-		btnImportJson.addActionListener(new ActionListener() {
+		btn_import_json.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				listenerHelperImport();
 			}
 		});
 
-		btnAddIncomingShipment.addActionListener(new ActionListener() {
+		btn_add_incoming_shipment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				listenerHelperAddShipment();
 			}
 		});
 
-		btnReadWarehouseContent.addActionListener(new ActionListener() {
+		btn_read_warehouse_content.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				listenerHelperReadContent();
 			}
 		});
 
-		btnExportContent.addActionListener(new ActionListener() {
+		btn_export_content.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				listenerHelperExportContent();
 			}
@@ -121,29 +121,29 @@ public class ShippingUI {
 			}
 		});
 
-		btnFreightRecieptToggle.addActionListener(new ActionListener() {
+		btn_freight_reciept_toggle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				listenerHelperFreightToggle();
 			}
 		});
 
 		// Add components to frame
-		mainFrame.getContentPane().add(left_penal, BorderLayout.WEST);
-		mainFrame.getContentPane().add(top_panel, BorderLayout.NORTH);
-		mainFrame.getContentPane().add(scrollPane, BorderLayout.CENTER);
-		top_panel.add(lblWarehouseId);
+		main_frame.getContentPane().add(left_penal, BorderLayout.WEST);
+		main_frame.getContentPane().add(top_panel, BorderLayout.NORTH);
+		main_frame.getContentPane().add(scroll_pane, BorderLayout.CENTER);
+		top_panel.add(lbl_warehouse_id);
 		top_panel.add(warehouse_selector);
-		top_panel.add(lblAddNewWarehouse);
+		top_panel.add(lbl_add_new_warehouse);
 		top_panel.add(warehouse_id_field);
-		left_penal.add(btnImportJson);
-		left_penal.add(btnAddIncomingShipment);
-		left_penal.add(btnFreightRecieptToggle);
-		left_penal.add(btnReadWarehouseContent);
-		left_penal.add(btnExportContent);
+		left_penal.add(btn_import_json);
+		left_penal.add(btn_add_incoming_shipment);
+		left_penal.add(btn_freight_reciept_toggle);
+		left_penal.add(btn_read_warehouse_content);
+		left_penal.add(btn_export_content);
 
-		mainFrame.setSize(900, 500);
-		mainFrame.setVisible(true);
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		main_frame.setSize(900, 500);
+		main_frame.setVisible(true);
+		main_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	/**
@@ -156,7 +156,7 @@ public class ShippingUI {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON Shipment Files", "json");
 		chooser.setFileFilter(filter);
 
-		int returnVal = chooser.showOpenDialog(mainFrame);
+		int returnVal = chooser.showOpenDialog(main_frame);
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			log(String.format("File selected: %s", chooser.getSelectedFile().getName()));
@@ -190,7 +190,7 @@ public class ShippingUI {
 	 */
 	private void listenerHelperReadContent() {
 		if (warehouse_selector.getSelectedItem() != null) {
-			textArea.append(company.readWarehouseContent((String) warehouse_selector.getSelectedItem()));
+			text_area.append(company.readWarehouseContent((String) warehouse_selector.getSelectedItem()));
 		} else {
 			log("No warehouse selected.");
 		}
@@ -246,9 +246,9 @@ public class ShippingUI {
 	 * warehouses are added, either manually, or via a file import.
 	 */
 	private void comboBoxRefresh() {
-		warehouseIdList = company.getWarehouseIds();
+		warehouse_id_list = company.getWarehouseIds();
 		warehouse_selector.removeAllItems();
-		for (String str : warehouseIdList) {
+		for (String str : warehouse_id_list) {
 			warehouse_selector.addItem(str);
 		}
 	}
@@ -263,7 +263,7 @@ public class ShippingUI {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		LocalDateTime now = LocalDateTime.now();
 		String log_entry = String.format("\n[%s]\t[%s]", formatter.format(now), entry);
-		textArea.append(log_entry);
+		text_area.append(log_entry);
 	}
 
 	/**
@@ -276,16 +276,18 @@ public class ShippingUI {
 	private class AddShipmentUI {
 
 		// Swing components
-		private JFrame mainFrame;
+		private JFrame main_frame_add;
 		private JPanel panel;
-		private JLabel lblWarehouseId;
-		private JLabel lblWarehouseId2;
-		private JLabel lblShipmentId;
+		private JLabel lbl_warehouse_id_add;
+		private JLabel lbl_warehouse_id2_add;
+		private JLabel lbl_shipment_id;
 		private JTextField shipment_id_field;
-		private JLabel lblShipmentMethod;
-		private JComboBox<ShippingMethod> comboBox;
-		private JLabel lblWeightlbs;
+		private JLabel lbl_shipment_method;
+		private JComboBox<ShippingMethod> combo_box_method_selector;
+		private JLabel lbl_weight;
 		private JTextField weight_field;
+		private JButton btn_submit;
+		private JButton btn_cancel;
 
 		/**
 		 * Main Constructor of the AddShipmentUI. Initialize all swing panels and
@@ -296,66 +298,66 @@ public class ShippingUI {
 		 */
 		public AddShipmentUI(String warehouse_id) {
 			// Component Declarations
-			mainFrame = new JFrame();
+			main_frame_add = new JFrame();
 			panel = new JPanel();
 
-			lblWarehouseId = new JLabel("Warehouse ID");
-			lblWarehouseId2 = new JLabel(warehouse_id);
+			lbl_warehouse_id_add = new JLabel("Warehouse ID");
+			lbl_warehouse_id2_add = new JLabel(warehouse_id);
 
-			lblShipmentId = new JLabel("Shipment ID");
+			lbl_shipment_id = new JLabel("Shipment ID");
 			shipment_id_field = new JTextField();
 
-			lblShipmentMethod = new JLabel("Shipment Method");
-			comboBox = new JComboBox<ShippingMethod>();
+			lbl_shipment_method = new JLabel("Shipment Method");
+			combo_box_method_selector = new JComboBox<ShippingMethod>();
 
-			lblWeightlbs = new JLabel("Weight (lbs)");
+			lbl_weight = new JLabel("Weight (lbs)");
 			weight_field = new JTextField();
 
-			JButton btnSubmit = new JButton("Submit");
-			JButton btnCancel = new JButton("Cancel");
+			btn_submit = new JButton("Submit");
+			btn_cancel = new JButton("Cancel");
 
 			// Component Attributes
 			shipment_id_field.setColumns(10);
 			weight_field.setColumns(10);
-			comboBox.addItem(ShippingMethod.air);
-			comboBox.addItem(ShippingMethod.rail);
-			comboBox.addItem(ShippingMethod.ship);
-			comboBox.addItem(ShippingMethod.truck);
+			combo_box_method_selector.addItem(ShippingMethod.air);
+			combo_box_method_selector.addItem(ShippingMethod.rail);
+			combo_box_method_selector.addItem(ShippingMethod.ship);
+			combo_box_method_selector.addItem(ShippingMethod.truck);
 
 			// Action Listeners
-			btnSubmit.addActionListener(new ActionListener() {
+			btn_submit.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					addShipment(warehouse_id);
 				}
 			});
 
-			btnCancel.addActionListener(new ActionListener() {
+			btn_cancel.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					log("shipment canceled");
-					mainFrame.dispose();
+					main_frame_add.dispose();
 				}
 			});
 
 			// Panel Layouts
-			mainFrame.getContentPane().add(panel, BorderLayout.CENTER);
+			main_frame_add.getContentPane().add(panel, BorderLayout.CENTER);
 			panel.setLayout(new GridLayout(5, 2, 0, 0));
 
 			// Add components
-			panel.add(lblWarehouseId);
-			panel.add(lblWarehouseId2);
-			panel.add(lblShipmentId);
+			panel.add(lbl_warehouse_id_add);
+			panel.add(lbl_warehouse_id2_add);
+			panel.add(lbl_shipment_id);
 			panel.add(shipment_id_field);
-			panel.add(lblShipmentMethod);
-			panel.add(comboBox);
-			panel.add(lblWeightlbs);
+			panel.add(lbl_shipment_method);
+			panel.add(combo_box_method_selector);
+			panel.add(lbl_weight);
 			panel.add(weight_field);
-			panel.add(btnSubmit);
-			panel.add(btnCancel);
+			panel.add(btn_submit);
+			panel.add(btn_cancel);
 
-			mainFrame.setSize(900, 500);
-			mainFrame.setVisible(true);
-			mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			mainFrame.getContentPane().setLayout(new BorderLayout(0, 0));
+			main_frame_add.setSize(900, 500);
+			main_frame_add.setVisible(true);
+			main_frame_add.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			main_frame_add.getContentPane().setLayout(new BorderLayout(0, 0));
 		}
 
 		/**
@@ -371,11 +373,11 @@ public class ShippingUI {
 		private void addShipment(String warehouse_id) {
 			try {
 				double weight = Double.parseDouble(weight_field.getText());
-				ShippingMethod method = (ShippingMethod) comboBox.getSelectedItem();
+				ShippingMethod method = (ShippingMethod) combo_box_method_selector.getSelectedItem();
 				String shipment_id = shipment_id_field.getText();
-				Shipment thisShipment = new Shipment(warehouse_id, method, shipment_id, weight,
+				Shipment this_shipment = new Shipment(warehouse_id, method, shipment_id, weight,
 						System.currentTimeMillis());
-				if (company.addIncomingShipment(thisShipment)) {
+				if (company.addIncomingShipment(this_shipment)) {
 					log(String.format("shipment: %s added to warehouse: %s", shipment_id, warehouse_id));
 				} else {
 					log(String.format("shipment: %s denied reciept at warehouse: %s", shipment_id, warehouse_id));
@@ -383,7 +385,7 @@ public class ShippingUI {
 			} catch (NumberFormatException e1) {
 				log(String.format("shipment denied invalid input."));
 			} finally {
-				mainFrame.dispose();
+				main_frame_add.dispose();
 			}
 		}
 	}
