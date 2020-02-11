@@ -3,9 +3,23 @@
     {
       "warehouse_id": "66",
       "shipment_method": "air",
+      "shipment_id": "44",
+      "weight": 44.0,
+      "receipt_date": 1581300430284
+    },
+    {
+      "warehouse_id": "66",
+      "shipment_method": "air",
+      "shipment_id": "55",
+      "weight": 55.0,
+      "receipt_date": 1581300432956
+    },
+    {
+      "warehouse_id": "66",
+      "shipment_method": "air",
       "shipment_id": "66",
       "weight": 66.0,
-      "receipt_date": 1581184798802
+      "receipt_date": 1581300435241
     }
   ]
 }

@@ -1,7 +1,7 @@
 package ics372.assignment1.controller;
 
 /**
- * The main
+ * The main used simply to call the ui.
  * 
  * @author conor
  *

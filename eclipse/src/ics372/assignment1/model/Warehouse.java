@@ -2,8 +2,23 @@ package ics372.assignment1.model;
 
 import java.util.ArrayList;
 
+/*
+ * Warehouse constraints:
+ * 
+ * 		warehouse_id may not be null. (enforced by Warehouse.Warehouse() and Warehouse.setWarehouse_id())
+ * 
+ * 		warehouse_id may not be changed once set. (private setter)
+ * 
+ * 		a warehouse may not contain two Shipments with the same shpiment_id. (enforced by Warehouse.addShipment())
+ * 
+ * 		a warehouse may not receive a shipment if receiving_freight is set to false. (enforced by Warehouse.addShipment())
+ * 
+ * 		two Warehouses are equal according to .equals() if they have the same warehouse_id
+ * 
+ */
+
 /**
- * Warehouse class that holds a collection of shipments 
+ * Warehouse class that holds a collection of shipments
  * 
  * @author nicole
  *
@@ -14,17 +29,18 @@ public class Warehouse {
 	private transient boolean receiving_freight;
 
 	/**
-	 * Warehouse constructor 
+	 * Warehouse constructor
+	 * 
 	 * @param warehouse_id
 	 */
 	public Warehouse(String warehouse_id) {
 		warehouse_contents = new ArrayList<Shipment>();
-		this.warehouse_id = warehouse_id;
+		this.warehouse_id = (warehouse_id == null) ? "" : warehouse_id;
 		this.receiving_freight = true;
 	}
 
 	/**
-	 * Default constructor 
+	 * Default constructor
 	 */
 	public Warehouse() {
 		this(null);
@@ -54,12 +70,13 @@ public class Warehouse {
 	/**
 	 * @param warehouse_id the warehouse_id to set
 	 */
-	public void setWarehouse_id(String warehouse_id) {
-		this.warehouse_id = warehouse_id;
+	private void setWarehouse_id(String warehouse_id) {
+		this.warehouse_id = (warehouse_id == null) ? "" : warehouse_id;
 	}
 
 	/**
 	 * receiving flag for a new shipment
+	 * 
 	 * @return the receiving_freight
 	 */
 	public boolean isReceiving_freight() {
@@ -75,8 +92,10 @@ public class Warehouse {
 
 	/**
 	 * method used to add a shipment to the warehouse_contents collection
+	 * 
 	 * @param shipment
-	 * @return true if shipment was added to the warehouse_contents, and false if the shipment was not added
+	 * @return true if shipment was added to the warehouse_contents, and false if
+	 *         the shipment was not added
 	 */
 	public boolean addShipment(Shipment shipment) {
 		if (receiving_freight == true && !(warehouse_contents.contains(shipment))) {
@@ -89,8 +108,10 @@ public class Warehouse {
 
 	/**
 	 * method used to remove a shipment from the warehouse_contents collection
+	 * 
 	 * @param shipment_id
-	 * @return true if the shipment was removed from the warehouse_contents, and false if the shipment was not removed
+	 * @return true if the shipment was removed from the warehouse_contents, and
+	 *         false if the shipment was not removed
 	 */
 	public boolean removeShipment(String shipment_id) {
 		for (Shipment s : warehouse_contents) {
@@ -105,6 +126,7 @@ public class Warehouse {
 	/**
 	 * method that returns a String of the contents within a warehouse
 	 */
+	@Override
 	public String toString() {
 		String outputString = String.format(
 				"\n\"warehouse_id\":\"%s\",\n" + "\"receiving_freight\":\"%s\",\n" + "\"warehouse_contents\":[\n",
@@ -116,7 +138,7 @@ public class Warehouse {
 		outputString += "]";
 		return outputString;
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -124,11 +146,19 @@ public class Warehouse {
 	public boolean equals(Object obj) {
 		if (obj == null) {
 			return false;
-		}		
-		if (!(obj instanceof Warehouse)) { 
-            return false; 
-        } 		
+		}
+		if (!(obj instanceof Warehouse)) {
+			return false;
+		}
 		Warehouse warehouse = (Warehouse) obj;
 		return this.warehouse_id.equalsIgnoreCase(warehouse.warehouse_id);
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public int hashCode() {
+		return warehouse_id.hashCode();
 	}
 }
