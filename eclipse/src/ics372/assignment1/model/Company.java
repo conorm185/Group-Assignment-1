@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -61,14 +63,15 @@ public class Company {
 
 	private static Company company_instance = null;
 	private File company_log;
-	private ArrayList<Warehouse> warehouses;
-	// private ConcurrentHashMap<Warehouse, Shipment> company_contents;
-
+	//look into using a ConcurrentHashMap and mapping shipments to warehouses themselves.
+	private HashMap <Integer, Warehouse> warehouses;
+	private HashMap <Integer, Shipment> shipments;  // may need later to maintain unique list of shipments.
+	
 	/**
 	 * Company constructor
 	 */
 	private Company() {
-		warehouses = new ArrayList<Warehouse>();
+		warehouses = new HashMap<Integer, Warehouse>();
 		company_log = new File("company_log.txt");
 	}
 
@@ -92,10 +95,11 @@ public class Company {
 	 * @return ids 
 	 */
 	public ArrayList<String> getWarehouseIds() {
+		
 		ArrayList<String> ids = new ArrayList<String>();
-		for (Warehouse warehouse : warehouses) {
-			ids.add(warehouse.getWarehouse_id());
-		}
+		warehouses.forEach((hash, warehouse) -> {
+            ids.add(warehouse.getWarehouse_id());
+        });
 		return ids;
 	}
 
@@ -106,12 +110,8 @@ public class Company {
 	 * @return warehouse
 	 */
 	private Warehouse getWarehouse(String warehouse_id) {
-		for (Warehouse warehouse : warehouses) {
-			if (warehouse.getWarehouse_id().equals(warehouse_id)) {
-				return warehouse;
-			}
-		}
-		return null;
+		Warehouse warehouse = warehouses.get(warehouse_id.hashCode());
+		return warehouse;
 	}
 
 	/**
@@ -162,8 +162,8 @@ public class Company {
 	 */
 	public synchronized boolean addWarehouse(String warehouse_id) {
 		Warehouse warehouse = new Warehouse(warehouse_id);
-		if (!(warehouses.contains(warehouse))) { // if the warehouse isn't already on the list
-			warehouses.add(warehouse);
+		
+		if (warehouses.putIfAbsent(warehouse.hashCode(), warehouse) == null) { // if the previous value was null
 			log(String.format("Warehouse: %s added to warehouse list", warehouse_id));
 			return true;
 		} else {
@@ -177,10 +177,9 @@ public class Company {
 	 * @param warehouse_id
 	 */
 	private boolean removeWarehouse(String warehouse_id) {
-		Warehouse warehouse = new Warehouse(warehouse_id);
-		if (!(warehouses.contains(warehouse))) { // if the warehouse isn't already on the list
+		if (warehouses.remove(warehouse_id.hashCode()) == null ) {
 			log(String.format("Warehouse: %s removed from warehouse list", warehouse_id));
-			return warehouses.remove(warehouse);
+			return true;
 		} else {
 			log(String.format("Warehouse: %s not on list", warehouse_id));
 			return false;
