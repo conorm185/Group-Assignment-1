@@ -25,8 +25,8 @@ import java.util.ArrayList;
  */
 public class Warehouse {
 	private ArrayList<Shipment> warehouse_contents;
-	private transient String warehouse_id;
-	private transient boolean receiving_freight;
+	private String warehouse_id;
+	private boolean receiving_freight;
 
 	/**
 	 * Warehouse constructor

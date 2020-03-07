@@ -1,0 +1,13 @@
+{
+  "warehouse_contents": [
+    {
+      "warehouse_id": "12513",
+      "shipment_method": "air",
+      "shipment_id": "48934j",
+      "weight": 84.0,
+      "receipt_date": 1515354694451
+    }
+  ],
+  "warehouse_id": "12513",
+  "receiving_freight": true
+}

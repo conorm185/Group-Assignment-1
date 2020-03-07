@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import ics372.assignment1.model.Company;
+import ics372.assignment1.model.CompanyIO;
 import ics372.assignment1.model.Shipment;
 import ics372.assignment1.model.Shipment.ShippingMethod;
 
@@ -61,6 +62,7 @@ public class ShippingUI {
 	public ShippingUI() {
 		company = Company.getInstance();
 		init();
+		this.comboBoxRefresh();
 	}
 
 	/**
@@ -155,13 +157,12 @@ public class ShippingUI {
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON Shipment Files", "json");
 		chooser.setFileFilter(filter);
-
 		int returnVal = chooser.showOpenDialog(main_frame);
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			log(String.format("File selected: %s", chooser.getSelectedFile().getName()));
 			try {
-				company.importShipments(chooser.getSelectedFile());
+				CompanyIO.importShipments(chooser.getSelectedFile());
 				log("file imported successfully!");
 				comboBoxRefresh();
 			} catch (Exception e1) {
@@ -203,7 +204,7 @@ public class ShippingUI {
 	 */
 	private void listenerHelperExportContent() {
 		try {
-			company.exportContentToJSON((String) warehouse_selector.getSelectedItem());
+			CompanyIO.exportContentToJSON((String) warehouse_selector.getSelectedItem());
 			log(String.format("warehouse: %s exported to .json file", warehouse_selector.getSelectedItem()));
 		} catch (IOException e1) {
 			log(String.format("warehouse: %s failed to export!", warehouse_selector.getSelectedItem()));
@@ -220,10 +221,10 @@ public class ShippingUI {
 	private void listenerHelperAddWarehouse() {
 		if (company.addWarehouse(warehouse_id_field.getText())) {
 			log(String.format("warehouse: %s added to company", warehouse_id_field.getText()));
-			comboBoxRefresh();
 		} else {
 			log(String.format("warehouse: %s already in list", warehouse_id_field.getText()));
 		}
+		comboBoxRefresh();
 		warehouse_id_field.setText("");
 	}
 

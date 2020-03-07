@@ -1,21 +1,7 @@
 package ics372.assignment1.model;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
 
 /*
  * Model Constraints: 
@@ -62,22 +48,19 @@ import com.google.gson.JsonSyntaxException;
 public class Company {
 
 	private static Company company_instance = null;
-	private File company_log;
-	//look into using a ConcurrentHashMap and mapping shipments to warehouses themselves.
-	private HashMap <Integer, Warehouse> warehouses;
-	private HashMap <Integer, Shipment> shipments;  // may need later to maintain unique list of shipments.
-	
+	private HashMap<Integer, Warehouse> warehouses;
+
 	/**
 	 * Company constructor
 	 */
 	private Company() {
-		warehouses = new HashMap<Integer, Warehouse>();
-		company_log = new File("company_log.txt");
+		warehouses = CompanyIO.loadState();
 	}
 
 	/**
 	 * method that returns an instance of a company
-	 * @return Company 
+	 * 
+	 * @return Company
 	 */
 	public static Company getInstance() {
 		if (company_instance == null) {
@@ -92,26 +75,31 @@ public class Company {
 
 	/**
 	 * method that returns an ArrayList of warehouse ids
-	 * @return ids 
+	 * 
+	 * @return ids
 	 */
 	public ArrayList<String> getWarehouseIds() {
-		
 		ArrayList<String> ids = new ArrayList<String>();
 		warehouses.forEach((hash, warehouse) -> {
-            ids.add(warehouse.getWarehouse_id());
-        });
+			ids.add(warehouse.getWarehouse_id());
+		});
 		return ids;
 	}
 
 	/**
-	 * method that takes in a warehouse id and compares it to the collection of 
+	 * method that takes in a warehouse id and compares it to the collection of
 	 * warehouses to find a match
+	 * 
 	 * @param warehouse_id
 	 * @return warehouse
 	 */
-	private Warehouse getWarehouse(String warehouse_id) {
+	protected Warehouse getWarehouse(String warehouse_id) {
 		Warehouse warehouse = warehouses.get(warehouse_id.hashCode());
 		return warehouse;
+	}
+
+	protected HashMap<Integer, Warehouse> getWarehouses() {
+		return warehouses;
 	}
 
 	/**
@@ -119,18 +107,18 @@ public class Company {
 	 * new warehouse if one does not currently exist. log the outcome.
 	 * 
 	 * @param shipment
-	 * @return 
+	 * @return
 	 */
 	public boolean addIncomingShipment(Shipment shipment) {
-
 		Warehouse warehouse = this.getWarehouse(shipment.getWarehouse_id());
 		if (warehouse != null) { // if the warehouse exists
 			if (warehouse.addShipment(shipment)) { // if the add was succesful
-				log(String.format("Shipment: %s added to Warehouse: %s", shipment.getShipment_id(),
+				CompanyIO.saveState();
+				CompanyIO.log(String.format("Shipment: %s added to Warehouse: %s", shipment.getShipment_id(),
 						warehouse.getWarehouse_id()));
 				return true;
 			} else { // otherwise log the failure
-				log(String.format("Shipment: %s denied at Warehouse: %s ", shipment.getShipment_id(),
+				CompanyIO.log(String.format("Shipment: %s denied at Warehouse: %s ", shipment.getShipment_id(),
 						warehouse.getWarehouse_id()));
 				return false;
 			}
@@ -143,45 +131,51 @@ public class Company {
 
 	/**
 	 * Method used to remove a shipment from a warehouse
+	 * 
 	 * @param shipment_id
 	 * @param warehouse_id
 	 */
 	private boolean removeShipment(String shipment_id, String warehouse_id) {
 		Warehouse warehouse = this.getWarehouse(warehouse_id);
 		if (warehouse != null) {
+			CompanyIO.saveState();
 			return warehouse.removeShipment(shipment_id);
 		} else {
-			log(String.format("Warehouse: %s not found", warehouse_id));
+			CompanyIO.log(String.format("Warehouse: %s not found", warehouse_id));
 			return false;
 		}
 	}
 
 	/**
 	 * Method used to add a new warehouse
+	 * 
 	 * @param warehouse_id
 	 */
 	public synchronized boolean addWarehouse(String warehouse_id) {
 		Warehouse warehouse = new Warehouse(warehouse_id);
-		
+
 		if (warehouses.putIfAbsent(warehouse.hashCode(), warehouse) == null) { // if the previous value was null
-			log(String.format("Warehouse: %s added to warehouse list", warehouse_id));
+			CompanyIO.saveState();
+			CompanyIO.log(String.format("Warehouse: %s added to warehouse list", warehouse_id));
 			return true;
 		} else {
-			log(String.format("Warehouse: %s already on list", warehouse_id));
+			CompanyIO.log(String.format("Warehouse: %s already on list", warehouse_id));
 			return false;
 		}
 	}
 
 	/**
 	 * Method that takes a warehouse id and removes that warehouse
+	 * 
 	 * @param warehouse_id
 	 */
 	private boolean removeWarehouse(String warehouse_id) {
-		if (warehouses.remove(warehouse_id.hashCode()) == null ) {
-			log(String.format("Warehouse: %s removed from warehouse list", warehouse_id));
+		if (warehouses.remove(warehouse_id.hashCode()) == null) {
+			CompanyIO.saveState();
+			CompanyIO.log(String.format("Warehouse: %s removed from warehouse list", warehouse_id));
 			return true;
 		} else {
-			log(String.format("Warehouse: %s not on list", warehouse_id));
+			CompanyIO.log(String.format("Warehouse: %s not on list", warehouse_id));
 			return false;
 		}
 	}
@@ -198,9 +192,11 @@ public class Company {
 			} else {
 				warehouse.setReceiving_freight(true);
 			}
-			log(String.format("Warehouse: %s freight status set to %b", warehouse_id, warehouse.isReceiving_freight()));
+			CompanyIO.saveState();
+			CompanyIO.log(String.format("Warehouse: %s freight status set to %b", warehouse_id,
+					warehouse.isReceiving_freight()));
 		} else {
-			log(String.format("Warehouse: %s not found", warehouse_id));
+			CompanyIO.log(String.format("Warehouse: %s not found", warehouse_id));
 		}
 	}
 
@@ -214,67 +210,14 @@ public class Company {
 		if (warehouse != null) {
 			return warehouse.isReceiving_freight();
 		} else {
-			log(String.format("Warehouse: %s not found", warehouse_id));
+			CompanyIO.log(String.format("Warehouse: %s not found", warehouse_id));
 			return false;
 		}
 	}
 
 	/**
-	 * 
-	 * @param entry
-	 */
-	private void log(String entry) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-		LocalDateTime now = LocalDateTime.now();
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(company_log, true));) {
-			String log_entry = String.format("[%s]\t[%s]\n", formatter.format(now), entry);
-			writer.write(log_entry);
-			System.out.print(log_entry);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * 
-	 * @param json_shipment_list
-	 * @throws JsonSyntaxException
-	 * @throws JsonIOException
-	 * @throws FileNotFoundException
-	 */
-	public void importShipments(File json_shipment_list)
-			throws JsonSyntaxException, JsonIOException, FileNotFoundException {
-		Gson gson = new Gson();
-		Warehouse temp = new Warehouse("tempuse");
-		temp = gson.fromJson(new FileReader(json_shipment_list), Warehouse.class);
-		log(String.format("importing shipments from %s", json_shipment_list.getName()));
-		if (temp != null) { // if the .json was not empty
-			for (Shipment s : temp.getWarehouse_contents()) {
-				addIncomingShipment(s);
-			}
-		} else {
-			log("import empty");
-		}
-
-	}
-
-	/**
-	 * 
-	 * @param warehouse_id
-	 * @throws IOException
-	 */
-	public void exportContentToJSON(String warehouse_id) throws IOException {
-		Warehouse warehouse = this.getWarehouse(warehouse_id);
-
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		try (FileWriter writer = new FileWriter(String.format("%s.json", warehouse_id));) {
-			writer.write(gson.toJson(warehouse));
-			log(String.format("warehouse%s: exported to %s.json", warehouse_id, warehouse_id));
-		}
-	}
-
-	/**
 	 * method that returns a string of the all the contents/shipments in a warehouse
+	 * 
 	 * @param warehouse_id
 	 * @return String
 	 */
@@ -286,4 +229,12 @@ public class Company {
 			return "Warehouse not found!";
 		}
 	}
+
+//	/**
+//	 * reload the warehouses state before each data operation to make sure all users
+//	 * are using the same data.
+//	 */
+//	private void refreshContent() {
+//		warehouses = CompanyIO.loadState();
+//	}
 }
