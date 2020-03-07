@@ -35,6 +35,8 @@ public class CompanyIO {
 		CompanyIO.log(String.format("importing shipments from %s", file.getName()));
 		if (temp != null) { // if the .json was not empty
 			for (Shipment s : temp.getWarehouse_contents()) {
+				// Check shipment object for validity
+				// validate(s); should replace any unparsed fields with default values
 				company.addIncomingShipment(s);
 			}
 		} else {

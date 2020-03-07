@@ -25,6 +25,7 @@ import java.util.ArrayList;
  */
 public class Warehouse {
 	private ArrayList<Shipment> warehouse_contents;
+	private String warehouse_name;
 	private String warehouse_id;
 	private boolean receiving_freight;
 
@@ -47,6 +48,8 @@ public class Warehouse {
 	}
 
 	/**
+	 * get the contents of this warehouse in the form of an ArrayList
+	 * 
 	 * @return the warehouse_contents
 	 */
 	public ArrayList<Shipment> getWarehouse_contents() {
@@ -54,6 +57,8 @@ public class Warehouse {
 	}
 
 	/**
+	 * set the contents of this warehouse in the form of an ArrayList.
+	 * 
 	 * @param warehouse_contents the warehouse_contents to set
 	 */
 	public void setWarehouse_contents(ArrayList<Shipment> warehouse_contents) {
@@ -61,6 +66,26 @@ public class Warehouse {
 	}
 
 	/**
+	 * get the name of this warehouse
+	 * 
+	 * @return the warehouse_name
+	 */
+	public String getWarehouse_name() {
+		return warehouse_name;
+	}
+
+	/**
+	 * set the name of this warehouse
+	 * 
+	 * @param warehouse_name the warehouse_name to set
+	 */
+	public void setWarehouse_name(String warehouse_name) {
+		this.warehouse_name = warehouse_name;
+	}
+
+	/**
+	 * get the warehouse_id of this warehouse
+	 * 
 	 * @return the warehouse_id
 	 */
 	public String getWarehouse_id() {
@@ -68,6 +93,8 @@ public class Warehouse {
 	}
 
 	/**
+	 * set the warehouse_id of this warehouse
+	 * 
 	 * @param warehouse_id the warehouse_id to set
 	 */
 	private void setWarehouse_id(String warehouse_id) {
@@ -84,6 +111,8 @@ public class Warehouse {
 	}
 
 	/**
+	 * set the freight reciept status of this warehouse
+	 * 
 	 * @param receiving_freight the receiving_freight to be set
 	 */
 	public void setReceiving_freight(boolean receiving_freight) {
@@ -140,7 +169,7 @@ public class Warehouse {
 	}
 
 	/**
-	 * 
+	 * Override of equals method. Two warehouses are equal if they have the same ID
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -155,7 +184,7 @@ public class Warehouse {
 	}
 
 	/**
-	 * 
+	 * Override the hashcode method. Hash of the warehouse_id
 	 */
 	@Override
 	public int hashCode() {
