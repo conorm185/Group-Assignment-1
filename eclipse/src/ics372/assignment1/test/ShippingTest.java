@@ -21,6 +21,7 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
 import ics372.assignment1.model.Company;
+import ics372.assignment1.model.CompanyIO;
 import ics372.assignment1.model.Shipment;
 import ics372.assignment1.model.Shipment.ShippingMethod;
 import ics372.assignment1.model.Warehouse;
@@ -49,8 +50,11 @@ class ShippingTest {
 		String jsonFileName = "test.json";
 		String shipment_idToCheck = "1adf4";
 		try {
-			company.importShipments(new File(jsonFileName));
+			CompanyIO.importShipments(new File(jsonFileName));
 		} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -58,7 +62,7 @@ class ShippingTest {
 		ArrayList<String> warehouseIDs =  company.getWarehouseIds();
 	
 		for(String id : warehouseIDs) {
-			 Warehouse warehouse = company.getWarehouse(id);
+			 Warehouse warehouse = CompanyIO.getWarehouse(id);
 			 
 			 // Get the shipments for each warehouse and check if has our shipment 1adf4
 			 ArrayList<Shipment> shipments = warehouse.getWarehouse_contents();
@@ -112,7 +116,7 @@ class ShippingTest {
 	void testShipmentIDAndGrossWeightAreAssociatedWithSpecifiedWarehouseID() {
 		// CHeck the sample shipment that the warehouse it belongs to actually has it in its record 
 		String wareHouseIDThatSampleShipmentBelongsTo = sampleShipment.getWarehouse_id();
-		Warehouse warehouse = company.getWarehouse(wareHouseIDThatSampleShipmentBelongsTo);
+		Warehouse warehouse = CompanyIO.getWarehouse(wareHouseIDThatSampleShipmentBelongsTo);
 		boolean warehouseContainsSampleShipmentID = false;
 		boolean warehouseContainsSampleShipmentGrossWeight = false;
 		
@@ -138,8 +142,11 @@ class ShippingTest {
 	@Test
 	void testWarehouseCommands() {
 		try {
-			company.importShipments(new File("test.json"));
+			CompanyIO.importShipments(new File("test.json"));
 		} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -147,18 +154,21 @@ class ShippingTest {
 		// Confirm that warehouse can add incoming shipment,
 		// get the number of Shipments in warehouse
 		String warehouseID = "33333";
-		Warehouse warehouse = company.getWarehouse(warehouseID);
+		Warehouse warehouse = CompanyIO.getWarehouse(warehouseID);
 		List<Shipment> shipments = warehouse.getWarehouse_contents();
 		int initialShipmentCount = shipments.size();
 		// add a shipment to the warehouse
 		try {
-			company.importShipments(new File("junittest1.json"));
+			CompanyIO.importShipments(new File("junittest1.json"));
 		} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		//assert that the number of shipment in warehouse is more than before
-		Warehouse warehouse2 = company.getWarehouse(warehouseID);
+		Warehouse warehouse2 = CompanyIO.getWarehouse(warehouseID);
 		List<Shipment> shipments2 = warehouse2.getWarehouse_contents();
 		int newShipmentCount = shipments2.size();
 		assertTrue(newShipmentCount > initialShipmentCount);
@@ -176,8 +186,11 @@ class ShippingTest {
 	@Test
 	void testAddingShipmentToFreightReceiptEnabledWarehouse() {
 		try {
-			company.importShipments(new File("test.json"));
+			CompanyIO.importShipments(new File("test.json"));
 		} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -185,11 +198,11 @@ class ShippingTest {
 		String warehouse_id1 = "12513";
 		String warehouse_id2 =  "15566";
 		
-		Warehouse warehouse1 = company.getWarehouse(warehouse_id1);
+		Warehouse warehouse1 = CompanyIO.getWarehouse(warehouse_id1);
 		List<Shipment> shipments1 = warehouse1.getWarehouse_contents();
 		int ShipmentCountWarehouse1 = shipments1.size();
 		
-		Warehouse warehouse2 = company.getWarehouse(warehouse_id2);
+		Warehouse warehouse2 = CompanyIO.getWarehouse(warehouse_id2);
 		List<Shipment> shipments2 = warehouse2.getWarehouse_contents();
 		int ShipmentCountWarehouse2 = shipments2.size();
 		
@@ -198,17 +211,20 @@ class ShippingTest {
 		
 		// add shipments to the warehouses
 				try {
-					company.importShipments(new File("junittest2.json"));
+					CompanyIO.importShipments(new File("junittest2.json"));
 				} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		
-				warehouse1 = company.getWarehouse(warehouse_id1);
+				warehouse1 = CompanyIO.getWarehouse(warehouse_id1);
 				shipments1 = warehouse1.getWarehouse_contents();
 				int newShipmentCountWarehouse1 = shipments1.size();
 				
-				 warehouse2 = company.getWarehouse(warehouse_id2);
+				 warehouse2 = CompanyIO.getWarehouse(warehouse_id2);
 				shipments2 = warehouse2.getWarehouse_contents();
 				int newShipmentCountWarehouse2 = shipments2.size();
 				
@@ -223,18 +239,21 @@ class ShippingTest {
 	@Test
 	void testShipmentsFromWarehouseAreExportedToJSONFile() {
 		try {
-			company.importShipments(new File("test.json"));
+			CompanyIO.importShipments(new File("test.json"));
 		} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		//export all shipments from a warehouse into a single JSON file.15566.json
 		String warehouse_id =  "15566";
-		Warehouse warehouse = company.getWarehouse(warehouse_id);
+		Warehouse warehouse = CompanyIO.getWarehouse(warehouse_id);
 		List<Shipment> shipments1 = warehouse.getWarehouse_contents();
 		int shipmentCount = shipments1.size();
 		try {
-			company.exportContentToJSON(warehouse_id);
+			CompanyIO.exportContentToJSON(warehouse_id);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

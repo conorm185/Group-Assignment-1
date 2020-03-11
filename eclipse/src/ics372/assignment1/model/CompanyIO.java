@@ -17,6 +17,8 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
+import ics372.assignment1.io.ImporterXML;
+
 /**
  * 
  * @author conor murphy
@@ -42,6 +44,13 @@ public class CompanyIO {
 		} else {
 			CompanyIO.log("import empty");
 		}
+	}
+	
+	public static Warehouse getWarehouse(String warehouseId) {
+		Company company = Company.getInstance();
+		Warehouse warehouse = company.getWarehouse(warehouseId);
+
+		return warehouse;
 	}
 
 	/**
@@ -116,6 +125,7 @@ public class CompanyIO {
 		default:
 			throw new Exception();
 		}
+		System.out.println("Warehouse ID " + temp.getWarehouse_id());
 		return temp;
 	}
 
@@ -138,7 +148,9 @@ public class CompanyIO {
 	 * @return
 	 */
 	private static Warehouse parseXML(File file) {
-		return null;
+		ImporterXML importer = new ImporterXML();
+		
+		return importer.parseWarehouse(file);
 	}
 
 	/**
