@@ -97,7 +97,7 @@ public class Warehouse {
 	 * 
 	 * @param warehouse_id the warehouse_id to set
 	 */
-	private void setWarehouse_id(String warehouse_id) {
+	public void setWarehouse_id(String warehouse_id) {
 		this.warehouse_id = (warehouse_id == null) ? "" : warehouse_id;
 	}
 

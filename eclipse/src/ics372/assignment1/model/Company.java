@@ -112,7 +112,7 @@ public class Company {
 	public boolean addIncomingShipment(Shipment shipment) {
 		Warehouse warehouse = this.getWarehouse(shipment.getWarehouse_id());
 		if (warehouse != null) { // if the warehouse exists
-			if (warehouse.addShipment(shipment)) { // if the add was succesful
+			if (warehouse.addShipment(shipment)) { // if the add was successful
 				CompanyIO.saveState();
 				CompanyIO.log(String.format("Shipment: %s added to Warehouse: %s", shipment.getShipment_id(),
 						warehouse.getWarehouse_id()));

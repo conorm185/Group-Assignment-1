@@ -32,6 +32,7 @@ public class Shipment {
 	private String shipment_id;
 	private double weight;
 	private Long receipt_date;
+	//private String unit;
 
 	/**
 	 * ShippingMethod enum
@@ -76,7 +77,7 @@ public class Shipment {
 	/**
 	 * @param warehouse_id the warehouse_id to set
 	 */
-	private void setWarehouse_id(String warehouse_id) {
+	public void setWarehouse_id(String warehouse_id) {
 		this.warehouse_id = (warehouse_id == null) ? "" : warehouse_id;
 	}
 
