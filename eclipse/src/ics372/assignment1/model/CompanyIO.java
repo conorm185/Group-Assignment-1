@@ -38,6 +38,7 @@ public class CompanyIO {
 		if (temp != null) { // if the .json was not empty
 			for (Shipment s : temp.getWarehouse_contents()) {
 				// Check shipment object for validity
+				s.isValid(temp); // temp values
 				// validate(s); should replace any unparsed fields with default values
 				company.addIncomingShipment(s);
 			}

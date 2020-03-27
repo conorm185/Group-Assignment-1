@@ -1,7 +1,9 @@
 package ics372.assignment1.model;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 /*
  * Shipment constraints:
@@ -37,7 +39,7 @@ public class Shipment implements Cloneable {
 	 * 
 	 */
 	public enum ShippingMethod {
-		air, truck, ship, rail;
+		air, truck, ship, rail, UNKNOWN;
 	}
 
 	/**
@@ -55,7 +57,7 @@ public class Shipment implements Cloneable {
 		this.shipment_method = shipment_method;
 		this.shipment_id = (shipment_id == null) ? "" : shipment_id;
 		this.weight = weight;
-		this.receipt_date = receipt_date;
+		setReceipt_date(receipt_date); // logic for valid date in set
 	}
 
 	/**
@@ -124,7 +126,8 @@ public class Shipment implements Cloneable {
 	/**
 	 * @return the receipt_date
 	 */
-	public Long getReceipt_date() {
+	public Long getReceipt_date() { 
+		
 		return receipt_date;
 	}
 
@@ -132,7 +135,13 @@ public class Shipment implements Cloneable {
 	 * @param receipt_date the receipt_date to set
 	 */
 	public void setReceipt_date(Long receipt_date) {
-		this.receipt_date = receipt_date;
+		if(receipt_date == 0 || receipt_date == null) {
+			Date rn = new Date();
+			Long rnL = rn.getTime();
+			this.receipt_date = rnL;
+		}else {
+			this.receipt_date = receipt_date;
+		}
 	}
 
 	/**
@@ -140,6 +149,7 @@ public class Shipment implements Cloneable {
 	 */
 	@Override
 	public String toString() {
+		
 		Date receipt = new Date(receipt_date);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		String outputString = String.format(
@@ -179,5 +189,38 @@ public class Shipment implements Cloneable {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+	
+	// used on a shipment, takes a warehouse (used in CompanyIO). Goes through checking values and giving anything its missing a value.
+	// Date is taken care of in setter. 
+	public boolean isValid(Warehouse warehouse) {
+
+		if(this.getWarehouse_id() == null || this.getWarehouse_id().equals("")) {
+			this.setWarehouse_id(warehouse.getWarehouse_id()); // if shipment doesn't have a warehouse try to take the passing warehouse's
+			if(this.getWarehouse_id() == null || this.getWarehouse_id().equals("")) {this.setWarehouse_id("Unknown");} // if neither have an id dead
+		}
+		if(this.getShipment_method() == null || this.getShipment_method().equals("")) {
+			this.setShipment_method(ShippingMethod.UNKNOWN); // unknown shipment method default
+		}
+		
+		if(this.shipment_id == null || this.shipment_id.equals("")) { // null shipment_id or empty
+			ArrayList<String> ids = new ArrayList<String>();
+			for (Shipment shipment : warehouse.getWarehouse_contents()) {
+				ids.add(shipment.getShipment_id());
+			}
+			Random rand = new Random();
+			boolean flag = true;
+			while(flag) {		// generate random int for shipment_id until it has a unique one for said warehouse
+				int i = rand.nextInt(10000) + 1;
+				String id = Integer.toString(i);
+				if(!ids.contains(id)) {
+					this.setShipment_id(id);
+					flag = false;
+				}
+			}
+		}
+		
+		
+		return true;
 	}
 }
