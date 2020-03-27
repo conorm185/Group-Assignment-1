@@ -49,12 +49,12 @@ public class CompanyIO {
 		}
 	}
 
-//	public static Warehouse getWarehouse(String warehouseId) {
-//		Company company = Company.getInstance();
-//		Warehouse warehouse = company.getWarehouse(warehouseId);
-//
-//		return warehouse;
-//	}
+	public static Warehouse getWarehouse(String warehouseId) {
+		Company company = Company.getInstance();
+		Warehouse warehouse = company.getWarehouse(warehouseId);
+
+		return warehouse;
+	}
 
 	/**
 	 * 
