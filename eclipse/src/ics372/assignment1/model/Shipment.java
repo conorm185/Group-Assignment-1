@@ -182,6 +182,9 @@ public class Shipment implements Cloneable {
 		return shipment_id.hashCode();
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public Object clone() {
 		try {
@@ -194,6 +197,13 @@ public class Shipment implements Cloneable {
 	// used on a shipment, takes a warehouse (used in CompanyIO). Goes through
 	// checking values and giving anything its missing a value.
 	// Date is taken care of in setter.
+
+	/**
+	 * 
+	 * 
+	 * @param warehouse
+	 * @return
+	 */
 	public boolean validate(Warehouse warehouse) {
 
 		if (this.getWarehouse_id() == null || this.getWarehouse_id().equals("")) {
