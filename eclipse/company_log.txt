@@ -637,3 +637,8 @@
 [2020/03/26 17:51:52]	[Shipment: 151e5dde denied at Warehouse: 485 ]
 [2020/03/26 17:51:52]	[Shipment: ern222 denied at Warehouse: 485 ]
 [2020/03/26 17:58:33]	[Warehouse: 55 already on list]
+[2020/03/26 20:17:58]	[importing shipments from exampleFromXml.xml]
+[2020/03/26 20:17:58]	[Shipment: 15dde denied at Warehouse: 485 ]
+[2020/03/26 20:17:58]	[Shipment: 52523 denied at Warehouse: 485 ]
+[2020/03/26 20:17:58]	[Shipment: 151e5dde denied at Warehouse: 485 ]
+[2020/03/26 20:17:58]	[Shipment: ern222 denied at Warehouse: 485 ]

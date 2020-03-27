@@ -17,6 +17,8 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
+import ics372.assignment1.io.Importable;
+import ics372.assignment1.io.ImporterJSON;
 import ics372.assignment1.io.ImporterXML;
 
 /**
@@ -38,7 +40,7 @@ public class CompanyIO {
 		if (temp != null) { // if the .json was not empty
 			for (Shipment s : temp.getWarehouse_contents()) {
 				// Check shipment object for validity
-				s.isValid(temp); // temp values
+				s.validate(temp); // temp values
 				// validate(s); should replace any unparsed fields with default values
 				company.addIncomingShipment(s);
 			}
@@ -46,13 +48,13 @@ public class CompanyIO {
 			CompanyIO.log("import empty");
 		}
 	}
-	
-	public static Warehouse getWarehouse(String warehouseId) {
-		Company company = Company.getInstance();
-		Warehouse warehouse = company.getWarehouse(warehouseId);
 
-		return warehouse;
-	}
+//	public static Warehouse getWarehouse(String warehouseId) {
+//		Company company = Company.getInstance();
+//		Warehouse warehouse = company.getWarehouse(warehouseId);
+//
+//		return warehouse;
+//	}
 
 	/**
 	 * 
@@ -116,42 +118,21 @@ public class CompanyIO {
 	private static Warehouse parseWarehouse(File file) throws Exception {
 		String file_type = CompanyIO.getFileExtension(file);
 		Warehouse temp;
+		Importable importer;
 		switch (file_type) {
 		case ".json":
-			temp = CompanyIO.parseJSON(file);
+			importer = new ImporterJSON();
+			temp = importer.parseWarehouse(file);
 			break;
 		case ".xml":
-			temp = CompanyIO.parseXML(file);
+			importer = new ImporterXML();
+			temp = importer.parseWarehouse(file);
 			break;
 		default:
 			throw new Exception();
 		}
 		System.out.println("Warehouse ID " + temp.getWarehouse_id());
 		return temp;
-	}
-
-	/**
-	 * 
-	 * @param file
-	 * @return
-	 * @throws Exception
-	 */
-	private static Warehouse parseJSON(File file) throws Exception {
-		Gson gson = new Gson();
-		Warehouse temp = new Warehouse("tempuse");
-		temp = gson.fromJson(new FileReader(file), Warehouse.class);
-		return temp;
-	}
-
-	/**
-	 * 
-	 * @param file
-	 * @return
-	 */
-	private static Warehouse parseXML(File file) {
-		ImporterXML importer = new ImporterXML();
-		
-		return importer.parseWarehouse(file);
 	}
 
 	/**
