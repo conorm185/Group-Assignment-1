@@ -77,7 +77,7 @@ public class ShippingUI {
 		warehouse_selector = new JComboBox<String>();
 		text_area = new JTextArea();
 		scroll_pane = new JScrollPane(text_area);
-		btn_import_json = new JButton("Import JSON");
+		btn_import_json = new JButton("Import File");
 		btn_add_incoming_shipment = new JButton("Add Incoming Shipment");
 		btn_freight_reciept_toggle = new JButton("Toggle Freight Reciept");
 		btn_export_content = new JButton("Export Content to JSON");
@@ -155,7 +155,7 @@ public class ShippingUI {
 	 */
 	private void listenerHelperImport() {
 		JFileChooser chooser = new JFileChooser();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("JSON Shipment Files", "json");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Shipment Files", "json", "xml");
 		chooser.setFileFilter(filter);
 		int returnVal = chooser.showOpenDialog(main_frame);
 
@@ -191,7 +191,7 @@ public class ShippingUI {
 	 */
 	private void listenerHelperReadContent() {
 		if (warehouse_selector.getSelectedItem() != null) {
-			text_area.append(company.readWarehouseContent((String) warehouse_selector.getSelectedItem()));
+			WarehouseUI current_warehouse = new WarehouseUI((String) warehouse_selector.getSelectedItem());
 		} else {
 			log("No warehouse selected.");
 		}

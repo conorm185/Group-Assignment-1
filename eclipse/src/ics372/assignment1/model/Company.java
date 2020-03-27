@@ -94,8 +94,7 @@ public class Company {
 	 * @return warehouse
 	 */
 	protected Warehouse getWarehouse(String warehouse_id) {
-		Warehouse warehouse = warehouses.get(warehouse_id.hashCode());
-		return warehouse;
+		return warehouses.get(warehouse_id.hashCode());
 	}
 
 	protected HashMap<Integer, Warehouse> getWarehouses() {
@@ -210,8 +209,40 @@ public class Company {
 		if (warehouse != null) {
 			return warehouse.isReceiving_freight();
 		} else {
-			CompanyIO.log(String.format("Warehouse: %s not found", warehouse_id));
+			CompanyIO.log(String.format("Warehouse: %s not found, unable to toggle freight status", warehouse_id));
 			return false;
+		}
+	}
+
+	/**
+	 * public method to retrieve the name of a given warehouse
+	 * 
+	 * @param warehouse_id the id of the warehouse being searched for
+	 * @return the name of the warehouse as a string
+	 */
+	public String getWarehouseName(String warehouse_id) {
+		Warehouse warehouse = this.getWarehouse(warehouse_id);
+		if (warehouse != null) {
+			return warehouse.getWarehouse_name();
+		} else {
+			CompanyIO.log(String.format("Warehouse: %s not found, unable to retrieve name", warehouse_id));
+			return "unnamed warehouse";
+		}
+	}
+
+	/**
+	 * public method the change the name of a given warehouse
+	 * 
+	 * @param warehouse_id   the id of the warehouse being renamed
+	 * @param warehouse_name the new name of the warehouse
+	 */
+	public void setWarehouseName(String warehouse_id, String warehouse_name) {
+		Warehouse warehouse = this.getWarehouse(warehouse_id);
+		if (warehouse != null) {
+			warehouse.setWarehouse_name(warehouse_name);
+			CompanyIO.log(String.format("Warehouse: %s name changed to %s", warehouse_id, warehouse_name));
+		} else {
+			CompanyIO.log(String.format("Warehouse: %s not found, unable to change name", warehouse_id));
 		}
 	}
 
@@ -221,13 +252,15 @@ public class Company {
 	 * @param warehouse_id
 	 * @return String
 	 */
-	public String readWarehouseContent(String warehouse_id) {
+	public HashMap<String, Shipment> readWarehouseContent(String warehouse_id) {
 		Warehouse warehouse = this.getWarehouse(warehouse_id);
+		HashMap<String, Shipment> shipments_in_warehouse = new HashMap<String, Shipment>();
 		if (warehouse != null) {
-			return warehouse.toString();
-		} else {
-			return "Warehouse not found!";
+			for (Shipment shipment : warehouse.getWarehouse_contents()) {
+				shipments_in_warehouse.put(shipment.getShipment_id(), (Shipment) shipment.clone());
+			}
 		}
+		return shipments_in_warehouse;
 	}
 
 //	/**

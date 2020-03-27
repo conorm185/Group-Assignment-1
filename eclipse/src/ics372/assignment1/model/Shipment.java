@@ -24,13 +24,13 @@ import java.util.Date;
  * @author nicole
  *
  */
-public class Shipment {
+public class Shipment implements Cloneable {
 	private String warehouse_id;
 	private ShippingMethod shipment_method;
 	private String shipment_id;
 	private double weight;
 	private Long receipt_date;
-	//private String unit;
+	// private String unit;
 
 	/**
 	 * ShippingMethod enum
@@ -170,5 +170,14 @@ public class Shipment {
 	@Override
 	public int hashCode() {
 		return shipment_id.hashCode();
+	}
+
+	@Override
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }
