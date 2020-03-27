@@ -240,6 +240,7 @@ public class Company {
 		Warehouse warehouse = this.getWarehouse(warehouse_id);
 		if (warehouse != null) {
 			warehouse.setWarehouse_name(warehouse_name);
+			CompanyIO.saveState();
 			CompanyIO.log(String.format("Warehouse: %s name changed to %s", warehouse_id, warehouse_name));
 		} else {
 			CompanyIO.log(String.format("Warehouse: %s not found, unable to change name", warehouse_id));

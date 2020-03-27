@@ -81,7 +81,7 @@ public class ShippingUI {
 		btn_add_incoming_shipment = new JButton("Add Incoming Shipment");
 		btn_freight_reciept_toggle = new JButton("Toggle Freight Reciept");
 		btn_export_content = new JButton("Export Content to JSON");
-		btn_read_warehouse_content = new JButton("Read Warehouse Content");
+		btn_read_warehouse_content = new JButton("View Warehouse");
 		lbl_warehouse_id = new JLabel("Warehouse Id");
 		lbl_add_new_warehouse = new JLabel("Add New Warehouse:");
 		warehouse_id_field = new JTextField();

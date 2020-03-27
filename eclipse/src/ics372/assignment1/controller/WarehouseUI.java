@@ -3,10 +3,13 @@ package ics372.assignment1.controller;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -15,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -48,8 +52,10 @@ public class WarehouseUI {
 	private JLabel lbl_warehouse_id_2;
 	private JLabel lbl_method_1;
 	private JLabel lbl_method_2;
+	private JButton btn_close;
 
 	public WarehouseUI(String warehouse_id) {
+
 		// Logic Objects declarations
 		company = Company.getInstance();
 		warehouse_contents = company.readWarehouseContent(warehouse_id);
@@ -64,23 +70,26 @@ public class WarehouseUI {
 		main_frame_warehouse = new JFrame();
 		panel = new JPanel();
 		panel_top = new JPanel();
+		panel_center = new JPanel();
+		panel_left = new JPanel();
+
 		lblWarehouseId = new JLabel(String.format("Warehouse ID: %s", warehouse_id));
 		lblWarehouseName = new JLabel("Warehouse Name:");
 		textField = new JTextField(company.getWarehouseName(warehouse_id));
-		panel_center = new JPanel();
-		lbl_warehouse_id_1 = new JLabel("Warehouse ID:");
-		lbl_warehouse_id_2 = new JLabel("warehouse_id");
-		lbl_shipment_id_1 = new JLabel("Shipment ID:");
-		lbl_shipment_id_2 = new JLabel("id");
-		lbl_method_1 = new JLabel("Shipping Method:");
-		lbl_method_2 = new JLabel("method");
-		lbl_weight_1 = new JLabel("Weight:");
+
+		lbl_warehouse_id_1 = new JLabel("Warehouse ID:", SwingConstants.CENTER);
+		lbl_warehouse_id_2 = new JLabel("warehouse_id", SwingConstants.CENTER);
+		lbl_shipment_id_1 = new JLabel("Shipment ID:", SwingConstants.CENTER);
+		lbl_shipment_id_2 = new JLabel("id", SwingConstants.CENTER);
+		lbl_method_1 = new JLabel("Shipping Method:", SwingConstants.CENTER);
+		lbl_method_2 = new JLabel("method", SwingConstants.CENTER);
+		lbl_weight_1 = new JLabel("Weight:", SwingConstants.CENTER);
+		lbl_weight_2 = new JLabel("weight", SwingConstants.CENTER);
+		btn_close = new JButton("close");
+
 		lbl_scrollpane = new JLabel("Shipment IDs:");
 		list = new JList(listModel);
 		scrollpane_shipments = new JScrollPane(list);
-		lbl_weight_2 = new JLabel("weight");
-
-		panel_left = new JPanel();
 
 		// layouts
 		panel.setLayout(new BorderLayout(0, 0));
@@ -94,6 +103,15 @@ public class WarehouseUI {
 		viewShipment((String) list.getSelectedValue());
 		list.setVisibleRowCount(10);
 		scrollpane_shipments.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+		lbl_warehouse_id_1.setBorder(BorderFactory.createLineBorder(Color.black));
+		lbl_warehouse_id_2.setBorder(BorderFactory.createLineBorder(Color.black));
+		lbl_shipment_id_1.setBorder(BorderFactory.createLineBorder(Color.black));
+		lbl_shipment_id_2.setBorder(BorderFactory.createLineBorder(Color.black));
+		lbl_method_1.setBorder(BorderFactory.createLineBorder(Color.black));
+		lbl_method_2.setBorder(BorderFactory.createLineBorder(Color.black));
+		lbl_weight_1.setBorder(BorderFactory.createLineBorder(Color.black));
+		lbl_weight_2.setBorder(BorderFactory.createLineBorder(Color.black));
 		// scrollpane_shipments.set
 		// Add listeners
 		list.addListSelectionListener(new ListSelectionListener() {
@@ -103,6 +121,17 @@ public class WarehouseUI {
 			}
 		});
 
+		textField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changeWarehouseName();
+			}
+		});
+
+		btn_close.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				main_frame_warehouse.dispose();
+			}
+		});
 		// add components
 		main_frame_warehouse.getContentPane().add(panel, BorderLayout.CENTER);
 		panel.add(panel_top, BorderLayout.NORTH);
@@ -114,7 +143,6 @@ public class WarehouseUI {
 		panel_top.add(textField);
 
 		panel_center.add(lbl_warehouse_id_1);
-		lbl_warehouse_id_1.setBorder(BorderFactory.createLineBorder(Color.black));
 		panel_center.add(lbl_warehouse_id_2);
 		panel_center.add(lbl_shipment_id_1);
 		panel_center.add(lbl_shipment_id_2);
@@ -122,6 +150,7 @@ public class WarehouseUI {
 		panel_center.add(lbl_method_2);
 		panel_center.add(lbl_weight_1);
 		panel_center.add(lbl_weight_2);
+		panel_center.add(btn_close);
 
 		panel_left.add(lbl_scrollpane);
 		panel_left.add(scrollpane_shipments);
@@ -132,11 +161,25 @@ public class WarehouseUI {
 		main_frame_warehouse.getContentPane().setLayout(new BorderLayout(0, 0));
 	}
 
+	/**
+	 * private method to centralize listener logic. updates JLabels to the values of
+	 * the currently selected Shipment.
+	 * 
+	 * @param shipment_id the id of the currently selected shipment
+	 */
 	private void viewShipment(String shipment_id) {
 		lbl_warehouse_id_2.setText(warehouse_contents.get(shipment_id).getWarehouse_id());
 		lbl_shipment_id_2.setText(shipment_id);
 		lbl_method_2.setText(warehouse_contents.get(shipment_id).getShipment_method().toString());
 		lbl_weight_2.setText(String.format("%.2f lbs", warehouse_contents.get(shipment_id).getWeight()));
 
+	}
+
+	/**
+	 * private method to centralize listener logic. Changes the name of the
+	 * currently selected warehouse.
+	 */
+	private void changeWarehouseName() {
+		company.setWarehouseName(warehouse_id, textField.getText());
 	}
 }
