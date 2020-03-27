@@ -51,16 +51,16 @@ public class Company {
 	private HashMap<Integer, Warehouse> warehouses;
 
 	/**
-	 * Company constructor
+	 * Company constructor that loads the state of the warehouses within a company
 	 */
 	private Company() {
 		warehouses = CompanyIO.loadState();
 	}
 
 	/**
-	 * method that returns an instance of a company
+	 * method that synchronizes an instance of a company
 	 * 
-	 * @return Company
+	 * @return a new instance of a company
 	 */
 	public static Company getInstance() {
 		if (company_instance == null) {
@@ -74,9 +74,10 @@ public class Company {
 	}
 
 	/**
-	 * method that returns an ArrayList of warehouse ids
+	 * method that loops through all the warehouses within a company and adds the warehouse ids to an ArrayList
+	 * then returns the ArrayList of warehouse ids within that company  
 	 * 
-	 * @return ids
+	 * @return ids ArrayList of warehouse ids  
 	 */
 	public ArrayList<String> getWarehouseIds() {
 		ArrayList<String> ids = new ArrayList<String>();
@@ -87,11 +88,10 @@ public class Company {
 	}
 
 	/**
-	 * method that takes in a warehouse id and compares it to the collection of
-	 * warehouses to find a match
+	 * method that takes in a warehouse id and returns the warehouse to which the specified id is mapped
 	 * 
-	 * @param warehouse_id
-	 * @return warehouse
+	 * @param warehouse id of a specific warehouse 
+	 * @return the warehouse associated with given warehouse id
 	 */
 	protected Warehouse getWarehouse(String warehouse_id) {
 		return warehouses.get(warehouse_id.hashCode());
@@ -105,8 +105,8 @@ public class Company {
 	 * Method to attempt to add a shipment to a corresponding warehouse, or create a
 	 * new warehouse if one does not currently exist. log the outcome.
 	 * 
-	 * @param shipment
-	 * @return
+	 * @param shipment that is to be added
+	 * @return 
 	 */
 	public boolean addIncomingShipment(Shipment shipment) {
 		Warehouse warehouse = this.getWarehouse(shipment.getWarehouse_id());
@@ -129,10 +129,11 @@ public class Company {
 	}
 
 	/**
-	 * Method used to remove a shipment from a warehouse
+	 * Method used to remove a shipment from a warehouse. Remove the shipment if the warehouse is found and is not null.
+	 * Or else log an error message.
 	 * 
-	 * @param shipment_id
-	 * @param warehouse_id
+	 * @param shipment_id shipment to be deleted
+	 * @param warehouse_id warehouse the contains shipment to be deleted
 	 */
 	private boolean removeShipment(String shipment_id, String warehouse_id) {
 		Warehouse warehouse = this.getWarehouse(warehouse_id);
@@ -146,9 +147,9 @@ public class Company {
 	}
 
 	/**
-	 * Method used to add a new warehouse
+	 * Method used to add a new warehouse. log the outcome.
 	 * 
-	 * @param warehouse_id
+	 * @param warehouse_id of new warehouse to be added
 	 */
 	public synchronized boolean addWarehouse(String warehouse_id) {
 		Warehouse warehouse = new Warehouse(warehouse_id);
@@ -164,9 +165,9 @@ public class Company {
 	}
 
 	/**
-	 * Method that takes a warehouse id and removes that warehouse
+	 * Method that takes a warehouse id and removes that warehouse. log the outcome.
 	 * 
-	 * @param warehouse_id
+	 * @param warehouse_id of warehouse to remove 
 	 */
 	private boolean removeWarehouse(String warehouse_id) {
 		if (warehouses.remove(warehouse_id.hashCode()) == null) {
@@ -180,8 +181,9 @@ public class Company {
 	}
 
 	/**
+	 * Method that changes the reciveing status of a freight receipt (on-to-off/off-to-on). log the outcome.
 	 * 
-	 * @param warehouse_id
+	 * @param warehouse_id used to find the receipt of a specific warehouse 
 	 */
 	public void toggleFreightReciept(String warehouse_id) {
 		Warehouse warehouse = this.getWarehouse(warehouse_id);
@@ -200,9 +202,11 @@ public class Company {
 	}
 
 	/**
+	 * Method the returns the status of a freight receipt (enabled/disabled). Return the freight receipt status
+	 * if the warehouse was found and is not null. Or else log an error message. 
 	 * 
-	 * @param warehouse_id
-	 * @return
+	 * @param warehouse_id used to find the receipt of a specific warehouse 
+	 * @return status of the freight receipt
 	 */
 	public boolean getFreightReceiptStatus(String warehouse_id) {
 		Warehouse warehouse = this.getWarehouse(warehouse_id);
@@ -215,7 +219,8 @@ public class Company {
 	}
 
 	/**
-	 * public method to retrieve the name of a given warehouse
+	 * public method to retrieve the name of a given warehouse. Return the warehouse name if found and not null. Or else
+	 * log and error message
 	 * 
 	 * @param warehouse_id the id of the warehouse being searched for
 	 * @return the name of the warehouse as a string
@@ -231,9 +236,9 @@ public class Company {
 	}
 
 	/**
-	 * public method the change the name of a given warehouse
+	 * public method to change the name of a given warehouse. log the outcome
 	 * 
-	 * @param warehouse_id   the id of the warehouse being renamed
+	 * @param warehouse_id  the id of the warehouse being renamed
 	 * @param warehouse_name the new name of the warehouse
 	 */
 	public void setWarehouseName(String warehouse_id, String warehouse_name) {
@@ -250,8 +255,8 @@ public class Company {
 	/**
 	 * method that returns a string of the all the contents/shipments in a warehouse
 	 * 
-	 * @param warehouse_id
-	 * @return String
+	 * @param warehouse_id the id of the warehouse 
+	 * @return String of warehouse contents 
 	 */
 	public HashMap<String, Shipment> readWarehouseContent(String warehouse_id) {
 		Warehouse warehouse = this.getWarehouse(warehouse_id);
