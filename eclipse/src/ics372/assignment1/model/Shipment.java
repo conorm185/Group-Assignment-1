@@ -199,10 +199,11 @@ public class Shipment implements Cloneable {
 	// Date is taken care of in setter.
 
 	/**
+	 * Method used to validate the the shipments within a warehouse. It goes through the values and if there is a missing
+	 * value the method will add a value 
 	 * 
-	 * 
-	 * @param warehouse
-	 * @return
+	 * @param warehouse of shipments 
+	 * @return true when all information is validated 
 	 */
 	public boolean validate(Warehouse warehouse) {
 
