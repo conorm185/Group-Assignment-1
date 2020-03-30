@@ -3,7 +3,7 @@
     {
       "warehouse_id": "15566",
       "shipment_method": "truck",
-      "shipment_id": "1adf4",
+      "shipment_id": "",
       "weight": 354.0,
       "receipt_date": 1515354694451
     },
@@ -13,6 +13,78 @@
       "shipment_id": "1a545",
       "weight": 20.6,
       "receipt_date": 1515354694451
+    },
+    {
+      "warehouse_id": "15566",
+      "shipment_method": "truck",
+      "shipment_id": "1adf4",
+      "weight": 354.0,
+      "receipt_date": 1515354694451
+    },
+    {
+      "warehouse_id": "15566",
+      "shipment_method": "truck",
+      "shipment_id": "1a97f4",
+      "weight": 354.0,
+      "receipt_date": 1515354694451
+    },
+    {
+      "warehouse_id": "15566",
+      "shipment_method": "air",
+      "shipment_id": "16dde",
+      "weight": 45.32000000000001,
+      "receipt_date": 1585543543592
+    },
+    {
+      "warehouse_id": "15566",
+      "shipment_method": "air",
+      "shipment_id": "16wde",
+      "weight": 45.32000000000001,
+      "receipt_date": 1585585869086
+    },
+    {
+      "warehouse_id": "15566",
+      "shipment_method": "truck",
+      "shipment_id": "1ad2f4",
+      "weight": 354.0,
+      "receipt_date": 1515354694451
+    },
+    {
+      "warehouse_id": "15566",
+      "shipment_method": "ship",
+      "shipment_id": "1a5425",
+      "weight": 20.6,
+      "receipt_date": 1515354694451
+    },
+    {
+      "warehouse_id": "15566",
+      "shipment_method": "truck",
+      "shipment_id": "1a927f4",
+      "weight": 354.0,
+      "receipt_date": 1515354694451
+    },
+    {
+      "warehouse_id": "15566",
+      "shipment_method": "truck",
+      "shipment_id": "1adpf4",
+      "weight": 354.0,
+      "receipt_date": 1515354694451
+    },
+    {
+      "warehouse_id": "15566",
+      "shipment_method": "ship",
+      "shipment_id": "1au425",
+      "weight": 20.6,
+      "receipt_date": 1515354694451
+    },
+    {
+      "warehouse_id": "15566",
+      "shipment_method": "air",
+      "shipment_id": "167wde",
+      "weight": 45.32000000000001,
+      "receipt_date": 1585587116411
     }
-  ]
+  ],
+  "warehouse_id": "15566",
+  "receiving_freight": true
 }

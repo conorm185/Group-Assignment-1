@@ -1,0 +1,7 @@
+<Shipments>
+	<Warehouse id="15566" name="Warehouse 120"> 
+		<Shipment type="Air" id="167wde">
+			<Weight unit="kg">20.6</Weight>
+		</Shipment>
+	</Warehouse>
+</Shipments>

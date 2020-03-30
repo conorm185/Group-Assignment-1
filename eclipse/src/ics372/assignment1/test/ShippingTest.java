@@ -4,8 +4,8 @@
 package ics372.assignment1.test;
 
 import static org.junit.jupiter.api.Assertions.*;
- 
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -48,7 +48,7 @@ class ShippingTest {
 	@Test
 	void testJSONFileWasReadContainingShipmentInformation() {
 		String jsonFileName = "test.json";
-		String shipment_idToCheck = "1adf4";
+		String shipment_idToCheck = "1ad2f4";
 		try {
 			CompanyIO.importShipments(new File(jsonFileName));
 		} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
@@ -142,7 +142,7 @@ class ShippingTest {
 	@Test
 	void testWarehouseCommands() {
 		try {
-			CompanyIO.importShipments(new File("test.json"));
+			CompanyIO.importShipments(new File("test3.json"));
 		} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -277,4 +277,56 @@ class ShippingTest {
 		
 	}
 	
+	@Test
+	void testWhichWarehouseAShipmentIsLocated() {
+		String test1ShipmentID = "49214j";
+		//Import a Shipment
+		try {
+			CompanyIO.importShipments(new File("test1.json"));
+		} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//For Each Warehouse, inquire if they contain the imported shipment
+		Shipment foundShipment = findShipment(test1ShipmentID);
+		//We expect one of our warehouses to have that shipment
+		assertTrue(foundShipment != null);
+	}
+	
+	@Test
+	void testCompanyStateIsSavedAfterDataEntry() {
+		
+	}
+	
+
+	
+	@Test
+	void testIncomingXMLIsImportedIntoCompanyData() {
+
+	}
+	
+
+	
+	Shipment findShipment(String shipmentID) {
+		Shipment shipmentFound = null;
+		ArrayList<String> warehouseIDs = company.getWarehouseIds();
+		for(String warehouseID : warehouseIDs) {
+			Warehouse warehouse = CompanyIO.getWarehouse(warehouseID);
+			if(warehouse != null) {
+				ArrayList<Shipment> shipments = warehouse.getWarehouse_contents();
+				for(Shipment shipment : shipments) {
+					if(shipment.getShipment_id().equals(shipmentID)) {
+						shipmentFound = shipment;
+						break;
+					}
+				}
+			}
+		}
+		return shipmentFound;
+	}
+	
+
 }

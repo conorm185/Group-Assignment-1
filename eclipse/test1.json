@@ -1,0 +1,10 @@
+{
+	"warehouse_contents": [{
+			"warehouse_id": "55",
+			"shipment_method": "truck",
+			"shipment_id": "49274j",
+			"weight": 74,
+			"receipt_date": 1515354694231
+		}
+		]
+}
