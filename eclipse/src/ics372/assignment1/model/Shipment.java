@@ -5,19 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
-/*
- * Shipment constraints:
- * 
- * 		shipment_id may not be null.(enforced by Shipment.Shipment() and Shipment.setShipment_id())
- * 
- * 		shipment_id may not be changed, once set (private setter)
- * 
- * 		warehouse_id may not be null.(enforced by Shipment.Shipment() and Shipment.setWarehouse_id())
- * 
- * 		two Shipments are equal according to .equals() if they have the same shipment_id
- * 
- */
-
 /**
  * Shipment class composed of getters and setters to access the different
  * attributes of a shipment
@@ -45,11 +32,12 @@ public class Shipment implements Cloneable {
 	/**
 	 * Shipment constructor
 	 * 
-	 * @param warehouse_id
-	 * @param shipment_method
-	 * @param shipment_id
-	 * @param weight
-	 * @param receipt_date
+	 * @param warehouse_id    the unique warehouse_id that this shipment is stored
+	 *                        in.
+	 * @param shipment_method the shipping method of this shipment
+	 * @param shipment_id     the unique shipment_id used to identify this shipment
+	 * @param weight          the weight of the shipment
+	 * @param receipt_date    the date this shipment was recieved.
 	 */
 	public Shipment(String warehouse_id, ShippingMethod shipment_method, String shipment_id, double weight,
 			Long receipt_date) {
@@ -68,6 +56,8 @@ public class Shipment implements Cloneable {
 	}
 
 	/**
+	 * Method to get the warehousee_id of this Shipment
+	 * 
 	 * @return the warehouse_id
 	 */
 	public String getWarehouse_id() {
@@ -75,6 +65,8 @@ public class Shipment implements Cloneable {
 	}
 
 	/**
+	 * method to set the warehouse_id of this Shipment
+	 * 
 	 * @param warehouse_id the warehouse_id to set
 	 */
 	public void setWarehouse_id(String warehouse_id) {
@@ -82,6 +74,8 @@ public class Shipment implements Cloneable {
 	}
 
 	/**
+	 * method to get the shipment_method of this shipment.
+	 * 
 	 * @return the shipment_method
 	 */
 	public ShippingMethod getShipment_method() {
@@ -89,6 +83,8 @@ public class Shipment implements Cloneable {
 	}
 
 	/**
+	 * method to get the shipment_method of this Shipment
+	 * 
 	 * @param shipment_method the shipment_method to set
 	 */
 	public void setShipment_method(ShippingMethod shipment_method) {
@@ -96,6 +92,8 @@ public class Shipment implements Cloneable {
 	}
 
 	/**
+	 * method to get the shipment_id of this shipment
+	 * 
 	 * @return the shipment_id
 	 */
 	public String getShipment_id() {
@@ -103,6 +101,9 @@ public class Shipment implements Cloneable {
 	}
 
 	/**
+	 * method to set the shipment_id of this Shipment. if input is null set shipment
+	 * to a blank string.
+	 * 
 	 * @param shipment_id the shipment_id to set
 	 */
 	public void setShipment_id(String shipment_id) {
@@ -110,6 +111,8 @@ public class Shipment implements Cloneable {
 	}
 
 	/**
+	 * method to get the weight of this shipment
+	 * 
 	 * @return the weight
 	 */
 	public double getWeight() {
@@ -117,6 +120,8 @@ public class Shipment implements Cloneable {
 	}
 
 	/**
+	 * method to set the weight of this shipment.
+	 * 
 	 * @param weight the weight to set
 	 */
 	public void setWeight(double weight) {
@@ -124,6 +129,8 @@ public class Shipment implements Cloneable {
 	}
 
 	/**
+	 * method to get the reciept_date of this object as a long
+	 * 
 	 * @return the receipt_date
 	 */
 	public Long getReceipt_date() {
@@ -132,6 +139,8 @@ public class Shipment implements Cloneable {
 	}
 
 	/**
+	 * method to set the reciept_date of this shipment with a long
+	 * 
 	 * @param receipt_date the receipt_date to set
 	 */
 	public void setReceipt_date(Long receipt_date) {
@@ -146,6 +155,8 @@ public class Shipment implements Cloneable {
 
 	/**
 	 * returns a String containing the information of a shipment
+	 * 
+	 * @return the string representation of this shipment
 	 */
 	@Override
 	public String toString() {
@@ -160,7 +171,11 @@ public class Shipment implements Cloneable {
 	}
 
 	/**
+	 * Override of the equals method. Two Shipments are equal if they have the same
+	 * shipment_id (ignoring case)
 	 * 
+	 * @param the Object being compared against this one
+	 * @return true if these shipments have the same shipment_id
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -175,7 +190,9 @@ public class Shipment implements Cloneable {
 	}
 
 	/**
+	 * Override of the hashCode method.
 	 * 
+	 * @return a hash of this Shipment's unique shpment ID.
 	 */
 	@Override
 	public int hashCode() {
@@ -183,7 +200,10 @@ public class Shipment implements Cloneable {
 	}
 
 	/**
+	 * Override of the clone method. Used to protect underlaying model objects from
+	 * changes that don't come from the Company class.
 	 * 
+	 * @return an Object object that is a clone of this Shipment.
 	 */
 	@Override
 	public Object clone() {
@@ -199,11 +219,11 @@ public class Shipment implements Cloneable {
 	// Date is taken care of in setter.
 
 	/**
-	 * Method used to validate the the shipments within a warehouse. It goes through the values and if there is a missing
-	 * value the method will add a value 
+	 * Method used to validate the the shipments within a warehouse. It goes through
+	 * the values and if there is a missing value the method will add a value
 	 * 
-	 * @param warehouse of shipments 
-	 * @return true when all information is validated 
+	 * @param warehouse of shipments
+	 * @return true when all information is validated
 	 */
 	public boolean validate(Warehouse warehouse) {
 
