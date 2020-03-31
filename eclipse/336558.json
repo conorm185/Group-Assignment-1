@@ -1,0 +1,41 @@
+{
+  "warehouse_contents": [
+    {
+      "warehouse_id": "336558",
+      "shipment_method": "rail",
+      "shipment_id": "85545",
+      "weight": 760.0,
+      "receipt_date": 1515354694451
+    },
+    {
+      "warehouse_id": "336558",
+      "shipment_method": "rail",
+      "shipment_id": "855245",
+      "weight": 760.0,
+      "receipt_date": 1515354694451
+    },
+    {
+      "warehouse_id": "336558",
+      "shipment_method": "rail",
+      "shipment_id": "855y45",
+      "weight": 760.0,
+      "receipt_date": 1515354694451
+    },
+    {
+      "warehouse_id": "336558",
+      "shipment_method": "rail",
+      "shipment_id": "8p5y45",
+      "weight": 760.0,
+      "receipt_date": 1515354694451
+    },
+    {
+      "warehouse_id": "336558",
+      "shipment_method": "rail",
+      "shipment_id": "8p5k45",
+      "weight": 760.0,
+      "receipt_date": 1515354694451
+    }
+  ],
+  "warehouse_id": "336558",
+  "receiving_freight": true
+}

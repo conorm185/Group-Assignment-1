@@ -2,14 +2,14 @@
 	"warehouse_contents": [{
 			"warehouse_id": "12513",
 			"shipment_method": "air",
-			"shipment_id": "482534j",
+			"shipment_id": "48kk34j",
 			"weight": 84,
 			"receipt_date": 1515354694451
 		},
 		{
 			"warehouse_id": "15566",
 			"shipment_method": "truck",
-			"shipment_id": "1a927f4",
+			"shipment_id": "1ah7f4",
 			"weight": 354,
 			"receipt_date": 1515354694451
 		}

@@ -63,6 +63,13 @@
         "shipment_id": "511347j",
         "weight": 80.0,
         "receipt_date": 1515354662451
+      },
+      {
+        "warehouse_id": "55",
+        "shipment_method": "ship",
+        "shipment_id": "51nn47j",
+        "weight": 80.0,
+        "receipt_date": 1515354662451
       }
     ],
     "warehouse_name": "warehouse 1",
@@ -152,6 +159,34 @@
         "warehouse_id": "336558",
         "shipment_method": "rail",
         "shipment_id": "8p5k45",
+        "weight": 760.0,
+        "receipt_date": 1515354694451
+      },
+      {
+        "warehouse_id": "336558",
+        "shipment_method": "rail",
+        "shipment_id": "5245",
+        "weight": 760.0,
+        "receipt_date": 1515354694451
+      },
+      {
+        "warehouse_id": "336558",
+        "shipment_method": "rail",
+        "shipment_id": "7gg5k45",
+        "weight": 760.0,
+        "receipt_date": 1515354694451
+      },
+      {
+        "warehouse_id": "336558",
+        "shipment_method": "rail",
+        "shipment_id": "7gk5k45",
+        "weight": 760.0,
+        "receipt_date": 1515354694451
+      },
+      {
+        "warehouse_id": "336558",
+        "shipment_method": "rail",
+        "shipment_id": "7gi5k45",
         "weight": 760.0,
         "receipt_date": 1515354694451
       }
@@ -256,10 +291,31 @@
         "shipment_id": "626",
         "weight": 66.0,
         "receipt_date": 1581184798802
+      },
+      {
+        "warehouse_id": "33333",
+        "shipment_method": "UNKNOWN",
+        "shipment_id": "54kl27",
+        "weight": 85.0,
+        "receipt_date": 1581184798802
+      },
+      {
+        "warehouse_id": "33333",
+        "shipment_method": "air",
+        "shipment_id": "6pphh6",
+        "weight": 66.0,
+        "receipt_date": 1581184798802
+      },
+      {
+        "warehouse_id": "33333",
+        "shipment_method": "UNKNOWN",
+        "shipment_id": "4562l7",
+        "weight": 85.0,
+        "receipt_date": 1581184798802
       }
     ],
     "warehouse_id": "33333",
-    "receiving_freight": false
+    "receiving_freight": true
   },
   "46884113": {
     "warehouse_contents": [
@@ -372,6 +428,69 @@
         "warehouse_id": "15566",
         "shipment_method": "ship",
         "shipment_id": "1l4l25",
+        "weight": 20.6,
+        "receipt_date": 1515354694451
+      },
+      {
+        "warehouse_id": "15566",
+        "shipment_method": "truck",
+        "shipment_id": "12f4",
+        "weight": 354.0,
+        "receipt_date": 1515354694451
+      },
+      {
+        "warehouse_id": "15566",
+        "shipment_method": "ship",
+        "shipment_id": "5425",
+        "weight": 20.6,
+        "receipt_date": 1515354694451
+      },
+      {
+        "warehouse_id": "15566",
+        "shipment_method": "truck",
+        "shipment_id": "1ah7f4",
+        "weight": 354.0,
+        "receipt_date": 1515354694451
+      },
+      {
+        "warehouse_id": "15566",
+        "shipment_method": "truck",
+        "shipment_id": "1ffkf4",
+        "weight": 354.0,
+        "receipt_date": 1515354694451
+      },
+      {
+        "warehouse_id": "15566",
+        "shipment_method": "ship",
+        "shipment_id": "1ggl25",
+        "weight": 20.6,
+        "receipt_date": 1515354694451
+      },
+      {
+        "warehouse_id": "15566",
+        "shipment_method": "truck",
+        "shipment_id": "1kfkf4",
+        "weight": 354.0,
+        "receipt_date": 1515354694451
+      },
+      {
+        "warehouse_id": "15566",
+        "shipment_method": "ship",
+        "shipment_id": "1kgl25",
+        "weight": 20.6,
+        "receipt_date": 1515354694451
+      },
+      {
+        "warehouse_id": "15566",
+        "shipment_method": "truck",
+        "shipment_id": "1ofkf4",
+        "weight": 354.0,
+        "receipt_date": 1515354694451
+      },
+      {
+        "warehouse_id": "15566",
+        "shipment_method": "ship",
+        "shipment_id": "1kil25",
         "weight": 20.6,
         "receipt_date": 1515354694451
       }

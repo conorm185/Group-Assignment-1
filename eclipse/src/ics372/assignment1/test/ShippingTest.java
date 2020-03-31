@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -136,7 +137,7 @@ class ShippingTest {
 	}
 	
 
-	//@Test					 //need need to change the shipping id
+	//@Test	   //need to change or update the shipping_id of test3.json & junittest1.json. 
 	void testWarehouseCommands() {
 		try {
 			CompanyIO.importShipments(new File("test3.json"));
@@ -180,7 +181,7 @@ class ShippingTest {
 		assertFalse(warehouse2.isReceiving_freight());
 		
 	}
-	//@Test			 //need need to change the shipping id
+	//@Test			 //need to change or update the shipping_id of test.json & junittest2.json.
 	void testAddingShipmentToFreightReceiptEnabledWarehouse() {
 		try {
 			CompanyIO.importShipments(new File("test.json"));
@@ -293,10 +294,10 @@ class ShippingTest {
 		assertTrue(foundShipment != null);
 	}
 	
-	//@Test     //need need to change the shipping id
+	//@Test     //need to change or update the shipping_id of test2.json & the variable test2ShipmentID
 	void testCompanyStateIsSavedAfterDataEntry() {
 		Gson gson = new Gson();
-		String test2ShipmentID = "511347j";
+		String test2ShipmentID = "51nn47j";
 		//Check if shipment previously existed in company
 		Shipment existed = findShipment(test2ShipmentID);
 		assert(existed == null);
@@ -391,4 +392,5 @@ class ShippingTest {
 		}
 		return shipmentFound;
 	}
+
 }
