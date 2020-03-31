@@ -3,44 +3,9 @@ package ics372.assignment1.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/*
- * Model Constraints: 
- * Company constraints:
- * 
- * 		Only one Company Object may exist at a time (a singleton)
- * 
- * 		a company may not have two Warehouses with the same company_id (enforced by Company.addWarehouse())
- * 
- * Warehouse constraints:
- * 
- * 		warehouse_id may not be null. (enforced by Warehouse.Warehouse() and Warehouse.setWarehouse_id())
- * 
- * 		warehouse_id may not be changed once set. (private setter)
- * 
- * 		a warehouse may not contain two Shipments with the same shpiment_id. (enforced by Warehouse.addShipment())
- * 
- * 		a warehouse may not receive a shipment if receiving_freight is set to false. (enforced by Warehouse.addShipment())
- * 
- * 		two Warehouses are equal according to .equals() if they have the same warehouse_id
- * 
- * Shipment constraints:
- * 
- * 		shipment_id may not be null.(enforced by Shipment.Shipment() and Shipment.setShipment_id())
- * 
- * 		shipment_id may not be changed, once set (private setter)
- * 
- * 		warehouse_id may not be null.(enforced by Shipment.Shipment() and Shipment.setWarehouse_id())
- * 
- * 		two Shipments are equal according to .equals() if they have the same shipment_id
- * 
- * Potential issues:
- * 		
- * 		not exhaustively tested for multi-user thread safety. (not yet a requirement)
- * 
- * 		does not enforce unique shipment_ids between warehouses  (will need fixing if moving shipments is allowed)
- */
-
 /**
+ * Company class is a Singleton implementation of a controller class used to
+ * handle all handle all operation with the model objects of a shiping company.
  * 
  * @author tom
  *
@@ -74,10 +39,11 @@ public class Company {
 	}
 
 	/**
-	 * method that loops through all the warehouses within a company and adds the warehouse ids to an ArrayList
-	 * then returns the ArrayList of warehouse ids within that company  
+	 * method that loops through all the warehouses within a company and adds the
+	 * warehouse ids to an ArrayList then returns the ArrayList of warehouse ids
+	 * within that company
 	 * 
-	 * @return ids ArrayList of warehouse ids  
+	 * @return ids ArrayList of warehouse ids
 	 */
 	public ArrayList<String> getWarehouseIds() {
 		ArrayList<String> ids = new ArrayList<String>();
@@ -88,9 +54,10 @@ public class Company {
 	}
 
 	/**
-	 * method that takes in a warehouse id and returns the warehouse to which the specified id is mapped
+	 * method that takes in a warehouse id and returns the warehouse to which the
+	 * specified id is mapped
 	 * 
-	 * @param warehouse id of a specific warehouse 
+	 * @param warehouse id of a specific warehouse
 	 * @return the warehouse associated with given warehouse id
 	 */
 	protected Warehouse getWarehouse(String warehouse_id) {
@@ -106,7 +73,7 @@ public class Company {
 	 * new warehouse if one does not currently exist. log the outcome.
 	 * 
 	 * @param shipment that is to be added
-	 * @return 
+	 * @return
 	 */
 	public boolean addIncomingShipment(Shipment shipment) {
 		Warehouse warehouse = this.getWarehouse(shipment.getWarehouse_id());
@@ -129,10 +96,10 @@ public class Company {
 	}
 
 	/**
-	 * Method used to remove a shipment from a warehouse. Remove the shipment if the warehouse is found and is not null.
-	 * Or else log an error message.
+	 * Method used to remove a shipment from a warehouse. Remove the shipment if the
+	 * warehouse is found and is not null. Or else log an error message.
 	 * 
-	 * @param shipment_id shipment to be deleted
+	 * @param shipment_id  shipment to be deleted
 	 * @param warehouse_id warehouse the contains shipment to be deleted
 	 */
 	private boolean removeShipment(String shipment_id, String warehouse_id) {
@@ -167,7 +134,7 @@ public class Company {
 	/**
 	 * Method that takes a warehouse id and removes that warehouse. log the outcome.
 	 * 
-	 * @param warehouse_id of warehouse to remove 
+	 * @param warehouse_id of warehouse to remove
 	 */
 	private boolean removeWarehouse(String warehouse_id) {
 		if (warehouses.remove(warehouse_id.hashCode()) == null) {
@@ -181,9 +148,10 @@ public class Company {
 	}
 
 	/**
-	 * Method that changes the reciveing status of a freight receipt (on-to-off/off-to-on). log the outcome.
+	 * Method that changes the reciveing status of a freight receipt
+	 * (on-to-off/off-to-on). log the outcome.
 	 * 
-	 * @param warehouse_id used to find the receipt of a specific warehouse 
+	 * @param warehouse_id used to find the receipt of a specific warehouse
 	 */
 	public void toggleFreightReciept(String warehouse_id) {
 		Warehouse warehouse = this.getWarehouse(warehouse_id);
@@ -202,10 +170,11 @@ public class Company {
 	}
 
 	/**
-	 * Method the returns the status of a freight receipt (enabled/disabled). Return the freight receipt status
-	 * if the warehouse was found and is not null. Or else log an error message. 
+	 * Method the returns the status of a freight receipt (enabled/disabled). Return
+	 * the freight receipt status if the warehouse was found and is not null. Or
+	 * else log an error message.
 	 * 
-	 * @param warehouse_id used to find the receipt of a specific warehouse 
+	 * @param warehouse_id used to find the receipt of a specific warehouse
 	 * @return status of the freight receipt
 	 */
 	public boolean getFreightReceiptStatus(String warehouse_id) {
@@ -219,8 +188,8 @@ public class Company {
 	}
 
 	/**
-	 * public method to retrieve the name of a given warehouse. Return the warehouse name if found and not null. Or else
-	 * log and error message
+	 * public method to retrieve the name of a given warehouse. Return the warehouse
+	 * name if found and not null. Or else log and error message
 	 * 
 	 * @param warehouse_id the id of the warehouse being searched for
 	 * @return the name of the warehouse as a string
@@ -238,7 +207,7 @@ public class Company {
 	/**
 	 * public method to change the name of a given warehouse. log the outcome
 	 * 
-	 * @param warehouse_id  the id of the warehouse being renamed
+	 * @param warehouse_id   the id of the warehouse being renamed
 	 * @param warehouse_name the new name of the warehouse
 	 */
 	public void setWarehouseName(String warehouse_id, String warehouse_name) {
@@ -255,8 +224,8 @@ public class Company {
 	/**
 	 * method that returns a string of the all the contents/shipments in a warehouse
 	 * 
-	 * @param warehouse_id the id of the warehouse 
-	 * @return String of warehouse contents 
+	 * @param warehouse_id the id of the warehouse
+	 * @return String of warehouse contents
 	 */
 	public HashMap<String, Shipment> readWarehouseContent(String warehouse_id) {
 		Warehouse warehouse = this.getWarehouse(warehouse_id);
@@ -268,12 +237,4 @@ public class Company {
 		}
 		return shipments_in_warehouse;
 	}
-
-//	/**
-//	 * reload the warehouses state before each data operation to make sure all users
-//	 * are using the same data.
-//	 */
-//	private void refreshContent() {
-//		warehouses = CompanyIO.loadState();
-//	}
 }

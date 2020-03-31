@@ -22,18 +22,22 @@ import ics372.assignment1.io.ImporterJSON;
 import ics372.assignment1.io.ImporterXML;
 
 /**
+ * Class filled with static methods to handle all file input/output operations
+ * for the Company singleton. Includes importing, exporting, logging, saving,
+ * and loading.
  * 
  * @author conor murphy
  *
  */
 public class CompanyIO {
 	/**
-	 * Method that attempts to import a JSON file by parsing the file into a temporary file/warehouse 
-	 * if the file/warehouse is not empty it loops through all the shipments in the file and checks there validity
-	 * then adds the shipment to the company. Outcome is logged. 
+	 * Method that attempts to import a JSON file by parsing the file into a
+	 * temporary file/warehouse if the file/warehouse is not empty it loops through
+	 * all the shipments in the file and checks there validity then adds the
+	 * shipment to the company. Outcome is logged.
 	 * 
 	 * @param file to be imported
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public static void importShipments(File file) throws Exception {
 		Warehouse temp = CompanyIO.parseWarehouse(file);
@@ -53,9 +57,10 @@ public class CompanyIO {
 	}
 
 	/**
-	 * Method that takes a warehouse id and gets an instance of a warehouse with that id
+	 * Method that takes a warehouse id and gets an instance of a warehouse with
+	 * that id
 	 * 
-	 * @param warehouseId id of warehouse being accessed 
+	 * @param warehouseId id of warehouse being accessed
 	 * @return warehouse that was accessed with specific id
 	 */
 	public static Warehouse getWarehouse(String warehouseId) {
@@ -66,7 +71,8 @@ public class CompanyIO {
 	}
 
 	/**
-	 * Method that exports the contents of a specific warehouse to a JSON file and logs the outocome
+	 * Method that exports the contents of a specific warehouse to a JSON file and
+	 * logs the outocome
 	 * 
 	 * @param warehouse_id id of warehouse whose contents need to be exported
 	 * @throws IOException
@@ -83,9 +89,9 @@ public class CompanyIO {
 	}
 
 	/**
-	 * Method used to log actions throughout the software 
+	 * Method used to log actions throughout the software
 	 * 
-	 * @param entry the string/message to be logged/displayed 
+	 * @param entry the string/message to be logged/displayed
 	 */
 	public static void log(String entry) {
 		File company_log = new File("company_log.txt");
@@ -101,9 +107,9 @@ public class CompanyIO {
 	}
 
 	/**
-	 * Private method that gets the file extention/type of a file  
+	 * Private method that gets the file extention/type of a file
 	 * 
-	 * @param file whos extention/type needs to be found 
+	 * @param file whos extention/type needs to be found
 	 * @return a string of the extention type
 	 */
 	private static String getFileExtension(File file) {
@@ -122,8 +128,9 @@ public class CompanyIO {
 	}
 
 	/**
-	 * Method that takes in a file, finds its extention, creates a new importer object
-	 * based on the file type, then parses that file into a temporary warehouse 
+	 * Method that takes in a file, finds its extention, creates a new importer
+	 * object based on the file type, then parses that file into a temporary
+	 * warehouse
 	 * 
 	 * @param file that needs to be parsed
 	 * @return file/temporary parsed warehouse
@@ -150,8 +157,8 @@ public class CompanyIO {
 	}
 
 	/**
-	 * Method that saves the state of the software. It gets the HashMap of warehouses within a company 
-	 * and writes them to a JSON and logs the outcome
+	 * Method that saves the state of the software. It gets the HashMap of
+	 * warehouses within a company and writes them to a JSON and logs the outcome
 	 * 
 	 */
 	protected static void saveState() {
