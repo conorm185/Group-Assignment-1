@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
@@ -26,23 +28,30 @@ import ics372.assignment1.model.Company;
 import ics372.assignment1.model.Shipment;
 
 public class WarehouseUI {
-	// Swing components
+	//model objects
 	private Company company;
 	private HashMap<String, Shipment> warehouse_contents;
 	private String warehouse_id;
-
+	
+	// Swing components
+	//Panels and frames
 	private JFrame main_frame_warehouse;
 	private JPanel panel;
 	private JPanel panel_top;
-	private JLabel lblWarehouseId;
-	private JLabel lblWarehouseName;
-	private JTextField textField;
-	private JList list;
-	private JScrollPane scrollpane_shipments;
-
-	private DefaultListModel<String> listModel;
 	private JPanel panel_center;
 	private JPanel panel_left;
+	
+	//top
+	private JLabel lbl_warehouse_id;
+	private JLabel lbl_warehouse_name;
+	private JTextField text_warehouse_name;
+	
+	//left
+	private JList list;
+	private JScrollPane scrollpane_shipments;
+	private DefaultListModel<String> listModel;
+	
+	//center
 	private JLabel lbl_scrollpane;
 	private JLabel lbl_shipment_id_1;
 	private JLabel lbl_weight_1;
@@ -52,6 +61,8 @@ public class WarehouseUI {
 	private JLabel lbl_warehouse_id_2;
 	private JLabel lbl_method_1;
 	private JLabel lbl_method_2;
+	private JLabel lbl_date_1;
+	private JLabel lbl_date_2;
 	private JButton btn_close;
 
 	public WarehouseUI(String warehouse_id) {
@@ -73,18 +84,20 @@ public class WarehouseUI {
 		panel_center = new JPanel();
 		panel_left = new JPanel();
 
-		lblWarehouseId = new JLabel(String.format("Warehouse ID: %s", warehouse_id));
-		lblWarehouseName = new JLabel("Warehouse Name:");
-		textField = new JTextField(company.getWarehouseName(warehouse_id));
+		lbl_warehouse_id = new JLabel(String.format("Warehouse ID: %s", warehouse_id));
+		lbl_warehouse_name = new JLabel("Warehouse Name:");
+		text_warehouse_name = new JTextField(company.getWarehouseName(warehouse_id));
 
 		lbl_warehouse_id_1 = new JLabel("Warehouse ID:", SwingConstants.CENTER);
-		lbl_warehouse_id_2 = new JLabel("warehouse_id", SwingConstants.CENTER);
+		lbl_warehouse_id_2 = new JLabel("n/a", SwingConstants.CENTER);
 		lbl_shipment_id_1 = new JLabel("Shipment ID:", SwingConstants.CENTER);
-		lbl_shipment_id_2 = new JLabel("id", SwingConstants.CENTER);
+		lbl_shipment_id_2 = new JLabel("n/a", SwingConstants.CENTER);
 		lbl_method_1 = new JLabel("Shipping Method:", SwingConstants.CENTER);
-		lbl_method_2 = new JLabel("method", SwingConstants.CENTER);
+		lbl_method_2 = new JLabel("n/a", SwingConstants.CENTER);
 		lbl_weight_1 = new JLabel("Weight:", SwingConstants.CENTER);
-		lbl_weight_2 = new JLabel("weight", SwingConstants.CENTER);
+		lbl_weight_2 = new JLabel("n/a", SwingConstants.CENTER);
+		lbl_date_1 = new JLabel("Reciept Date", SwingConstants.CENTER);
+		lbl_date_2 = new JLabel("n/a", SwingConstants.CENTER); 
 		btn_close = new JButton("close");
 
 		lbl_scrollpane = new JLabel("Shipment IDs:");
@@ -93,11 +106,11 @@ public class WarehouseUI {
 
 		// layouts
 		panel.setLayout(new BorderLayout(0, 0));
-		panel_center.setLayout(new GridLayout(5, 2, 0, 0));
+		panel_center.setLayout(new GridLayout(6, 2, 0, 0));
 		panel_left.setLayout(new GridLayout(2, 1, 0, 0));
 
 		// configure components
-		textField.setColumns(10);
+		text_warehouse_name.setColumns(16);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setSelectedIndex(0);
 		viewShipment((String) list.getSelectedValue());
@@ -112,7 +125,9 @@ public class WarehouseUI {
 		lbl_method_2.setBorder(BorderFactory.createLineBorder(Color.black));
 		lbl_weight_1.setBorder(BorderFactory.createLineBorder(Color.black));
 		lbl_weight_2.setBorder(BorderFactory.createLineBorder(Color.black));
-		// scrollpane_shipments.set
+		lbl_date_1.setBorder(BorderFactory.createLineBorder(Color.black));
+		lbl_date_2.setBorder(BorderFactory.createLineBorder(Color.black));
+		
 		// Add listeners
 		list.addListSelectionListener(new ListSelectionListener() {
 			@Override
@@ -121,7 +136,7 @@ public class WarehouseUI {
 			}
 		});
 
-		textField.addActionListener(new ActionListener() {
+		text_warehouse_name.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				changeWarehouseName();
 			}
@@ -138,9 +153,9 @@ public class WarehouseUI {
 		panel.add(panel_left, BorderLayout.WEST);
 		panel.add(panel_center, BorderLayout.CENTER);
 
-		panel_top.add(lblWarehouseId);
-		panel_top.add(lblWarehouseName);
-		panel_top.add(textField);
+		panel_top.add(lbl_warehouse_id);
+		panel_top.add(lbl_warehouse_name);
+		panel_top.add(text_warehouse_name);
 
 		panel_center.add(lbl_warehouse_id_1);
 		panel_center.add(lbl_warehouse_id_2);
@@ -150,6 +165,8 @@ public class WarehouseUI {
 		panel_center.add(lbl_method_2);
 		panel_center.add(lbl_weight_1);
 		panel_center.add(lbl_weight_2);
+		panel_center.add(lbl_date_1);
+		panel_center.add(lbl_date_2);
 		panel_center.add(btn_close);
 
 		panel_left.add(lbl_scrollpane);
@@ -168,11 +185,16 @@ public class WarehouseUI {
 	 * @param shipment_id the id of the currently selected shipment
 	 */
 	private void viewShipment(String shipment_id) {
-		lbl_warehouse_id_2.setText(warehouse_contents.get(shipment_id).getWarehouse_id());
-		lbl_shipment_id_2.setText(shipment_id);
-		lbl_method_2.setText(warehouse_contents.get(shipment_id).getShipment_method().toString());
-		lbl_weight_2.setText(String.format("%.2f lbs", warehouse_contents.get(shipment_id).getWeight()));
-
+		if (shipment_id != null) {
+			Date receipt = new Date(warehouse_contents.get(shipment_id).getReceipt_date());
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			
+			lbl_warehouse_id_2.setText(warehouse_contents.get(shipment_id).getWarehouse_id());
+			lbl_shipment_id_2.setText(shipment_id);
+			lbl_method_2.setText(warehouse_contents.get(shipment_id).getShipment_method().toString());
+			lbl_weight_2.setText(String.format("%.2f lbs", warehouse_contents.get(shipment_id).getWeight()));
+			lbl_date_2.setText(formatter.format(receipt));
+		}
 	}
 
 	/**
@@ -180,6 +202,6 @@ public class WarehouseUI {
 	 * currently selected warehouse.
 	 */
 	private void changeWarehouseName() {
-		company.setWarehouseName(warehouse_id, textField.getText());
+		company.setWarehouseName(warehouse_id, text_warehouse_name.getText());
 	}
 }

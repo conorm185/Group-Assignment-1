@@ -222,7 +222,7 @@ public class Company {
 	}
 
 	/**
-	 * method that returns a string of the all the contents/shipments in a warehouse
+	 * Returns a HashMap of a warehouses contents.  Intended to be view only (cloned to protect the underlying model)
 	 * 
 	 * @param warehouse_id the id of the warehouse
 	 * @return String of warehouse contents

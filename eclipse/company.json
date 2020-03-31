@@ -70,6 +70,13 @@
         "shipment_id": "51nn47j",
         "weight": 80.0,
         "receipt_date": 1515354662451
+      },
+      {
+        "warehouse_id": "55",
+        "shipment_method": "truck",
+        "shipment_id": "1234564321",
+        "weight": 123.21,
+        "receipt_date": 1585644246959
       }
     ],
     "warehouse_name": "warehouse 1",
@@ -122,8 +129,9 @@
   },
   "1449589344": {
     "warehouse_contents": [],
+    "warehouse_name": "test test",
     "warehouse_id": "111111",
-    "receiving_freight": true
+    "receiving_freight": false
   },
   "1508847618": {
     "warehouse_contents": [
@@ -508,6 +516,7 @@
         "receipt_date": 1515354694451
       }
     ],
+    "warehouse_name": "Wavy Wacky Warehouse",
     "warehouse_id": "12513",
     "receiving_freight": false
   },

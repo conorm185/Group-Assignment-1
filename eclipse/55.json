@@ -34,6 +34,41 @@
       "shipment_id": "33",
       "weight": 890.0,
       "receipt_date": 1583812193841
+    },
+    {
+      "warehouse_id": "55",
+      "shipment_method": "truck",
+      "shipment_id": "48214j",
+      "weight": 74.0,
+      "receipt_date": 1515354694231
+    },
+    {
+      "warehouse_id": "55",
+      "shipment_method": "truck",
+      "shipment_id": "49214j",
+      "weight": 74.0,
+      "receipt_date": 1515354694231
+    },
+    {
+      "warehouse_id": "55",
+      "shipment_method": "truck",
+      "shipment_id": "49274j",
+      "weight": 74.0,
+      "receipt_date": 1515354694231
+    },
+    {
+      "warehouse_id": "55",
+      "shipment_method": "ship",
+      "shipment_id": "511347j",
+      "weight": 80.0,
+      "receipt_date": 1515354662451
+    },
+    {
+      "warehouse_id": "55",
+      "shipment_method": "ship",
+      "shipment_id": "51nn47j",
+      "weight": 80.0,
+      "receipt_date": 1515354662451
     }
   ],
   "warehouse_name": "warehouse 1",
