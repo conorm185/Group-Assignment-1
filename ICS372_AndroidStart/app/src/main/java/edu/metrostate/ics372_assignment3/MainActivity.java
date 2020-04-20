@@ -7,14 +7,17 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    Button impButt, shipButt, receiptButt, viewButt, exportButt, addButt; // names are temporary but bad jokes last forever. buttons.
 
     private static final int WRITE_STORAGE_PERMISSION_REQUEST = 5;
 
     private WarehouseApplication application;
-
     /**
      * Creates the view for the application
      * @param savedInstanceState saved state information for the activity
@@ -25,7 +28,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         application = (WarehouseApplication)getApplication();
 
+        // buttons
+        impButt = (Button) findViewById(R.id.importButton);
+        shipButt = (Button) findViewById(R.id.addShipButton);
+        receiptButt = (Button) findViewById(R.id.receiptButton);
+        viewButt = (Button) findViewById(R.id.viewWarehouseButton);
+        exportButt = (Button) findViewById(R.id.exportContentButton);
+        addButt = (Button) findViewById(R.id.addWarehouseButton);
 
+        impButt.setOnClickListener(this);
+        shipButt.setOnClickListener(this);
+        receiptButt.setOnClickListener(this);
+        viewButt.setOnClickListener(this);
+        exportButt.setOnClickListener(this);
+        addButt.setOnClickListener(this);
 
         //  Check Storage Permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -36,7 +52,36 @@ public class MainActivity extends AppCompatActivity {
                     WRITE_STORAGE_PERMISSION_REQUEST);
         }
 
+
+
     }
+
+
+    @Override
+    public void onClick(View v) {
+        //code for onclick listeners to move code out of onCreate. Toasts for debugging.
+        switch(v.getId()){
+            case R.id.importButton:
+                Toast.makeText(this, "importButton pressed", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.addShipButton:
+                Toast.makeText(this, "addShip pressed", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.receiptButton:
+                Toast.makeText(this, "receiptButton pressed", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.viewWarehouseButton:
+                Toast.makeText(this, "view warehouse pressed", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.exportContentButton:
+                Toast.makeText(this, "export pressed", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.addWarehouseButton:
+                Toast.makeText(this, "add warehouse pressed", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
 
 
     /**
