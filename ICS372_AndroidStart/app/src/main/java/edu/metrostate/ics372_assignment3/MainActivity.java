@@ -5,9 +5,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -18,15 +20,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int WRITE_STORAGE_PERMISSION_REQUEST = 5;
 
     private WarehouseApplication application;
+
     /**
      * Creates the view for the application
+     *
      * @param savedInstanceState saved state information for the activity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        application = (WarehouseApplication)getApplication();
+        application = (WarehouseApplication) getApplication();
 
         // buttons
         impButt = (Button) findViewById(R.id.importButton);
@@ -53,19 +57,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
-
     }
 
 
     @Override
     public void onClick(View v) {
         //code for onclick listeners to move code out of onCreate. Toasts for debugging.
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.importButton:
                 Toast.makeText(this, "importButton pressed", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.addShipButton:
                 Toast.makeText(this, "addShip pressed", Toast.LENGTH_SHORT).show();
+                openAddShipmentActivity();
                 break;
             case R.id.receiptButton:
                 Toast.makeText(this, "receiptButton pressed", Toast.LENGTH_SHORT).show();
@@ -82,12 +86,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
+    // opens Activity to add a shipment. Used by addShipButton.
+    public void openAddShipmentActivity() {
+        Intent intent = new Intent(this, AddShipment.class);
+        startActivity(intent);
+    }
 
     /**
      * Indicates when the user has responded to a permission request
-     * @param requestCode The request code
-     * @param permissions The permissions requested
+     *
+     * @param requestCode  The request code
+     * @param permissions  The permissions requested
      * @param grantResults The result
      */
     @Override
