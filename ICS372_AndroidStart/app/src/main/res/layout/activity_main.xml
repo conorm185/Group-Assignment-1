@@ -33,20 +33,21 @@ android:orientation="vertical">
 
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/importButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Import File"
         android:layout_weight="1" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/addShipButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Shipment"
         android:layout_weight="1" />
 
     <Button
+        android:id="@+id/receiptButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Toggle Receipt"
@@ -72,17 +73,19 @@ android:orientation="vertical">
     android:gravity="bottom">
 
     <Button
+        android:id="@+id/viewWarehouseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="View Warehouse" />
 
     <Button
+        android:id="@+id/exportContentButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Export Content" />
 
     <Button
-        android:id="@+id/addWarehouse"
+        android:id="@+id/addWarehouseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
