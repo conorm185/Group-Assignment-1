@@ -21,7 +21,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="Pixel_2_API_29" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="Pixel_XL_API_29" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -64,6 +64,14 @@
   <component name="FavoritesManager">
     <favorites_list name="ICS372_Assignment3" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="layoutResourceFile" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
@@ -81,6 +89,9 @@
     <option name="MODULE_TAB" value="Properties" />
   </component>
   <component name="RecentsManager">
+    <key name="android.template.packageName">
+      <recent name="edu.metrostate.ics372_assignment3" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\git\Group-Assignment-1\ICS372_AndroidStart\app\src\main\java\edu\metrostate\ics372_assignment3\model" />
       <recent name="C:\git\Group-Assignment-1\ICS372_AndroidStart\app\src\main\java\edu\metrostate\ics372_assignment3\io" />
