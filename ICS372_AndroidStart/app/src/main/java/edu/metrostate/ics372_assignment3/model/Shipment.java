@@ -174,7 +174,7 @@ public class Shipment implements Cloneable {
 	 * Override of the equals method. Two Shipments are equal if they have the same
 	 * shipment_id (ignoring case)
 	 * 
-	 * @param the Object being compared against this one
+	 * @param obj Object being compared against this one
 	 * @return true if these shipments have the same shipment_id
 	 */
 	@Override

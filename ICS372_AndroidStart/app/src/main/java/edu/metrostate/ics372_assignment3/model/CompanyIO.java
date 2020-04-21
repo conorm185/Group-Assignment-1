@@ -17,6 +17,7 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
+import edu.metrostate.ics372_assignment3.WarehouseApplication;
 import edu.metrostate.ics372_assignment3.io.Importable;
 import edu.metrostate.ics372_assignment3.io.ImporterJSON;
 import edu.metrostate.ics372_assignment3.io.ImporterXML;
@@ -57,6 +58,36 @@ public class CompanyIO {
 	}
 
 	/**
+	 * Method that attempts to import a JSON file by parsing the file into a temporary file/warehouse
+	 * if the file/warehouse is not empty it loops through all the shipments in the file and checks there validity
+	 * then adds the shipment to the company. Outcome is logged.
+	 *
+	 * @param fileContent to be imported
+	 * @param fileExtension
+	 * @throws Exception
+	 */
+	public static void importShipments(String fileContent, String fileExtension) throws Exception {
+		Warehouse temp = CompanyIO.parseWarehouse(fileContent, fileExtension);
+
+		Company company = Company.getInstance();
+		CompanyIO.log(String.format("importing shipments from %s", fileExtension));
+		if (temp != null) { // if the .json was not empty
+			for (Shipment s : temp.getWarehouse_contents()) {
+				// Check shipment object for validity
+				s.validate(temp); // temp values
+				// validate(s); should replace any unparsed fields with default values
+				company.addIncomingShipment(s);
+			}
+		} else {
+			CompanyIO.log("import empty");
+		}
+	}
+
+
+
+
+
+	/**
 	 * Method that takes a warehouse id and gets an instance of a warehouse with
 	 * that id
 	 * 
@@ -77,6 +108,7 @@ public class CompanyIO {
 	 * @param warehouse_id id of warehouse whose contents need to be exported
 	 * @throws IOException
 	 */
+	/**
 	public static void exportContentToJSON(String warehouse_id) throws IOException {
 		Company company = Company.getInstance();
 		Warehouse warehouse = company.getWarehouse(warehouse_id);
@@ -87,12 +119,34 @@ public class CompanyIO {
 			log(String.format("warehouse%s: exported to %s.json", warehouse_id, warehouse_id));
 		}
 	}
+*/
+
+
+	/**
+	 * Method that exports the contents of a specific warehouse to a JSON file and
+	 * logs the outocome
+	 *
+	 * @param warehouse_id id of warehouse whose contents need to be exported
+	 * @throws IOException
+	 */
+
+	public static String exportContentToJSON(String warehouse_id) throws IOException {
+		Company company = Company.getInstance();
+		Warehouse warehouse = company.getWarehouse(warehouse_id);
+		System.out.println("Warehouse data " + warehouse.getWarehouse_name() + " " + warehouse.getWarehouse_id());
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		String content = gson.toJson(warehouse);
+		log(String.format("warehouse%s: exported to %s.json", warehouse_id, warehouse_id));
+		return content;
+	}
+
 
 	/**
 	 * Method used to log actions throughout the software
 	 * 
 	 * @param entry the string/message to be logged/displayed
 	 */
+	/*
 	public static void log(String entry) {
 		File company_log = new File("company_log.txt");
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
@@ -104,6 +158,18 @@ public class CompanyIO {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+*/
+	public static void log(String entry) {
+		File company_log = new File("company_log.txt");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+		LocalDateTime now = LocalDateTime.now();
+		//BufferedWriter writer = new BufferedWriter(new FileWriter(company_log, true));
+		String log_entry = String.format("[%s]\t[%s]\n", formatter.format(now), entry);
+		WarehouseApplication.warehouseApplicationSingleton.log(log_entry);
+		//writer.write(log_entry);
+		System.out.print(log_entry);
+
 	}
 
 	/**
@@ -156,6 +222,31 @@ public class CompanyIO {
 		return temp;
 	}
 
+
+	private static Warehouse parseWarehouse(String fileContent, String fileExtension) throws Exception {
+		//String file_type = CompanyIO.getFileExtension(file);
+		String file_type = fileExtension;
+		System.out.println("File type is " + file_type);
+		Warehouse temp;
+		Importable importer;
+		switch (file_type) {
+			case "json":
+				System.out.println("its json");
+				importer = new ImporterJSON();
+				temp = importer.parseWarehouse(fileContent);
+				break;
+			case "xml":
+				System.out.println("its xml");
+				importer = new ImporterXML();
+				temp = importer.parseWarehouse(fileContent);
+				break;
+			default:
+				throw new Exception();
+		}
+		System.out.println("Warehouse ID " + temp.getWarehouse_id());
+		return temp;
+	}
+
 	/**
 	 * Method that saves the state of the software. It gets the HashMap of
 	 * warehouses within a company and writes them to a JSON and logs the outcome
@@ -164,7 +255,7 @@ public class CompanyIO {
 	protected static void saveState() {
 		Company company = Company.getInstance();
 		HashMap<Integer, Warehouse> warehouses = company.getWarehouses();
-
+		/*
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		try (FileWriter writer = new FileWriter("company.json");) {
 			writer.write(gson.toJson(warehouses));
@@ -173,6 +264,11 @@ public class CompanyIO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		 */
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		String json = gson.toJson(warehouses);
+		WarehouseApplication.warehouseApplicationSingleton.writeFileContent(json);
+		log(String.format("All content saved"));
 	}
 
 	/**
@@ -181,13 +277,15 @@ public class CompanyIO {
 	 * @return HashMap of warehouses within the JSON
 	 */
 	protected static HashMap<Integer, Warehouse> loadState() {
-		File file = new File("company.json");
+		//File file = new File("company.json");
 		Gson gson = new Gson();
 		Type genericType = new TypeToken<HashMap<Integer, Warehouse>>() {
 		}.getType();
 		HashMap<Integer, Warehouse> warehouses = new HashMap<Integer, Warehouse>();
 		try {
-			warehouses = gson.fromJson(new FileReader(file), genericType);
+			String storageJson = WarehouseApplication.warehouseApplicationSingleton.loadState();
+			warehouses = gson.fromJson(storageJson, genericType);
+			System.out.println("Warehouses size " + warehouses.size());
 		} catch (JsonIOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -196,6 +294,8 @@ public class CompanyIO {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return warehouses;
