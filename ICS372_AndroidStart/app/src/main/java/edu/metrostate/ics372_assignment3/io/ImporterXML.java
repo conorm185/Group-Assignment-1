@@ -111,4 +111,9 @@ public class ImporterXML implements Importable {
 		return warehouse;
 	}
 
+	@Override
+	public Warehouse parseWarehouse(String fileContent) throws Exception {
+		return null;
+	}
+
 }

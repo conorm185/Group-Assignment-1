@@ -58,9 +58,21 @@ public class CompanyIO {
 		}
 	}
 
-	public static void importShipments(String content, String fileExtension) {
-		Log.i("content",content);
-		Log.i("file",fileExtension);
+	public static void importShipments(String fileContent, String fileExtension) throws Exception {
+		Warehouse temp = CompanyIO.parseWarehouse(fileContent, fileExtension);
+
+		Company company = Company.getInstance();
+		CompanyIO.log(String.format("importing shipments from %s", fileExtension));
+		if (temp != null) { // if the .json was not empty
+			for (Shipment s : temp.getWarehouse_contents()) {
+				// Check shipment object for validity
+				s.validate(temp); // temp values
+				// validate(s); should replace any unparsed fields with default values
+				company.addIncomingShipment(s);
+			}
+		} else {
+			CompanyIO.log("import empty");
+		}
 	}
 
 	/**
@@ -160,6 +172,30 @@ public class CompanyIO {
 			break;
 		default:
 			throw new Exception();
+		}
+		System.out.println("Warehouse ID " + temp.getWarehouse_id());
+		return temp;
+	}
+
+	private static Warehouse parseWarehouse(String fileContent, String fileExtension) throws Exception {
+		//String file_type = CompanyIO.getFileExtension(file);
+		String file_type = fileExtension;
+		System.out.println("File type is " + file_type);
+		Warehouse temp;
+		Importable importer;
+		switch (file_type) {
+			case "json":
+				System.out.println("its json");
+				importer = new ImporterJSON();
+				temp = importer.parseWarehouse(fileContent);
+				break;
+			case "xml":
+				System.out.println("its xml");
+				importer = new ImporterXML();
+				temp = importer.parseWarehouse(fileContent);
+				break;
+			default:
+				throw new Exception();
 		}
 		System.out.println("Warehouse ID " + temp.getWarehouse_id());
 		return temp;

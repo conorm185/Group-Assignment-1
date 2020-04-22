@@ -34,4 +34,11 @@ public class ImporterJSON implements Importable {
 		return temp;
 	}
 
+	@Override
+	public Warehouse parseWarehouse(String fileContent) throws JsonSyntaxException, JsonIOException {
+		Gson gson = new Gson();
+		Warehouse temp = new Warehouse("tempuse");
+		temp = gson.fromJson(fileContent, Warehouse.class);
+		return temp;
+	}
 }
