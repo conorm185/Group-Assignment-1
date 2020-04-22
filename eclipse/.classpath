@@ -11,7 +11,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/conor/Desktop/java libraries/gson-2.8.6.jar">
+	<classpathentry kind="lib" path="C:/Users/Conor/Desktop/Github Repositories/Group-Assignment-1/gson-2.8.6.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
