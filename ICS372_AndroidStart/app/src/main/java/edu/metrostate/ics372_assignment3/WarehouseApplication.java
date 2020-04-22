@@ -162,10 +162,10 @@ public class WarehouseApplication extends Application {
         }
     }
 
-    public void writeCompanyDataToFile(Uri fileUri) throws IOException {
+    public void writeWarehouseDataToFile(Uri fileUri) throws IOException {
         //String textContent = readFromExternalFileStorageURI();
         System.out.println("URI " + fileUri.toString());
-        String companyJsonText = CompanyIO.exportContentToJSON("15566");
+        String warehouseJsonText = CompanyIO.exportContentToJSON(getCurrentWarehouseID());
         //String saveFileName = String.format("%s.json", warehouse_id);
         try{
             ParcelFileDescriptor pfd =
@@ -176,7 +176,7 @@ public class WarehouseApplication extends Application {
                     new FileOutputStream(
                             pfd.getFileDescriptor());
 
-            fileOutputStream.write(companyJsonText.getBytes());
+            fileOutputStream.write(warehouseJsonText.getBytes());
 
             fileOutputStream.close();
             pfd.close();
