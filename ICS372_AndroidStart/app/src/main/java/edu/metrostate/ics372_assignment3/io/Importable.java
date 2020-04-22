@@ -13,5 +13,4 @@ import edu.metrostate.ics372_assignment3.model.Warehouse;
  */
 public interface Importable {
 	public Warehouse parseWarehouse(File file) throws Exception;
-	public Warehouse parseWarehouse(String fileContent) throws Exception;
 }

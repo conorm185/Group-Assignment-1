@@ -5,36 +5,21 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button impButt, shipButt, receiptButt, viewButt, exportButt, addButt; // names are temporary but bad jokes last forever. buttons.
 
     private static final int WRITE_STORAGE_PERMISSION_REQUEST = 5;
-    private static final int OPEN_REQUEST_CODE = 41;
-    private static final int SAVE_REQUEST_CODE = 42;
-
 
     private WarehouseApplication application;
-    private static TextView textView;
 
     /**
      * Creates the view for the application
@@ -54,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         viewButt = (Button) findViewById(R.id.viewWarehouseButton);
         exportButt = (Button) findViewById(R.id.exportContentButton);
         addButt = (Button) findViewById(R.id.addWarehouseButton);
-        textView = findViewById(R.id.TextView);
 
         impButt.setOnClickListener(this);
         shipButt.setOnClickListener(this);
@@ -82,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.importButton:
                 Toast.makeText(this, "importButton pressed", Toast.LENGTH_SHORT).show();
-                openFile(v);
                 break;
             case R.id.addShipButton:
                 Toast.makeText(this, "addShip pressed", Toast.LENGTH_SHORT).show();
@@ -96,31 +79,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.exportContentButton:
                 Toast.makeText(this, "export pressed", Toast.LENGTH_SHORT).show();
-                exportContent(v);
                 break;
             case R.id.addWarehouseButton:
                 Toast.makeText(this, "add warehouse pressed", Toast.LENGTH_SHORT).show();
                 break;
         }
-    }
-
-    public void openFile(View view)
-    {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        //https://developer.android.com/training/sharing/send
-        intent.setType("text/json");
-        startActivityForResult(intent, OPEN_REQUEST_CODE);
-    }
-
-    public void exportContent(View view)
-    {
-        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        //https://developer.android.com/training/sharing/send
-        intent.setType("text/json");
-        intent.putExtra(Intent.EXTRA_TITLE, "55.json");
-        startActivityForResult(intent, SAVE_REQUEST_CODE);
     }
 
     // opens Activity to add a shipment. Used by addShipButton.
@@ -155,99 +118,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return;
             }
         }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode,
-                                 Intent resultData) {
-        Uri currentUri = null;
-        Uri uri = new Uri.Builder().build();
-
-        super.onActivityResult(requestCode, resultCode, resultData);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == SAVE_REQUEST_CODE) {
-
-                if (resultData != null) {
-
-                    currentUri =
-                            resultData.getData();
-                    try {
-                        application.writeCompanyDataToFile(currentUri);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    //Toast.makeText(this, "The file has been saved at " + currentUri.toString(), Toast.LENGTH_SHORT).show();
-                }
-            }
-            else if (requestCode == OPEN_REQUEST_CODE) {
-
-                if (resultData != null) {
-                    currentUri = resultData.getData();
-
-                    try {
-                        // get file extension
-                        // https://stackoverflow.com/questions/53869269/get-file-name-and-extension-of-any-file-in-android
-                        String path = new File(resultData.getData().getPath()).getAbsolutePath();
-
-                        if(path != null) {
-                            System.out.println("Path is not null");
-                            uri = resultData.getData();
-
-                            String filename;
-                            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-
-                            if (cursor == null) filename = uri.getPath();
-                            else {
-                                cursor.moveToFirst();
-                                int idx = cursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME);
-                                filename = cursor.getString(idx);
-                                cursor.close();
-                            }
-
-                            String name = filename.substring(filename.lastIndexOf("."));
-                            String extension = filename.substring(filename.lastIndexOf(".") + 1);
-                            System.out.println("The file name " + name + " extension is " + extension + " name is " + name);
-                            Toast.makeText(this, "The file name " + name + " extension is " + extension, Toast.LENGTH_SHORT).show();
-
-                            String content =
-                                    readFileContent(currentUri);
-                            application.importShipment(content, extension);
-                            //textView.append("The file has been imported into Company \n");
-                            //Toast.makeText(this, "The file has been opened", Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (IOException e) {
-                        // Handle error here
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-        }
-
-        //content://com.android.providers.downloads.documents/document/29
-    }
-
-    private String readFileContent(Uri uri) throws IOException {
-
-        InputStream inputStream =
-                getContentResolver().openInputStream(uri);
-        BufferedReader reader =
-                new BufferedReader(new InputStreamReader(
-                        inputStream));
-        StringBuilder stringBuilder = new StringBuilder();
-        String currentline;
-        while ((currentline = reader.readLine()) != null) {
-            stringBuilder.append(currentline + "\n");
-        }
-        inputStream.close();
-        return stringBuilder.toString();
-    }
-
-
-    public static void log(String content){
-        textView.append(content + "\n");
     }
 
 }
