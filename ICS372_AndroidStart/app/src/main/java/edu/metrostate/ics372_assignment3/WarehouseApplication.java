@@ -1,6 +1,22 @@
 package edu.metrostate.ics372_assignment3;
 
 import android.app.Application;
+import android.net.Uri;
+import android.os.ParcelFileDescriptor;
+import android.widget.Toast;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
+import edu.metrostate.ics372_assignment3.model.Company;
+import edu.metrostate.ics372_assignment3.model.CompanyIO;
 
 public class WarehouseApplication extends Application {
     private Company company;
@@ -126,8 +142,7 @@ public class WarehouseApplication extends Application {
 
         try{
             ParcelFileDescriptor pfd =
-                    getContentResolver().
-                            openFileDescriptor(externalFileStorageURI, "rwt");
+                    getContentResolver().openFileDescriptor(externalFileStorageURI, "rwt");
 
             FileOutputStream fileOutputStream =
                     new FileOutputStream(
