@@ -22,11 +22,9 @@ import java.net.URISyntaxException;
 import edu.metrostate.ics372_assignment3.model.Company;
 import edu.metrostate.ics372_assignment3.model.CompanyIO;
 
-import edu.metrostate.ics372_assignment3.model.Company;
-
 public class WarehouseApplication extends Application {
 
-    private Company company = Company.getInstance();
+    private Company company;
     private String currentWarehouseID;
 
     public Company getCompany(){
@@ -54,6 +52,7 @@ public class WarehouseApplication extends Application {
         setExternalFileStorageURI();
         this.warehouseApplicationSingleton = this;
         companyIO = new CompanyIO();
+        company = Company.getInstance();
 
     }
 
