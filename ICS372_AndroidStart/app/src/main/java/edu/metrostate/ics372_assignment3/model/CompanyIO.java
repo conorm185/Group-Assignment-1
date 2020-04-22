@@ -1,5 +1,7 @@
 package edu.metrostate.ics372_assignment3.model;
 
+import android.util.Log;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -56,6 +58,11 @@ public class CompanyIO {
 		}
 	}
 
+	public static void importShipments(String content, String fileExtension) {
+		Log.i("content",content);
+		Log.i("file",fileExtension);
+	}
+
 	/**
 	 * Method that takes a warehouse id and gets an instance of a warehouse with
 	 * that id
@@ -76,16 +83,18 @@ public class CompanyIO {
 	 * 
 	 * @param warehouse_id id of warehouse whose contents need to be exported
 	 * @throws IOException
+	 * @return
 	 */
-	public static void exportContentToJSON(String warehouse_id) throws IOException {
+	public static String exportContentToJSON(String warehouse_id) throws IOException {
 		Company company = Company.getInstance();
 		Warehouse warehouse = company.getWarehouse(warehouse_id);
 
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		try (FileWriter writer = new FileWriter(String.format("%s.json", warehouse_id));) {
+		return gson.toJson(warehouse);
+		/*try (FileWriter writer = new FileWriter(String.format("%s.json", warehouse_id));) {
 			writer.write(gson.toJson(warehouse));
 			log(String.format("warehouse%s: exported to %s.json", warehouse_id, warehouse_id));
-		}
+		}*/
 	}
 
 	/**

@@ -186,9 +186,9 @@ public class WarehouseApplication extends Application {
         }
     }
 
-    public void log(String text){
+    /*public void log(String text){
         MainActivity.log(text);
-    }
+    }*/
 
     public void importShipment(String content, String fileExtension) throws Exception {
         CompanyIO.importShipments(content, fileExtension);
