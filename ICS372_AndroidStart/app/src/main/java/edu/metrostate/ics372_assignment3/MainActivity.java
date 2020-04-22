@@ -7,11 +7,15 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Toast;
+
+import edu.metrostate.ics372_assignment3.model.Company;
+import edu.metrostate.ics372_assignment3.model.Shipment;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -20,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int WRITE_STORAGE_PERMISSION_REQUEST = 5;
 
     private WarehouseApplication application;
+    private Company company;
 
     /**
      * Creates the view for the application
@@ -31,6 +36,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         application = (WarehouseApplication) getApplication();
+        application.setCompany();
+        company = application.getCompany();
+        this.fillSampleData();
 
         // buttons
         impButt = (Button) findViewById(R.id.importButton);
@@ -75,7 +83,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, "receiptButton pressed", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.viewWarehouseButton:
-                Toast.makeText(this, "view warehouse pressed", Toast.LENGTH_SHORT).show();
+                ((WarehouseApplication) this.getApplication()).setCurrentWarehouseID("4321");
+                Intent intent = new Intent(this, ViewWarehouseActivity.class);
+                startActivity(intent);
+
+                //Toast.makeText(this, "view warehouse pressed", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.exportContentButton:
                 Toast.makeText(this, "export pressed", Toast.LENGTH_SHORT).show();
@@ -120,4 +132,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void fillSampleData() {
+        company.addWarehouse("4321");
+        Shipment s1 = new Shipment("4321", Shipment.ShippingMethod.air,"444",5, (long) 1732279329);
+        Shipment s2 = new Shipment("4321", Shipment.ShippingMethod.air,"443",5, (long) 1732279329);
+        Shipment s3 = new Shipment("4321", Shipment.ShippingMethod.air,"442",5, (long) 1732279329);
+        Shipment s4 = new Shipment("4321", Shipment.ShippingMethod.air,"441",5, (long) 1732279329);
+        company.addIncomingShipment(s1);
+        company.addIncomingShipment(s2);
+        company.addIncomingShipment(s3);
+        company.addIncomingShipment(s4);
+    }
 }

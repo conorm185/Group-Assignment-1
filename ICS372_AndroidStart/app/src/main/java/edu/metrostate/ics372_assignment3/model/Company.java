@@ -57,7 +57,7 @@ public class Company {
 	 * method that takes in a warehouse id and returns the warehouse to which the
 	 * specified id is mapped
 	 * 
-	 * @param warehouse id of a specific warehouse
+	 * @param warehouse_id of a specific warehouse
 	 * @return the warehouse associated with given warehouse id
 	 */
 	protected Warehouse getWarehouse(String warehouse_id) {
