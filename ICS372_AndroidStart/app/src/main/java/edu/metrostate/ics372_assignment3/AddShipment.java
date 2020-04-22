@@ -20,11 +20,14 @@ public class AddShipment extends AppCompatActivity implements View.OnClickListen
 
     private Button submitButton, cancelButton;
     private Company company;
+    WarehouseApplication application;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_shipment);
+        application = (WarehouseApplication) getApplication();
+        company = application.getCompany();
 
         submitButton = (Button) findViewById(R.id.submitButton);
         cancelButton = (Button) findViewById(R.id.cancelButton);
@@ -46,13 +49,14 @@ public class AddShipment extends AppCompatActivity implements View.OnClickListen
 
         switch (v.getId()){
             case R.id.submitButton:
-                Toast.makeText(this, "submitButton pressed", Toast.LENGTH_SHORT).show();
+                addShipment(application.getCurrentWarehouseID());
+                this.finish();
+                //Toast.makeText(this, "submitButton pressed", Toast.LENGTH_SHORT).show();
                 //submit()
                 //addShipment(warehouse_id); // need a way to get warehouse id
                 break;
             case R.id.cancelButton:
-                Toast.makeText(this, "cancelButton pressed", Toast.LENGTH_SHORT).show();
-                openMainActivity(); // goes back to home screen. This may be used a lot between activities.
+                this.finish();
                 break;
         }
     }

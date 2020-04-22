@@ -30,8 +30,6 @@ public class ViewWarehouseActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_view_warehouse);
         application = (WarehouseApplication) getApplication();
         company = application.getCompany();
-        warehouse_contents = company.readWarehouseContent(application.getCurrentWarehouseID());
-
 
         addShipmentButton = (Button) findViewById(R.id.addShipmentButton);
         toggleActiveInactiveButton = (Button) findViewById(R.id.activeShipments);
@@ -43,11 +41,7 @@ public class ViewWarehouseActivity extends AppCompatActivity implements View.OnC
         toggleRecieptButton.setOnClickListener(this);
         editWarehouseButton.setOnClickListener(this);
 
-        String[] shipment_id_list = warehouse_contents.keySet().toArray(new String[0]);
-
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.shipment_list_view, shipment_id_list);
-        shipmentList = (ListView) findViewById(R.id.shipment_list_view);
-        shipmentList.setAdapter(adapter);
+        refreshShipmentList();
     }
 
     @Override
@@ -84,5 +78,19 @@ public class ViewWarehouseActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        refreshShipmentList();
+    }
+
+    public void refreshShipmentList(){
+        warehouse_contents = company.readWarehouseContent(application.getCurrentWarehouseID());
+        String[] shipment_id_list = warehouse_contents.keySet().toArray(new String[0]);
+        ArrayAdapter adapter = new ArrayAdapter<String>(this,R.layout.shipment_list_view, shipment_id_list);
+        shipmentList = (ListView) findViewById(R.id.shipment_list_view);
+        shipmentList.setAdapter(adapter);
     }
 }
