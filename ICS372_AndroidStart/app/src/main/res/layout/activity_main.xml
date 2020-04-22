@@ -16,106 +16,107 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>-->
-<LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".MainActivity"
-android:id="@+id/RelativeWindow"
-android:orientation="vertical">
-
-<LinearLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeWindow"
     android:layout_width="match_parent"
-    android:id="@+id/LinearButtons"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
-    <LinearLayout
-        android:id="@+id/spins"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Select Warehouse"/>
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/TopBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/spins"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_below="@id/spinner"
-            android:layout_marginLeft="10px"
-            />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Warehouse" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/spinner"
+                android:layout_marginLeft="10px"
+                android:layout_weight="1" />
+
+
+        </LinearLayout>
 
 
     </LinearLayout>
 
-
-    <Button
-        android:id="@+id/importButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Import File"
-        android:layout_weight="1" />
-
-    <Button
-        android:id="@+id/addShipButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add Shipment"
-        android:layout_weight="1" />
-
-    <Button
-        android:id="@+id/receiptButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Toggle Receipt"
-        android:layout_weight="1"/>
-</LinearLayout>
-
-<TextView
+    <TextView
     android:id="@+id/TextView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_below="@id/LinearButtons"
+    android:layout_below="@id/TopBar"
     android:text="Hello World!"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
-<LinearLayout
-    android:id="@+id/LinearBot"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:gravity="bottom">
-
-    <Button
-        android:id="@+id/viewWarehouseButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/BottomBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="View Warehouse" />
+        android:layout_alignParentBottom="true">
 
-    <Button
-        android:id="@+id/exportContentButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Export Content" />
+        <Button
+            android:id="@+id/importButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Import File" />
 
-    <Button
-        android:id="@+id/addWarehouseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Add WH" />
+        <Button
+            android:id="@+id/receiptButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Toggle Receipt" />
+
+        <Button
+            android:id="@+id/addShipButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Add Shipment" />
+
+        <Button
+            android:id="@+id/viewWarehouseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Warehouse"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/exportContentButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Export Content"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/addWarehouseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Add WH" />
 
 
-</LinearLayout>
+    </LinearLayout>
 
 
-</LinearLayout >
+</RelativeLayout>
