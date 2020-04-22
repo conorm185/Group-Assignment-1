@@ -17,6 +17,8 @@
         <activity android:name=".ViewWarehouseActivity" />
         <activity android:name=".AddShipmentActivity" />
         <activity android:name=".MainActivity">
+
+        <activity android:name=".StorageDemoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
