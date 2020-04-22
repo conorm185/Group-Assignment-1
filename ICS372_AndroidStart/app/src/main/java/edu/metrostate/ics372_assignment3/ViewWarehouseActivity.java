@@ -49,7 +49,7 @@ public class ViewWarehouseActivity extends AppCompatActivity implements View.OnC
 
         switch (v.getId()){
             case R.id.addShipmentButton:
-                Intent intent = new Intent(this, AddShipment.class);
+                Intent intent = new Intent(this, AddShipmentActivity.class);
                 startActivity(intent);
                 //Toast.makeText(this, "Add Shipment Pressed", Toast.LENGTH_SHORT).show();
                 //submit()

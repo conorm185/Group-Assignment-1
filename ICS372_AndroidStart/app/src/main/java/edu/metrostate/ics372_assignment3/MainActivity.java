@@ -7,10 +7,8 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -100,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // opens Activity to add a shipment. Used by addShipButton.
     public void openAddShipmentActivity() {
-        Intent intent = new Intent(this, AddShipment.class);
+        Intent intent = new Intent(this, AddShipmentActivity.class);
         startActivity(intent);
     }
 

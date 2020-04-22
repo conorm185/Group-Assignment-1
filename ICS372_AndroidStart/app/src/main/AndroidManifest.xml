@@ -12,8 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ViewWarehouseActivity"></activity>
-        <activity android:name=".AddShipment"></activity>
+        <activity android:name=".EditWarehouseActivity"></activity>
+        <activity android:name=".AddWarehouseActivity" />
+        <activity android:name=".ViewWarehouseActivity" />
+        <activity android:name=".AddShipmentActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
