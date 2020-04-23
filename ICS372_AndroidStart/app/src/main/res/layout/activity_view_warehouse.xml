@@ -36,10 +36,161 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/TopBar"
         android:layout_above="@id/BottomBar">
+
         <ListView
             android:id="@+id/shipment_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_width="166dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        </ListView>
+
+        <RelativeLayout
+            android:id="@+id/shipment_info_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+
+
+            <LinearLayout
+                android:id="@+id/shipment_warehouse_id_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentTop="true"
+                android:layout_margin="12dp">
+
+                <TextView
+                    android:id="@+id/textViewWarehouseIDLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Warehouse ID:" />
+
+                <TextView
+                    android:id="@+id/textViewWarehouseID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="####" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/shipment_shipment_id_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/shipment_warehouse_id_bar"
+                android:layout_margin="12dp">
+
+                <TextView
+                    android:id="@+id/textViewShipmentIDLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Shipment ID:" />
+
+                <TextView
+                    android:id="@+id/textViewShipmentID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="####" />
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:id="@+id/shipment_method_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/shipment_shipment_id_bar"
+                android:layout_margin="12dp">
+
+                <TextView
+                    android:id="@+id/textViewShipmentMethodLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Shipment Method:" />
+
+                <TextView
+                    android:id="@+id/textViewShipmentMethod"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="####" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/shipment_weight_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/shipment_method_bar"
+                android:layout_margin="12dp">
+
+                <TextView
+                    android:id="@+id/textViewShipmentWeightLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Weight:" />
+
+                <TextView
+                    android:id="@+id/textViewShipmentWeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="### lbs" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/shipment_receipt_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/shipment_weight_bar"
+                android:layout_margin="12dp">
+
+                <TextView
+                    android:id="@+id/textViewReceiptLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Date Received:" />
+
+                <TextView
+                    android:id="@+id/textViewReceipt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="##/##/####" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/shipment_departure_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/shipment_receipt_bar"
+                android:layout_margin="12dp">
+
+                <TextView
+                    android:id="@+id/textViewDepartureLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Date Departed: " />
+
+                <TextView
+                    android:id="@+id/textViewDeparture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="##/##/####" />
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
