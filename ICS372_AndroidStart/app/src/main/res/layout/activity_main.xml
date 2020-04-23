@@ -81,20 +81,6 @@
             android:text="Import File" />
 
         <Button
-            android:id="@+id/receiptButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Toggle Receipt" />
-
-        <Button
-            android:id="@+id/addShipButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Add Shipment" />
-
-        <Button
             android:id="@+id/viewWarehouseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

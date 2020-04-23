@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int OPEN_REQUEST_CODE = 41;
     private static final int SAVE_REQUEST_CODE = 42;
 
-    Button impButt, shipButt, receiptButt, viewButt, exportButt, addButt; // names are temporary but bad jokes last forever. buttons.
+    Button impButt, viewButt, exportButt, addButt; // names are temporary but bad jokes last forever. buttons.
 
     private static final int WRITE_STORAGE_PERMISSION_REQUEST = 5;
 
@@ -66,8 +66,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // buttons
         impButt = (Button) findViewById(R.id.importButton);
-        shipButt = (Button) findViewById(R.id.addShipButton);
-        receiptButt = (Button) findViewById(R.id.receiptButton);
         viewButt = (Button) findViewById(R.id.viewWarehouseButton);
         exportButt = (Button) findViewById(R.id.exportContentButton);
         addButt = (Button) findViewById(R.id.addWarehouseButton);
@@ -84,8 +82,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
 
         impButt.setOnClickListener(this);
-        shipButt.setOnClickListener(this);
-        receiptButt.setOnClickListener(this);
         viewButt.setOnClickListener(this);
         exportButt.setOnClickListener(this);
         addButt.setOnClickListener(this);
@@ -102,6 +98,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateSpinnerArray();
     }
 
     // an action listene that is called when a warehouse id is selected
@@ -125,8 +127,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void updateSpinnerArray(){
         //query Company for its list of IDs
         List<String> ids = application.getCompany().getWarehouseIds();
-        ids.forEach(i -> System.out.println(i));
-
         //loop through the list and check it is already in the warehouselist here
         //if its not we add it
         ids.forEach(i -> {
@@ -145,20 +145,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.importButton:
                 Toast.makeText(this, "importButton pressed", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.addShipButton:
-                Toast.makeText(this, "addShip pressed", Toast.LENGTH_SHORT).show();
-                openAddShipmentActivity();
-                break;
-            case R.id.receiptButton:
-                Toast.makeText(this, "receiptButton pressed", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.viewWarehouseButton:
-                ((WarehouseApplication) this.getApplication()).setCurrentWarehouseID("4321");
-                Intent intent = new Intent(this, ViewWarehouseActivity.class);
-                startActivity(intent);
-
-                //Toast.makeText(this, "view warehouse pressed", Toast.LENGTH_SHORT).show();
-
+                if (application.getCurrentWarehouseID() == null) {
+                    Toast.makeText(this, "No Warehouse Selected", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intentViewWarehouse = new Intent(this, ViewWarehouseActivity.class);
+                    startActivity(intentViewWarehouse);
+                }
                 break;
             case R.id.exportContentButton:
                 Toast.makeText(this, "export pressed", Toast.LENGTH_SHORT).show();
@@ -188,18 +181,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.setType("text/json");
         intent.putExtra(Intent.EXTRA_TITLE, application.getCurrentWarehouseID() + ".json");
         startActivityForResult(intent, SAVE_REQUEST_CODE);
-    }
-
-    // opens Activity to add a shipment. Used by addShipButton.
-    public void openAddShipmentActivity() {
-        Intent intent = new Intent(this, AddShipmentActivity.class);
-        startActivity(intent);
-    }
-
-    // opens Activity to add a shipment. Used by addShipButton.
-    public void openViewWarehouseActivity() {
-        Intent intent = new Intent(this, ViewWarehouseActivity.class);
-        startActivity(intent);
     }
 
     /**
