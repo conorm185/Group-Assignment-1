@@ -164,7 +164,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, "export pressed", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.addWarehouseButton:
-                Toast.makeText(this, "add warehouse pressed", Toast.LENGTH_SHORT).show();
+                Intent intentAddWarehouse = new Intent(this, AddWarehouseActivity.class);
+                startActivity(intentAddWarehouse);
                 break;
         }
     }

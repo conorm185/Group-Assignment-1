@@ -28,6 +28,7 @@ public class ViewWarehouseActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_warehouse);
+
         application = (WarehouseApplication) getApplication();
         company = application.getCompany();
 
@@ -64,8 +65,8 @@ public class ViewWarehouseActivity extends AppCompatActivity implements View.OnC
                 //openMainActivity(); // goes back to home screen. This may be used a lot between activities.
                 break;
             case R.id.editWarehouseButton:
-                Toast.makeText(this, "Edit Warehouse Pressed", Toast.LENGTH_SHORT).show();
-                //openMainActivity(); // goes back to home screen. This may be used a lot between activities.
+                Intent intentEditWarehouse = new Intent(this, EditWarehouseActivity.class);
+                startActivity(intentEditWarehouse);
                 break;
         }
     }
