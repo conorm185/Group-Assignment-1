@@ -7,7 +7,7 @@ package edu.metrostate.ics372_assignment3;
  */
 public class MainActivityPresenter implements MainActivityMVP.Presenter {
     private MainActivityMVP.View view;
-    private MainActivityMVP.Model model;
+    private MainActivityMVP.Model model; //this is the company
 
     public MainActivityPresenter(MainActivityMVP.Model model) {
         this.model = model;
