@@ -254,8 +254,8 @@ public class CompanyIO {
 				,shipment.getReceipt_date(),(long) 0);
 	}
 
-	public static void removeShipment(String shipment_id) {
-		database.deleteShipment(shipment_id);
+	public static void removeShipment(String shipment_id, String warehouse_id) {
+		database.deleteShipment(shipment_id, warehouse_id);
 	}
 
 	public static void addWarehouse(String warehouse_id) {
@@ -270,4 +270,9 @@ public class CompanyIO {
 		database.updateWarehouse(warehouse_id, warehouse_name, b);
 	}
 
+	public static void updateShipment(Shipment shipment) {
+		database.updateShipment(shipment.getShipment_id(),shipment.getWarehouse_id()
+				,shipment.getShipment_method().toString(),shipment.getWeight()
+				,shipment.getReceipt_date(),shipment.getDeparture_date());
+	}
 }

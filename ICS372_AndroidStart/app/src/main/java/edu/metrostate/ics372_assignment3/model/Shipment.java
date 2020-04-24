@@ -159,13 +159,7 @@ public class Shipment implements Cloneable {
 	}
 
 	public void setDeparture_date(Long departure_date) {
-		if (departure_date == 0 || departure_date == null) {
-			Date rn = new Date();
-			Long rnL = rn.getTime();
-			this.departure_date = rnL;
-		} else {
-			this.departure_date = departure_date;
-		}
+		this.departure_date = departure_date;
 	}
 
 	/**

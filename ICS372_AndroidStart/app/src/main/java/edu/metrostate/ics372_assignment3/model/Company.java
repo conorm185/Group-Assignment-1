@@ -107,10 +107,31 @@ public class Company {
 	private boolean removeShipment(String shipment_id, String warehouse_id) {
 		Warehouse warehouse = this.getWarehouse(warehouse_id);
 		if (warehouse != null) {
-			CompanyIO.removeShipment(shipment_id);
+			CompanyIO.removeShipment(shipment_id, warehouse_id);
 			return warehouse.removeShipment(shipment_id);
 		} else {
 			CompanyIO.log(String.format("Warehouse: %s not found", warehouse_id));
+			return false;
+		}
+	}
+
+	private boolean moveShipment(String shipment_id, String warehouse_id_from, String warehouse_id_to){
+		Warehouse warehouse_from = this.getWarehouse(warehouse_id_from);
+		Warehouse warehouse_to = this.getWarehouse(warehouse_id_from);
+		if (warehouse_from != null && warehouse_to != null && warehouse_from.findShipment(shipment_id) != null) {
+			Shipment s = warehouse_from.findShipment(shipment_id);
+			s.setDeparture_date(System.currentTimeMillis());
+			CompanyIO.updateShipment(s);
+
+			Shipment s2 = (Shipment) s.clone();
+			s2.setWarehouse_id(warehouse_id_to);
+			s2.setReceipt_date(System.currentTimeMillis());
+			s2.setDeparture_date((long) 0);
+			CompanyIO.addShipment(s2);
+
+			return true;
+		} else {
+			CompanyIO.log(String.format("Warehouse: %s not found", warehouse_id_from));
 			return false;
 		}
 	}

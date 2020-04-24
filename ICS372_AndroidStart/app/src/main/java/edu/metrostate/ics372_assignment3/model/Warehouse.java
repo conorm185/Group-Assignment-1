@@ -137,6 +137,15 @@ public class Warehouse {
 		return false;
 	}
 
+	public Shipment findShipment(String shipment_id){
+		for (Shipment s : warehouse_contents) {
+			if (s.getShipment_id().equalsIgnoreCase(shipment_id)) {
+				return s;
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * method that returns a String of the contents within a warehouse
 	 * 

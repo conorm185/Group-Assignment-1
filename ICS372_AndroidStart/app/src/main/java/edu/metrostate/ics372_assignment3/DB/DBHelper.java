@@ -38,7 +38,13 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
         db.execSQL("create table warehouses " + "(id text primary key, name text,status integer)");
-        db.execSQL("create table shipments " + "(shipment_id text primary key, warehouse_id text,method text,weight real,receipt integer,departure integer)");
+
+        /*db.execSQL("create table shipments " + "(shipment_id text primary key, warehouse_id text" +
+                ",method text,weight real,receipt integer,departure integer)");*/
+
+        db.execSQL("create table shipments " + "(shipment_id text, warehouse_id text" +
+                ",method text,weight real,receipt integer,departure integer" +
+                ", PRIMARY KEY (shipment_id,warehouse_id))");
     }
 
     @Override
@@ -84,12 +90,11 @@ public class DBHelper extends SQLiteOpenHelper {
     public boolean updateShipment (String shipment_id, String warehouse_id, String method, double weight, long receipt, long departure) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SHIPMENT_COLUMN_WAREHOUSE_ID, warehouse_id);
         contentValues.put(SHIPMENT_COLUMN_SHIPPING_METHOD, method);
         contentValues.put(SHIPMENT_COLUMN_WEIGHT, weight);
         contentValues.put(SHIPMENT_COLUMN_RECEIPT, receipt);
         contentValues.put(SHIPMENT_COLUMN_DEPARTURE, departure);
-        db.update(SHIPMENT_TABLE_NAME, contentValues, "id = ? ", new String[] { shipment_id } );
+        db.update(SHIPMENT_TABLE_NAME, contentValues, "shipment_id = ? AND warehouse_id = ?", new String[] { shipment_id,warehouse_id } );
         return true;
     }
 
@@ -107,9 +112,9 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.delete(WAREHOUSE_TABLE_NAME, "id = ? ", new String[] { id });
     }
 
-    public Integer deleteShipment (String shipment_id) {
+    public Integer deleteShipment (String shipment_id, String warehouse_id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(SHIPMENT_TABLE_NAME, "id = ? ", new String[] { shipment_id });
+        return db.delete(SHIPMENT_TABLE_NAME, "shipment_id = ? AND warehouse_id = ?", new String[] { shipment_id,warehouse_id });
     }
 
     public HashMap<Integer, Warehouse> getAllWarehouses() {
