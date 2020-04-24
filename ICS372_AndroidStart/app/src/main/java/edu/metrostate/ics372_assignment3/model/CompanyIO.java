@@ -1,6 +1,10 @@
 package edu.metrostate.ics372_assignment3.model;
 
 import android.content.Context;
+import android.net.Uri;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,10 +28,14 @@ import edu.metrostate.ics372_assignment3.io.ImporterXML;
  */
 public class CompanyIO {
     private static DBHelper database;
+    private static Company company;
 
-    /*
 
-     *//**
+    public static void importShipments(Uri uri) throws Exception {
+        CompanyIO.importShipments(new File(uri.getPath()));
+    }
+
+    /**
      * Method that attempts to import a JSON file by parsing the file into a
      * temporary file/warehouse if the file/warehouse is not empty it loops through
      * all the shipments in the file and checks there validity then adds the
@@ -35,11 +43,10 @@ public class CompanyIO {
      *
      * @param file to be imported
      * @throws Exception
-     *//*
+     */
 	public static void importShipments(File file) throws Exception {
 		Warehouse temp = CompanyIO.parseWarehouse(file);
 
-		Company company = Company.getInstance();
 		CompanyIO.log(String.format("importing shipments from %s", file.getName()));
 		if (temp != null) { // if the .json was not empty
 			for (Shipment s : temp.getWarehouse_contents()) {
@@ -56,7 +63,6 @@ public class CompanyIO {
 	public static void importShipments(String fileContent, String fileExtension) throws Exception {
 		Warehouse temp = CompanyIO.parseWarehouse(fileContent, fileExtension);
 
-		Company company = Company.getInstance();
 		CompanyIO.log(String.format("importing shipments from %s", fileExtension));
 		if (temp != null) { // if the .json was not empty
 			for (Shipment s : temp.getWarehouse_contents()) {
@@ -70,43 +76,37 @@ public class CompanyIO {
 		}
 	}
 
-	*//**
+	/**
      * Method that takes a warehouse id and gets an instance of a warehouse with
      * that id
      *
      * @param warehouseId id of warehouse being accessed
      * @return warehouse that was accessed with specific id
-     *//*
+     */
 	public static Warehouse getWarehouse(String warehouseId) {
-		Company company = Company.getInstance();
 		Warehouse warehouse = company.getWarehouse(warehouseId);
-
 		return warehouse;
 	}
 
-	*//**
+	/**
      * Method that exports the contents of a specific warehouse to a JSON file and
      * logs the outocome
      *
      * @param warehouse_id id of warehouse whose contents need to be exported
      * @throws IOException
      * @return
-     *//*
+     */
 	public static String exportContentToJSON(String warehouse_id) throws IOException {
-		Company company = Company.getInstance();
 		Warehouse warehouse = company.getWarehouse(warehouse_id);
 
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		return gson.toJson(warehouse);
-		*//*try (FileWriter writer = new FileWriter(String.format("%s.json", warehouse_id));) {
+
+		/*try (FileWriter writer = new FileWriter(String.format("%s.json", warehouse_id));) {
 			writer.write(gson.toJson(warehouse));
 			log(String.format("warehouse%s: exported to %s.json", warehouse_id, warehouse_id));
-		}*//*
+		}*/
 	}
-
-
-	*/
-
 
     /**
      * Method used to log actions throughout the software
@@ -199,30 +199,10 @@ public class CompanyIO {
         System.out.println("Warehouse ID " + temp.getWarehouse_id());
         return temp;
     }
-    /*
 
-     */
-/**
- * Method that saves the state of the software. It gets the HashMap of
- * warehouses within a company and writes them to a JSON and logs the outcome
- *
- *//*
-
-	protected static void saveState() {
-		Company company = Company.getInstance();
-		HashMap<Integer, Warehouse> warehouses = company.getWarehouses();
-
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		try (FileWriter writer = new FileWriter("company.json");) {
-			writer.write(gson.toJson(warehouses));
-			log(String.format("All content saved"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-*/
-
+    public static void setCompany(Company company){
+        CompanyIO.company = company;
+    }
 
     /**
      * Method that loads the contents on the saved JSON file

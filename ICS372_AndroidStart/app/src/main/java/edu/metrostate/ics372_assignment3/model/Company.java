@@ -23,6 +23,7 @@ public class Company implements MainActivityMVP.Model {
      */
     private Company(Context context) {
         warehouses = CompanyIO.loadState(context);
+        CompanyIO.setCompany(this);
     }
 
     /**

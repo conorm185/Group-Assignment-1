@@ -220,7 +220,8 @@ public class WarehouseApplication extends Application {
         return stringBuilder.toString();
     }
 
-    public String loadState() throws IOException {
+    /*public String loadState() throws IOException {
         return readFromExternalFileStorageURI();
-    }
+    }*/
+
 }

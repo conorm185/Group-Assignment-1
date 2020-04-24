@@ -36,7 +36,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // TODO Auto-generated method stub
         db.execSQL("create table warehouses " + "(id text primary key, name text,status integer)");
 
         /*db.execSQL("create table shipments " + "(shipment_id text primary key, warehouse_id text" +
@@ -49,7 +48,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // TODO Auto-generated method stub
         db.execSQL("DROP TABLE IF EXISTS warehouses");
         db.execSQL("DROP TABLE IF EXISTS shipments");
         onCreate(db);
