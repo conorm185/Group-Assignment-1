@@ -1,5 +1,6 @@
 package edu.metrostate.ics372_assignment3.model;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.io.BufferedWriter;
@@ -19,6 +20,7 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
+import edu.metrostate.ics372_assignment3.DB.DBHelper;
 import edu.metrostate.ics372_assignment3.io.Importable;
 import edu.metrostate.ics372_assignment3.io.ImporterJSON;
 import edu.metrostate.ics372_assignment3.io.ImporterXML;
@@ -32,7 +34,11 @@ import edu.metrostate.ics372_assignment3.io.ImporterXML;
  *
  */
 public class CompanyIO {
-	/**
+	private static DBHelper database;
+
+/*
+
+	*//**
 	 * Method that attempts to import a JSON file by parsing the file into a
 	 * temporary file/warehouse if the file/warehouse is not empty it loops through
 	 * all the shipments in the file and checks there validity then adds the
@@ -40,7 +46,7 @@ public class CompanyIO {
 	 * 
 	 * @param file to be imported
 	 * @throws Exception
-	 */
+	 *//*
 	public static void importShipments(File file) throws Exception {
 		Warehouse temp = CompanyIO.parseWarehouse(file);
 
@@ -75,13 +81,13 @@ public class CompanyIO {
 		}
 	}
 
-	/**
+	*//**
 	 * Method that takes a warehouse id and gets an instance of a warehouse with
 	 * that id
 	 * 
 	 * @param warehouseId id of warehouse being accessed
 	 * @return warehouse that was accessed with specific id
-	 */
+	 *//*
 	public static Warehouse getWarehouse(String warehouseId) {
 		Company company = Company.getInstance();
 		Warehouse warehouse = company.getWarehouse(warehouseId);
@@ -89,25 +95,29 @@ public class CompanyIO {
 		return warehouse;
 	}
 
-	/**
+	*//**
 	 * Method that exports the contents of a specific warehouse to a JSON file and
 	 * logs the outocome
 	 * 
 	 * @param warehouse_id id of warehouse whose contents need to be exported
 	 * @throws IOException
 	 * @return
-	 */
+	 *//*
 	public static String exportContentToJSON(String warehouse_id) throws IOException {
 		Company company = Company.getInstance();
 		Warehouse warehouse = company.getWarehouse(warehouse_id);
 
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		return gson.toJson(warehouse);
-		/*try (FileWriter writer = new FileWriter(String.format("%s.json", warehouse_id));) {
+		*//*try (FileWriter writer = new FileWriter(String.format("%s.json", warehouse_id));) {
 			writer.write(gson.toJson(warehouse));
 			log(String.format("warehouse%s: exported to %s.json", warehouse_id, warehouse_id));
-		}*/
+		}*//*
 	}
+
+
+	*/
+
 
 	/**
 	 * Method used to log actions throughout the software
@@ -200,12 +210,15 @@ public class CompanyIO {
 		System.out.println("Warehouse ID " + temp.getWarehouse_id());
 		return temp;
 	}
+/*
 
-	/**
+	*/
+/**
 	 * Method that saves the state of the software. It gets the HashMap of
 	 * warehouses within a company and writes them to a JSON and logs the outcome
 	 * 
-	 */
+	 *//*
+
 	protected static void saveState() {
 		Company company = Company.getInstance();
 		HashMap<Integer, Warehouse> warehouses = company.getWarehouses();
@@ -219,30 +232,42 @@ public class CompanyIO {
 			e.printStackTrace();
 		}
 	}
+*/
+
+
+
 
 	/**
 	 * Method that loads the contents on the saved JSON file
 	 * 
 	 * @return HashMap of warehouses within the JSON
+	 * @param context
 	 */
-	protected static HashMap<Integer, Warehouse> loadState() {
-		File file = new File("company.json");
-		Gson gson = new Gson();
-		Type genericType = new TypeToken<HashMap<Integer, Warehouse>>() {
-		}.getType();
-		HashMap<Integer, Warehouse> warehouses = new HashMap<Integer, Warehouse>();
-		try {
-			warehouses = gson.fromJson(new FileReader(file), genericType);
-		} catch (JsonIOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonSyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return warehouses;
+	protected static HashMap<Integer, Warehouse> loadState(Context context) {
+		database = new DBHelper(context);
+		return database.getAllWarehouses();
 	}
+
+	public static void addShipment(Shipment shipment) {
+		database.insertShipment(shipment.getShipment_id(),shipment.getWarehouse_id()
+				,shipment.getShipment_method().toString(),shipment.getWeight()
+				,shipment.getReceipt_date(),(long) 0);
+	}
+
+	public static void removeShipment(String shipment_id) {
+		database.deleteShipment(shipment_id);
+	}
+
+	public static void addWarehouse(String warehouse_id) {
+		database.insertWarehouse(warehouse_id);
+	}
+
+	public static void removeWarehouse(String warehouse_id) {
+		database.deleteWarehouse(warehouse_id);
+	}
+
+	public static void updateWarehouse(String warehouse_id,String warehouse_name, boolean b) {
+		database.updateWarehouse(warehouse_id, warehouse_name, b);
+	}
+
 }

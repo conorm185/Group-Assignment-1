@@ -48,7 +48,7 @@ public class AddWarehouseActivity extends AppCompatActivity implements View.OnCl
         String warehouse_id = warehouse_id_text.getText().toString();
 
         EditText warehouse_name_text = findViewById(R.id.editTextWarehouseName);
-        String warehouse_name = warehouse_id_text.getText().toString();
+        String warehouse_name = warehouse_name_text.getText().toString();
 
         company.addWarehouse(warehouse_id);
         company.setWarehouseName(warehouse_id,warehouse_name);

@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         application = (WarehouseApplication) getApplication();
         application.setCompany();
         company = application.getCompany();
-        this.fillSampleData();
+        //this.fillSampleData();
 
         // buttons
         impButt = (Button) findViewById(R.id.importButton);
@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, "importButton pressed", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.viewWarehouseButton:
+                application.setCurrentWarehouseID(spinner.getSelectedItem().toString());
                 if (application.getCurrentWarehouseID() == null) {
                     Toast.makeText(this, "No Warehouse Selected", Toast.LENGTH_SHORT).show();
                 } else {
@@ -212,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private void fillSampleData() {
+    /*private void fillSampleData() {
         company.addWarehouse("4321");
         Shipment s1 = new Shipment("4321", Shipment.ShippingMethod.air,"444",5, (long) 1732279329);
         Shipment s2 = new Shipment("4321", Shipment.ShippingMethod.air,"443",5, (long) 1732279329);
@@ -222,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         company.addIncomingShipment(s2);
         company.addIncomingShipment(s3);
         company.addIncomingShipment(s4);
-    }
+    }*/
 
     @Override
     public void onActivityResult(int requestCode, int resultCode,

@@ -49,12 +49,11 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertWarehouse (String id, String name, Boolean status) {
+    public boolean insertWarehouse (String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COMPANY_COLUMN_WAREHOUSE_ID, name);
-        contentValues.put(COMPANY_COLUMN_WAREHOUSE_NAME, name);
-        contentValues.put(COMPANY_COLUMN_FREIGHT_STATUS, status);
+        contentValues.put(COMPANY_COLUMN_WAREHOUSE_ID, id);
+        contentValues.put(COMPANY_COLUMN_FREIGHT_STATUS, true);
         db.insert(WAREHOUSE_TABLE_NAME, null, contentValues);
         return true;
     }

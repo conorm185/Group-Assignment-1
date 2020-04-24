@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+import edu.metrostate.ics372_assignment3.DB.DBHelper;
 import edu.metrostate.ics372_assignment3.model.Company;
 import edu.metrostate.ics372_assignment3.model.CompanyIO;
 
@@ -27,7 +28,7 @@ public class WarehouseApplication extends Application {
     }
 
     public void setCompany(){
-        company = Company.getInstance();
+        company = Company.getInstance(this);
     }
 
     public void setCurrentWarehouseID(String currentWarehouseID){
@@ -51,7 +52,7 @@ public class WarehouseApplication extends Application {
         setExternalFileStorageURI();
         this.warehouseApplicationSingleton = this;
         companyIO = new CompanyIO();
-        company = Company.getInstance();
+        company = Company.getInstance(this);
 
     }
 
@@ -161,7 +162,7 @@ public class WarehouseApplication extends Application {
     }
 
     public void writeWarehouseDataToFile(Uri fileUri) throws IOException {
-        //String textContent = readFromExternalFileStorageURI();
+        /*//String textContent = readFromExternalFileStorageURI();
         System.out.println("URI " + fileUri.toString());
         String warehouseJsonText = CompanyIO.exportContentToJSON(getCurrentWarehouseID());
         //String saveFileName = String.format("%s.json", warehouse_id);
@@ -183,7 +184,7 @@ public class WarehouseApplication extends Application {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     /*public void log(String text){
@@ -191,7 +192,7 @@ public class WarehouseApplication extends Application {
     }*/
 
     public void importShipment(String content, String fileExtension) throws Exception {
-        CompanyIO.importShipments(content, fileExtension);
+        /*CompanyIO.importShipments(content, fileExtension);*/
     }
     /*
         public void exportContentToJSON(String warehouse_id) throws Exception {

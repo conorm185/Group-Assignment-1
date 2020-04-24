@@ -1,5 +1,7 @@
 package edu.metrostate.ics372_assignment3.model;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -18,8 +20,8 @@ public class Company {
 	/**
 	 * Company constructor that loads the state of the warehouses within a company
 	 */
-	private Company() {
-		warehouses = CompanyIO.loadState();
+	private Company(Context context) {
+		warehouses = CompanyIO.loadState(context);
 	}
 
 	/**
@@ -27,11 +29,11 @@ public class Company {
 	 * 
 	 * @return a new instance of a company
 	 */
-	public static Company getInstance() {
+	public static Company getInstance(Context context) {
 		if (company_instance == null) {
 			synchronized (Company.class) {
 				if (company_instance == null) {
-					company_instance = new Company();
+					company_instance = new Company(context);
 				}
 			}
 		}
@@ -79,7 +81,7 @@ public class Company {
 		Warehouse warehouse = this.getWarehouse(shipment.getWarehouse_id());
 		if (warehouse != null) { // if the warehouse exists
 			if (warehouse.addShipment(shipment)) { // if the add was successful
-				CompanyIO.saveState();
+				CompanyIO.addShipment(shipment);
 				CompanyIO.log(String.format("Shipment: %s added to Warehouse: %s", shipment.getShipment_id(),
 						warehouse.getWarehouse_id()));
 				return true;
@@ -105,7 +107,7 @@ public class Company {
 	private boolean removeShipment(String shipment_id, String warehouse_id) {
 		Warehouse warehouse = this.getWarehouse(warehouse_id);
 		if (warehouse != null) {
-			CompanyIO.saveState();
+			CompanyIO.removeShipment(shipment_id);
 			return warehouse.removeShipment(shipment_id);
 		} else {
 			CompanyIO.log(String.format("Warehouse: %s not found", warehouse_id));
@@ -122,7 +124,7 @@ public class Company {
 		Warehouse warehouse = new Warehouse(warehouse_id);
 
 		if (warehouses.putIfAbsent(warehouse.hashCode(), warehouse) == null) { // if the previous value was null
-			CompanyIO.saveState();
+			CompanyIO.addWarehouse(warehouse_id);
 			CompanyIO.log(String.format("Warehouse: %s added to warehouse list", warehouse_id));
 			return true;
 		} else {
@@ -138,7 +140,7 @@ public class Company {
 	 */
 	private boolean removeWarehouse(String warehouse_id) {
 		if (warehouses.remove(warehouse_id.hashCode()) == null) {
-			CompanyIO.saveState();
+			CompanyIO.removeWarehouse(warehouse_id);
 			CompanyIO.log(String.format("Warehouse: %s removed from warehouse list", warehouse_id));
 			return true;
 		} else {
@@ -158,10 +160,12 @@ public class Company {
 		if (warehouse != null) {
 			if (warehouse.isReceiving_freight()) {
 				warehouse.setReceiving_freight(false);
+				CompanyIO.updateWarehouse(warehouse_id,warehouse.getWarehouse_name(),false);
 			} else {
 				warehouse.setReceiving_freight(true);
+				CompanyIO.updateWarehouse(warehouse_id,warehouse.getWarehouse_name(),true);
 			}
-			CompanyIO.saveState();
+
 			CompanyIO.log(String.format("Warehouse: %s freight status set to %b", warehouse_id,
 					warehouse.isReceiving_freight()));
 		} else {
@@ -214,7 +218,7 @@ public class Company {
 		Warehouse warehouse = this.getWarehouse(warehouse_id);
 		if (warehouse != null) {
 			warehouse.setWarehouse_name(warehouse_name);
-			CompanyIO.saveState();
+			CompanyIO.updateWarehouse(warehouse_id, warehouse_name, warehouse.isReceiving_freight());
 			CompanyIO.log(String.format("Warehouse: %s name changed to %s", warehouse_id, warehouse_name));
 		} else {
 			CompanyIO.log(String.format("Warehouse: %s not found, unable to change name", warehouse_id));

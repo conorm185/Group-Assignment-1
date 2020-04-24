@@ -19,6 +19,8 @@ public class Shipment implements Cloneable {
 	private String shipment_id;
 	private double weight;
 	private Long receipt_date;
+	private Long departure_date;
+
 	// private String unit;
 
 	/**
@@ -134,7 +136,6 @@ public class Shipment implements Cloneable {
 	 * @return the receipt_date
 	 */
 	public Long getReceipt_date() {
-
 		return receipt_date;
 	}
 
@@ -150,6 +151,20 @@ public class Shipment implements Cloneable {
 			this.receipt_date = rnL;
 		} else {
 			this.receipt_date = receipt_date;
+		}
+	}
+
+	public Long getDeparture_date() {
+		return departure_date;
+	}
+
+	public void setDeparture_date(Long departure_date) {
+		if (departure_date == 0 || departure_date == null) {
+			Date rn = new Date();
+			Long rnL = rn.getTime();
+			this.departure_date = rnL;
+		} else {
+			this.departure_date = departure_date;
 		}
 	}
 
