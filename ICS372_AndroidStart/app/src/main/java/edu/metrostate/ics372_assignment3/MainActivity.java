@@ -232,19 +232,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
-    /*private void fillSampleData() {
-        company.addWarehouse("4321");
-        Shipment s1 = new Shipment("4321", Shipment.ShippingMethod.air,"444",5, (long) 1732279329);
-        Shipment s2 = new Shipment("4321", Shipment.ShippingMethod.air,"443",5, (long) 1732279329);
-        Shipment s3 = new Shipment("4321", Shipment.ShippingMethod.air,"442",5, (long) 1732279329);
-        Shipment s4 = new Shipment("4321", Shipment.ShippingMethod.air,"441",5, (long) 1732279329);
-        company.addIncomingShipment(s1);
-        company.addIncomingShipment(s2);
-        company.addIncomingShipment(s3);
-        company.addIncomingShipment(s4);
-    }*/
-
     @Override
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent resultData) {
