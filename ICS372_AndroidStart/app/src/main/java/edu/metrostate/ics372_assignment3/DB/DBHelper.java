@@ -29,7 +29,6 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String SHIPMENT_COLUMN_WEIGHT = "weight";
     private static final String SHIPMENT_COLUMN_RECEIPT = "receipt";
     private static final String SHIPMENT_COLUMN_DEPARTURE = "departure";
-    private HashMap hp;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME , null, 1);
@@ -73,11 +72,6 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public Cursor getData(int id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery( "select * from contacts where id="+id+"", null );
-    }
-
     public int numberOfWarehouseRows(){
         SQLiteDatabase db = this.getReadableDatabase();
         return (int) DatabaseUtils.queryNumEntries(db, WAREHOUSE_TABLE_NAME);
@@ -119,42 +113,53 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.delete(SHIPMENT_TABLE_NAME, "id = ? ", new String[] { shipment_id });
     }
 
-    public ArrayList<Warehouse> getAllWarehouses() {
-        ArrayList<String> array_list = new ArrayList<String>();
+    public HashMap<Integer, Warehouse> getAllWarehouses() {
+        //ArrayList<String> array_list = new ArrayList<String>();
+        HashMap<Integer, Warehouse> company_contents = new HashMap<Integer, Warehouse>();
+        String warehouse_id;
+        String warehouse_name;
+        boolean receiving_freight;
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "select * from warehouses", null );
-        res.moveToFirst();
+        while(res.moveToNext()) {
+            warehouse_id = res.getString(res.getColumnIndexOrThrow(COMPANY_COLUMN_WAREHOUSE_ID));
+            warehouse_name = res.getString(res.getColumnIndexOrThrow(COMPANY_COLUMN_WAREHOUSE_NAME));
+            receiving_freight =
+                    (1 == res.getInt(res.getColumnIndexOrThrow(COMPANY_COLUMN_FREIGHT_STATUS)))? true:false;
 
-        while(res.isAfterLast() == false){
-            array_list.add(res.getString(res.getColumnIndex(WAREHOUSE_TABLE_NAME)));
-            res.moveToNext();
+            Warehouse current_warehouse = new Warehouse(warehouse_id);
+            current_warehouse.setWarehouse_name(warehouse_name);
+            current_warehouse.setReceiving_freight(receiving_freight);
+            current_warehouse.setWarehouse_contents(getWarehouseContents(warehouse_id));
+
+            company_contents.put(current_warehouse.hashCode(),current_warehouse);
         }
-        return null;
+        return company_contents;
     }
 
     public ArrayList<Shipment> getWarehouseContents(String warehouse_id){
-        ArrayList<Shipment> shipments = new ArrayList<Shipment>();
+        ArrayList<Shipment> warehouse_contents = new ArrayList<Shipment>();
 
+        String shipment_id;
+        Shipment.ShippingMethod shipment_method;
+        double weight;
+        Long receipt_date;
 
-        return shipments;
-    }
-/*
-
-    public ArrayList<String> getAllShipments() {
-        ArrayList<String> array_list = new ArrayList<String>();
-
-        //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from shipments", null );
-        res.moveToFirst();
+        Cursor res =  db.rawQuery( "select * from shipments where warehouse_id = ?", new String[] { warehouse_id } );
 
-        while(res.isAfterLast() == false){
-            array_list.add(res.getString(res.getColumnIndex(WAREHOUSE_TABLE_NAME)));
-            res.moveToNext();
+        while(res.moveToNext()) {
+            shipment_id = res.getString(res.getColumnIndexOrThrow(SHIPMENT_COLUMN_SHIPMENT_ID));
+            shipment_method = Shipment.ShippingMethod.valueOf(res.getString(res.getColumnIndexOrThrow(SHIPMENT_COLUMN_SHIPPING_METHOD)));
+            weight = res.getDouble(res.getColumnIndexOrThrow(SHIPMENT_COLUMN_WEIGHT));
+            receipt_date = res.getLong(res.getColumnIndexOrThrow(SHIPMENT_COLUMN_RECEIPT));
+
+            Shipment current_shipment = new Shipment(warehouse_id, shipment_method, shipment_id, weight, receipt_date);
+
+            warehouse_contents.add(current_shipment);
         }
-        return array_list;
+        return warehouse_contents;
     }
-*/
 }
