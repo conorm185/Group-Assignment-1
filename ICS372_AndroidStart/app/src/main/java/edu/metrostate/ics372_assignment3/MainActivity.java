@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -112,7 +113,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
             // get the item selected
             String selected =  parent.getItemAtPosition(pos).toString();
+            System.out.println("The warehouse selected is " + selected);
             application.setCurrentWarehouseID(selected);
+            System.out.println("Current warehouse is " + application.getCurrentWarehouseID());
         }
 
         @Override
@@ -144,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.importButton:
                 Toast.makeText(this, "importButton pressed", Toast.LENGTH_SHORT).show();
+                openFile(v);
                 break;
             case R.id.viewWarehouseButton:
                 application.setCurrentWarehouseID(spinner.getSelectedItem().toString());
@@ -156,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.exportContentButton:
                 Toast.makeText(this, "export pressed", Toast.LENGTH_SHORT).show();
+                exportContent(v);
                 break;
             case R.id.addWarehouseButton:
                 Intent intentAddWarehouse = new Intent(this, AddWarehouseActivity.class);
@@ -170,7 +175,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         //https://developer.android.com/training/sharing/send
-        intent.setType("text/json");
+        //https://stackoverflow.com/questions/50386916/select-specific-file-types-using-action-get-content-and-settype-or-intent-extra
+        String[] supportedMimeTypes = {"text/json", "text/xml"};
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            intent.setType(supportedMimeTypes.length == 1 ? supportedMimeTypes[0] : "*/*");
+            if (supportedMimeTypes.length > 0) {
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, supportedMimeTypes);
+            }
+        } else {
+            String mimeTypes = "";
+            for (String mimeType : supportedMimeTypes) {
+                mimeTypes += mimeType + "|";
+            }
+            intent.setType(mimeTypes.substring(0,mimeTypes.length() - 1));
+        }
+        //intent.setType("text/json", "text/xml");
         startActivityForResult(intent, OPEN_REQUEST_CODE);
     }
 
