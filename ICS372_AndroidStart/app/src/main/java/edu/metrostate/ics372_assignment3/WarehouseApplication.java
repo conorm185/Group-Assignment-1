@@ -19,8 +19,8 @@ import edu.metrostate.ics372_assignment3.model.Company;
 import edu.metrostate.ics372_assignment3.model.CompanyIO;
 
 public class WarehouseApplication extends Application {
-    private Company company;
-    private String currentWarehouseID;
+    private Company company = null;
+    private String currentWarehouseID = null;
 
     public Company getCompany(){
         return company;
