@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddShipmentActivity">
 
 
-
-
     <TextView
+        android:id="@+id/wareText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_margin="20dp"
-        android:text="Warehouse ID"
-        android:id="@+id/wareText"
-        android:layout_alignParentLeft="true">
+        android:text="Warehouse ID">
 
     </TextView>
 
@@ -23,22 +20,22 @@
         android:id="@+id/showWareIdText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
         android:layout_marginRight="90dp"
-        android:text="TEMP"
-        android:layout_alignParentRight="true">
+        android:layout_marginBottom="20dp"
+        android:text="TEMP">
 
     </TextView>
 
     <TextView
+        android:id="@+id/shipText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="Shipment ID"
-        android:id="@+id/shipText"
         android:layout_below="@id/wareText"
-        android:layout_alignParentLeft="true">
+        android:layout_alignParentLeft="true"
+        android:layout_margin="20dp"
+        android:text="Shipment ID">
 
     </TextView>
 
@@ -46,9 +43,9 @@
         android:id="@+id/shipmentIdEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
         android:layout_below="@id/showWareIdText"
         android:layout_alignParentRight="true"
+        android:layout_margin="12dp"
         android:ems="10"
         android:inputType="text"
         android:text="Enter_Shipment_Id" />
@@ -57,10 +54,10 @@
         android:id="@+id/shipMethodText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="Shipment Method"
         android:layout_below="@+id/shipText"
-        android:layout_alignParentLeft="true">
+        android:layout_alignParentLeft="true"
+        android:layout_margin="20dp"
+        android:text="Shipment Method">
 
     </TextView>
 
@@ -77,10 +74,10 @@
         android:id="@+id/weightText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="Weight(lbs)"
         android:layout_below="@+id/shipMethodText"
-        android:layout_alignParentLeft="true">
+        android:layout_alignParentLeft="true"
+        android:layout_margin="20dp"
+        android:text="Weight(lbs)">
 
     </TextView>
 
@@ -88,9 +85,9 @@
         android:id="@+id/weightEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
         android:layout_below="@id/shipmentMethodSpinner"
         android:layout_alignParentRight="true"
+        android:layout_margin="12dp"
         android:ems="10"
         android:inputType="numberDecimal"
         android:text="Enter_Weight" />
@@ -99,10 +96,10 @@
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:text="Submit"
+        android:layout_below="@id/weightText"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/weightText">
+        android:layout_marginLeft="12dp"
+        android:text="Submit">
 
     </Button>
 
@@ -110,13 +107,12 @@
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:text="Cancel"
+        android:layout_below="@id/weightEdit"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/weightEdit">
+        android:layout_margin="12dp"
+        android:text="Cancel">
 
     </Button>
-
 
 
 </RelativeLayout>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -57,15 +56,15 @@
     </LinearLayout>
 
     <TextView
-    android:id="@+id/TextView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@id/TopBar"
-    android:text="Hello World!"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TopBar"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/BottomBar"
@@ -84,15 +83,15 @@
             android:id="@+id/viewWarehouseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="View Warehouse"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:text="View Warehouse" />
 
         <Button
             android:id="@+id/exportContentButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Export Content"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:text="Export Content" />
 
         <Button
             android:id="@+id/addWarehouseButton"

@@ -1,9 +1,5 @@
 package edu.metrostate.ics372_assignment3;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -14,17 +10,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-
-import edu.metrostate.ics372_assignment3.model.Company;
-import edu.metrostate.ics372_assignment3.model.Shipment;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,22 +29,21 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.metrostate.ics372_assignment3.model.Company;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int CREATE_REQUEST_CODE = 40;
     private static final int OPEN_REQUEST_CODE = 41;
     private static final int SAVE_REQUEST_CODE = 42;
-
-    Button impButt, viewButt, exportButt, addButt; // names are temporary but bad jokes last forever. buttons.
-
     private static final int WRITE_STORAGE_PERMISSION_REQUEST = 5;
-
-    private WarehouseApplication application;
-    private Company company;
     private static TextView textView;
     private static Spinner spinner;
+    Button impButt, viewButt, exportButt, addButt; // names are temporary but bad jokes last forever. buttons.
     List<String> warehouseIDs;
     ArrayAdapter<String> spinnerArrayAdapter;
+    private WarehouseApplication application;
+    private Company company;
 
     /**
      * Creates the view for the application
@@ -66,10 +60,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //this.fillSampleData();
 
         // buttons
-        impButt = (Button) findViewById(R.id.importButton);
-        viewButt = (Button) findViewById(R.id.viewWarehouseButton);
-        exportButt = (Button) findViewById(R.id.exportContentButton);
-        addButt = (Button) findViewById(R.id.addWarehouseButton);
+        impButt = findViewById(R.id.importButton);
+        viewButt = findViewById(R.id.viewWarehouseButton);
+        exportButt = findViewById(R.id.exportContentButton);
+        addButt = findViewById(R.id.addWarehouseButton);
 
         textView = findViewById(R.id.TextView);
         //https://mkyong.com/android/android-spinner-drop-down-list-example/
@@ -78,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         warehouseIDs = new ArrayList<>();
         // Initializing an ArrayAdapter
         spinnerArrayAdapter = new ArrayAdapter<String>(
-                this,R.layout.support_simple_spinner_dropdown_item,warehouseIDs);
+                this, R.layout.support_simple_spinner_dropdown_item, warehouseIDs);
         spinner.setAdapter(spinnerArrayAdapter);
         spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
 
@@ -107,39 +101,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         updateSpinnerArray();
     }
 
-    // an action listene that is called when a warehouse id is selected
-    class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
-
-        public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
-            // get the item selected
-            String selected =  parent.getItemAtPosition(pos).toString();
-            System.out.println("The warehouse selected is " + selected);
-            application.setCurrentWarehouseID(selected);
-            System.out.println("Current warehouse is " + application.getCurrentWarehouseID());
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> arg0) {
-            // TODO Auto-generated method stub
-        }
-
-    }
-
-
     // a method that is called to loadnew entries to the spinner list if they dont exist
-    public void updateSpinnerArray(){
+    public void updateSpinnerArray() {
         //query Company for its list of IDs
         List<String> ids = application.getCompany().getWarehouseIds();
         //loop through the list and check it is already in the warehouselist here
         //if its not we add it
         ids.forEach(i -> {
-            if(!warehouseIDs.contains(i)){
+            if (!warehouseIDs.contains(i)) {
                 warehouseIDs.add(i);
             }
         });
         spinnerArrayAdapter.notifyDataSetChanged();
     }
-
 
     @Override
     public void onClick(View v) {
@@ -169,9 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
-    public void openFile(View view)
-    {
+    public void openFile(View view) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         //https://developer.android.com/training/sharing/send
@@ -188,14 +160,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             for (String mimeType : supportedMimeTypes) {
                 mimeTypes += mimeType + "|";
             }
-            intent.setType(mimeTypes.substring(0,mimeTypes.length() - 1));
+            intent.setType(mimeTypes.substring(0, mimeTypes.length() - 1));
         }
         //intent.setType("text/json", "text/xml");
         startActivityForResult(intent, OPEN_REQUEST_CODE);
     }
 
-    public void exportContent(View view)
-    {
+    public void exportContent(View view) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         //https://developer.android.com/training/sharing/send
@@ -254,8 +225,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     //Toast.makeText(this, "The file has been saved at " + currentUri.toString(), Toast.LENGTH_SHORT).show();
                 }
-            }
-            else if (requestCode == OPEN_REQUEST_CODE) {
+            } else if (requestCode == OPEN_REQUEST_CODE) {
 
                 if (resultData != null) {
                     currentUri = resultData.getData();
@@ -265,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         // https://stackoverflow.com/questions/53869269/get-file-name-and-extension-of-any-file-in-android
                         String path = new File(resultData.getData().getPath()).getAbsolutePath();
 
-                        if(path != null) {
+                        if (path != null) {
                             System.out.println("Path is not null");
                             uri = resultData.getData();
 
@@ -319,5 +289,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         inputStream.close();
         return stringBuilder.toString();
+    }
+
+    // an action listene that is called when a warehouse id is selected
+    class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
+
+        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+            // get the item selected
+            String selected = parent.getItemAtPosition(pos).toString();
+            System.out.println("The warehouse selected is " + selected);
+            application.setCurrentWarehouseID(selected);
+            System.out.println("Current warehouse is " + application.getCurrentWarehouseID());
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> arg0) {
+            // TODO Auto-generated method stub
+        }
+
     }
 }

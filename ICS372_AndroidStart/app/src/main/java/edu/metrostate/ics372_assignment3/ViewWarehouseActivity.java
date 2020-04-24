@@ -1,10 +1,7 @@
 package edu.metrostate.ics372_assignment3;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,6 +9,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,7 +23,7 @@ public class ViewWarehouseActivity extends AppCompatActivity implements View.OnC
 
     private Company company;
     private Button addShipmentButton, toggleActiveInactiveButton, toggleRecieptButton, editWarehouseButton;
-    private TextView warehouse_id, warehouse_name, shipment_warehouse_id,shipment_shipment_id, shipment_method, shipment_weight, shipment_receipt, shipment_departure;
+    private TextView warehouse_id, warehouse_name, shipment_warehouse_id, shipment_shipment_id, shipment_method, shipment_weight, shipment_receipt, shipment_departure;
     private ListView shipmentList;
     private HashMap<String, Shipment> warehouse_contents;
     private WarehouseApplication application;
@@ -38,22 +37,22 @@ public class ViewWarehouseActivity extends AppCompatActivity implements View.OnC
         application = (WarehouseApplication) getApplication();
         company = application.getCompany();
 
-        addShipmentButton = (Button) findViewById(R.id.addShipmentButton);
-        toggleActiveInactiveButton = (Button) findViewById(R.id.activeShipments);
-        toggleRecieptButton = (Button) findViewById(R.id.receiptButton);
-        editWarehouseButton = (Button) findViewById(R.id.editWarehouseButton);
+        addShipmentButton = findViewById(R.id.addShipmentButton);
+        toggleActiveInactiveButton = findViewById(R.id.activeShipments);
+        toggleRecieptButton = findViewById(R.id.receiptButton);
+        editWarehouseButton = findViewById(R.id.editWarehouseButton);
 
-        warehouse_id = (TextView) findViewById(R.id.warehouseIDText);
-        warehouse_name = (TextView) findViewById(R.id.warehouseNameText);
-        shipment_warehouse_id= (TextView) findViewById(R.id.textViewWarehouseID);
-        shipment_shipment_id = (TextView) findViewById(R.id.textViewShipmentID);
-        shipment_method = (TextView) findViewById(R.id.textViewShipmentMethod);
-        shipment_weight = (TextView) findViewById(R.id.textViewShipmentWeight);
-        shipment_receipt = (TextView) findViewById(R.id.textViewReceipt);
-        shipment_departure = (TextView) findViewById(R.id.textViewDeparture);
+        warehouse_id = findViewById(R.id.warehouseIDText);
+        warehouse_name = findViewById(R.id.warehouseNameText);
+        shipment_warehouse_id = findViewById(R.id.textViewWarehouseID);
+        shipment_shipment_id = findViewById(R.id.textViewShipmentID);
+        shipment_method = findViewById(R.id.textViewShipmentMethod);
+        shipment_weight = findViewById(R.id.textViewShipmentWeight);
+        shipment_receipt = findViewById(R.id.textViewReceipt);
+        shipment_departure = findViewById(R.id.textViewDeparture);
 
-        warehouse_id.setText(String.format("Warehouse ID: %s",application.getCurrentWarehouseID()));
-        warehouse_name.setText(String.format("Name: %s",company.getWarehouseName(application.getCurrentWarehouseID())));
+        warehouse_id.setText(String.format("Warehouse ID: %s", application.getCurrentWarehouseID()));
+        warehouse_name.setText(String.format("Name: %s", company.getWarehouseName(application.getCurrentWarehouseID())));
 
         addShipmentButton.setOnClickListener(this);
         toggleActiveInactiveButton.setOnClickListener(this);
@@ -64,7 +63,7 @@ public class ViewWarehouseActivity extends AppCompatActivity implements View.OnC
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         refreshShipmentList();
     }
@@ -72,7 +71,7 @@ public class ViewWarehouseActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.addShipmentButton:
                 Intent intent = new Intent(this, AddShipmentActivity.class);
                 startActivity(intent);
@@ -95,16 +94,16 @@ public class ViewWarehouseActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    public void refreshShipmentList(){
+    public void refreshShipmentList() {
         warehouse_contents = company.readWarehouseContent(application.getCurrentWarehouseID());
         String[] shipment_id_list = warehouse_contents.keySet().toArray(new String[0]);
-        adapter = new ArrayAdapter<String>(this,R.layout.shipment_list_view, shipment_id_list);
-        shipmentList = (ListView) findViewById(R.id.shipment_list_view);
+        adapter = new ArrayAdapter<String>(this, R.layout.shipment_list_view, shipment_id_list);
+        shipmentList = findViewById(R.id.shipment_list_view);
         shipmentList.setAdapter(adapter);
         shipmentList.setOnItemClickListener(this::onItemClick);
     }
 
-    public void refreshShipmentInfo(String shipment_id){
+    public void refreshShipmentInfo(String shipment_id) {
         Shipment current_shipment = warehouse_contents.get(shipment_id);
         Date receipt = new Date(current_shipment.getReceipt_date());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -112,7 +111,7 @@ public class ViewWarehouseActivity extends AppCompatActivity implements View.OnC
         shipment_warehouse_id.setText(current_shipment.getWarehouse_id());
         shipment_shipment_id.setText(current_shipment.getShipment_id());
         shipment_method.setText(current_shipment.getShipment_method().toString());
-        shipment_weight.setText(String.format("%.2f lbs",current_shipment.getWeight()));
+        shipment_weight.setText(String.format("%.2f lbs", current_shipment.getWeight()));
         shipment_receipt.setText(formatter.format(receipt));
         shipment_departure.setText("N/A");
     }

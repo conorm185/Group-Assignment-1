@@ -15,48 +15,46 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-import edu.metrostate.ics372_assignment3.DB.DBHelper;
 import edu.metrostate.ics372_assignment3.model.Company;
 import edu.metrostate.ics372_assignment3.model.CompanyIO;
 
 public class WarehouseApplication extends Application {
+    static final int READ_BLOCK_SIZE = 100;
+    public static WarehouseApplication warehouseApplicationSingleton;
     private Company company = null;
     private String currentWarehouseID = null;
+    private Uri externalFileStorageURI;
+    private String internalFileStorageURI;
+    private CompanyIO companyIO;
 
-    public Company getCompany(){
+    public WarehouseApplication() {
+
+    }
+
+    public Company getCompany() {
         return company;
     }
 
-    public void setCompany(){
+    public void setCompany() {
         company = Company.getInstance(this);
     }
 
-    public void setCurrentWarehouseID(String currentWarehouseID){
-        this.currentWarehouseID = currentWarehouseID;
-    }
-
-    public String getCurrentWarehouseID(){
+    public String getCurrentWarehouseID() {
         return currentWarehouseID;
     }
 
-    private Uri externalFileStorageURI;
-    private String internalFileStorageURI;
-    static final int READ_BLOCK_SIZE = 100;
-    public static WarehouseApplication warehouseApplicationSingleton;
-    private CompanyIO companyIO;
+    public void setCurrentWarehouseID(String currentWarehouseID) {
+        this.currentWarehouseID = currentWarehouseID;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         setInternalFileStorageURI();
         setExternalFileStorageURI();
-        this.warehouseApplicationSingleton = this;
+        warehouseApplicationSingleton = this;
         companyIO = new CompanyIO();
         company = Company.getInstance(this);
-
-    }
-
-    public WarehouseApplication(){
 
     }
 
@@ -64,7 +62,7 @@ public class WarehouseApplication extends Application {
         return internalFileStorageURI;
     }
 
-    private void setExternalFileStorageURI(){
+    private void setExternalFileStorageURI() {
         // read the external URI location from the internal file
         String uriString = readLocationURI();
 
@@ -75,15 +73,14 @@ public class WarehouseApplication extends Application {
         return externalFileStorageURI;
     }
 
-    private void setInternalFileStorageURI(){
+    private void setInternalFileStorageURI() {
         // check if filestorage.txt exists in internal storage
         File file = new File("filestorageuri.txt");
-        if(file.exists()) {
+        if (file.exists()) {
             // set it
             System.out.println("file exists");
             internalFileStorageURI = "filestorageuri.txt";
-        }
-        else {
+        } else {
             // if it does not, set it and create it
             System.out.println("file does not exists");
             internalFileStorageURI = "filestorageuri.txt";
@@ -95,8 +92,8 @@ public class WarehouseApplication extends Application {
     public void writeLocationURI(String fileStorageURI) {
         // add-write text into file
         try {
-            FileOutputStream fileout=openFileOutput(getInternalFileStorageURI(), MODE_PRIVATE);
-            OutputStreamWriter outputWriter=new OutputStreamWriter(fileout);
+            FileOutputStream fileout = openFileOutput(getInternalFileStorageURI(), MODE_PRIVATE);
+            OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
             outputWriter.write(fileStorageURI);
             outputWriter.close();
             System.out.println("filestorageuri.txt saved successfully!");
@@ -114,19 +111,19 @@ public class WarehouseApplication extends Application {
     // Read file location URI from internal file storage
     public String readLocationURI() {
         //reading text from file
-        String s="";
+        String s = "";
         try {
-            FileInputStream fileIn=openFileInput(getInternalFileStorageURI());
-            InputStreamReader InputRead= new InputStreamReader(fileIn);
+            FileInputStream fileIn = openFileInput(getInternalFileStorageURI());
+            InputStreamReader InputRead = new InputStreamReader(fileIn);
 
-            char[] inputBuffer= new char[READ_BLOCK_SIZE];
+            char[] inputBuffer = new char[READ_BLOCK_SIZE];
 
             int charRead;
 
-            while ((charRead=InputRead.read(inputBuffer))>0) {
+            while ((charRead = InputRead.read(inputBuffer)) > 0) {
                 // char to string conversion
-                String readstring=String.copyValueOf(inputBuffer,0,charRead);
-                s +=readstring;
+                String readstring = String.copyValueOf(inputBuffer, 0, charRead);
+                s += readstring;
             }
             InputRead.close();
         } catch (Exception e) {
@@ -135,13 +132,12 @@ public class WarehouseApplication extends Application {
         return s;
     }
 
-    public void writeFileContent(String textContent)
-    {
+    public void writeFileContent(String textContent) {
         System.out.println("In write file content");
         System.out.println("Text content " + textContent);
         System.out.println("URI " + externalFileStorageURI.toString());
 
-        try{
+        try {
             ParcelFileDescriptor pfd =
                     getContentResolver().openFileDescriptor(externalFileStorageURI, "rwt");
 
@@ -194,6 +190,7 @@ public class WarehouseApplication extends Application {
     public void importShipment(String content, String fileExtension) throws Exception {
         /*CompanyIO.importShipments(content, fileExtension);*/
     }
+
     /*
         public void exportContentToJSON(String warehouse_id) throws Exception {
             String companyJsonText = CompanyIO.exportContentToJSON(warehouse_id);

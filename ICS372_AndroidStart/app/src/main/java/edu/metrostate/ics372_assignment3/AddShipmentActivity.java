@@ -1,7 +1,5 @@
 package edu.metrostate.ics372_assignment3;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,15 +10,17 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import edu.metrostate.ics372_assignment3.model.Company;
 import edu.metrostate.ics372_assignment3.model.Shipment;
 import edu.metrostate.ics372_assignment3.model.Shipment.ShippingMethod;
 
 public class AddShipmentActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
+    WarehouseApplication application;
     private Button submitButton, cancelButton;
     private Company company;
-    WarehouseApplication application;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +29,13 @@ public class AddShipmentActivity extends AppCompatActivity implements View.OnCli
         application = (WarehouseApplication) getApplication();
         company = application.getCompany();
 
-        submitButton = (Button) findViewById(R.id.submitButton);
-        cancelButton = (Button) findViewById(R.id.cancelButton);
+        submitButton = findViewById(R.id.submitButton);
+        cancelButton = findViewById(R.id.cancelButton);
 
         submitButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
 
-        Spinner spinner = (Spinner) findViewById(R.id.shipmentMethodSpinner);
+        Spinner spinner = findViewById(R.id.shipmentMethodSpinner);
         spinner.setAdapter(new ArrayAdapter<Shipment.ShippingMethod>(this, android.R.layout.simple_spinner_item, Shipment.ShippingMethod.values()));
         // Specify the layout to use when the list of choices appears
         // Apply the adapter to the spinner
@@ -47,7 +47,7 @@ public class AddShipmentActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.submitButton:
                 addShipment(application.getCurrentWarehouseID());
                 this.finish();
@@ -71,7 +71,7 @@ public class AddShipmentActivity extends AppCompatActivity implements View.OnCli
             double weight = Double.parseDouble(weightString);
 
             // get selection from spinner
-            Spinner mySpinner = (Spinner) findViewById(R.id.shipmentMethodSpinner);
+            Spinner mySpinner = findViewById(R.id.shipmentMethodSpinner);
             ShippingMethod method = (ShippingMethod) mySpinner.getSelectedItem();
 
             // get selection from EditText holding the shipment Id
@@ -104,12 +104,12 @@ public class AddShipmentActivity extends AppCompatActivity implements View.OnCli
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Toast.makeText(this, "YOUR SELECTION IS : " + parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
     }
+
     // spinner interface.
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
-
 
 
 }

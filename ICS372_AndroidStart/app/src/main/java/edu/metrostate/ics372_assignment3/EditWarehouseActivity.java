@@ -1,19 +1,19 @@
 package edu.metrostate.ics372_assignment3;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import edu.metrostate.ics372_assignment3.model.Company;
 
-public class EditWarehouseActivity extends AppCompatActivity implements View.OnClickListener{
+public class EditWarehouseActivity extends AppCompatActivity implements View.OnClickListener {
 
     Company company;
     WarehouseApplication application;
-    Button submitButton,cancelButton;
+    Button submitButton, cancelButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +23,8 @@ public class EditWarehouseActivity extends AppCompatActivity implements View.OnC
         application = (WarehouseApplication) getApplication();
         company = application.getCompany();
 
-        submitButton = (Button) findViewById(R.id.submitButton);
-        cancelButton = (Button) findViewById(R.id.cancelButton);
+        submitButton = findViewById(R.id.submitButton);
+        cancelButton = findViewById(R.id.cancelButton);
 
         submitButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
@@ -32,7 +32,7 @@ public class EditWarehouseActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.submitButton:
                 addWarehouse();
                 this.finish();
@@ -43,7 +43,7 @@ public class EditWarehouseActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    private void addWarehouse(){
+    private void addWarehouse() {
         EditText warehouse_id_text = findViewById(R.id.editTextWarehouseID);
         String warehouse_id = warehouse_id_text.getText().toString();
 
@@ -51,6 +51,6 @@ public class EditWarehouseActivity extends AppCompatActivity implements View.OnC
         String warehouse_name = warehouse_id_text.getText().toString();
 
         company.addWarehouse(warehouse_id);
-        company.setWarehouseName(warehouse_id,warehouse_name);
+        company.setWarehouseName(warehouse_id, warehouse_name);
     }
 }
