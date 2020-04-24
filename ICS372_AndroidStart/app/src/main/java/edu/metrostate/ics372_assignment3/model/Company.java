@@ -5,6 +5,8 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import edu.metrostate.ics372_assignment3.MainActivityMVP;
+
 /**
  * Company class is a Singleton implementation of a controller class used to
  * handle all handle all operation with the model objects of a shiping company.
@@ -12,7 +14,7 @@ import java.util.HashMap;
  * @author tom
  *
  */
-public class Company {
+public class Company implements MainActivityMVP.Model {
 
 	private static Company company_instance = null;
 	private HashMap<Integer, Warehouse> warehouses;
@@ -104,7 +106,7 @@ public class Company {
 	 * @param shipment_id  shipment to be deleted
 	 * @param warehouse_id warehouse the contains shipment to be deleted
 	 */
-	private boolean removeShipment(String shipment_id, String warehouse_id) {
+	public boolean removeShipment(String shipment_id, String warehouse_id) {
 		Warehouse warehouse = this.getWarehouse(warehouse_id);
 		if (warehouse != null) {
 			CompanyIO.removeShipment(shipment_id, warehouse_id);
@@ -115,7 +117,7 @@ public class Company {
 		}
 	}
 
-	private boolean moveShipment(String shipment_id, String warehouse_id_from, String warehouse_id_to){
+	public boolean moveShipment(String shipment_id, String warehouse_id_from, String warehouse_id_to){
 		Warehouse warehouse_from = this.getWarehouse(warehouse_id_from);
 		Warehouse warehouse_to = this.getWarehouse(warehouse_id_from);
 		if (warehouse_from != null && warehouse_to != null && warehouse_from.findShipment(shipment_id) != null) {
@@ -159,7 +161,7 @@ public class Company {
 	 * 
 	 * @param warehouse_id of warehouse to remove
 	 */
-	private boolean removeWarehouse(String warehouse_id) {
+	public boolean removeWarehouse(String warehouse_id) {
 		if (warehouses.remove(warehouse_id.hashCode()) == null) {
 			CompanyIO.removeWarehouse(warehouse_id);
 			CompanyIO.log(String.format("Warehouse: %s removed from warehouse list", warehouse_id));
