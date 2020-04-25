@@ -2,6 +2,8 @@ package edu.metrostate.ics372_assignment3;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -9,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -36,6 +39,7 @@ import java.util.List;
 import edu.metrostate.ics372_assignment3.model.Company;
 import edu.metrostate.ics372_assignment3.model.CompanyIO;
 import edu.metrostate.ics372_assignment3.model.Shipment;
+import edu.metrostate.ics372_assignment3.model.Warehouse;
 
 public class MainActivity extends AppCompatActivity implements MainActivityMVP.View,View.OnClickListener, AdapterView.OnItemClickListener,AdapterView.OnItemSelectedListener {
 
@@ -54,9 +58,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
 
     private WarehouseApplication application;
     private Company company;
+    private MainActivityPresenter presenter;
     private HashMap<String, Shipment> warehouse_contents;
     private List<String> warehouseIDs;
 
+    private AlertDialog dialog;
 
     /**
      * Creates the view for the application
@@ -70,7 +76,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         application = (WarehouseApplication) getApplication();
         application.setCompany();
         company = application.getCompany();
-        //this.fillSampleData();
+
+        presenter = new MainActivityPresenter(Company.getInstance(this));
+        presenter.setView(this);
 
         // buttons
         impButt = findViewById(R.id.importButton);
@@ -114,7 +122,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         editWarehouseButton.setOnClickListener(this);
         impButt.setOnClickListener(this);
         exportButt.setOnClickListener(this);
-        addButt.setOnClickListener(this);
+        //addButt.setOnClickListener(this);
+        addButt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.addWarehouseClicked();
+            }
+        });
 
         refreshShipmentList();
     }
@@ -147,10 +161,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
             case R.id.exportContentButton:
                 Toast.makeText(this, "export pressed", Toast.LENGTH_SHORT).show();
                 exportContent(v);
-                break;
-            case R.id.addWarehouseButton:
-                Intent intentAddWarehouse = new Intent(this, AddWarehouseActivity.class);
-                startActivity(intentAddWarehouse);
                 break;
             case R.id.addShipmentButton:
                 Intent intent = new Intent(this, AddShipmentActivity.class);
@@ -344,7 +354,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
 
     @Override
     public void showAddNewWarehouse() {
-
+        dialog = new AlertDialog.Builder(MainActivity.this)
+            .setTitle("Add New Warehouse")
+            .setView(R.layout.fragment_add_warehouse)
+            .setPositiveButton("Add", addWarehouseHandler).show();
     }
 
     @Override
@@ -359,6 +372,21 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
 
     @Override
     public void showWarehouses(ArrayList<String> warehouseIds) {
-        //should replace updateSpinnerArray
+        updateSpinnerArray();
     }
+
+    private DialogInterface.OnClickListener addWarehouseHandler = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            String id = ((TextView)MainActivity.this.dialog.findViewById(R.id.editTextWarehouseID)).getText().toString();
+            String name = ((TextView)MainActivity.this.dialog.findViewById(R.id.editTextWarehouseName)).getText().toString();
+            Log.e("here", "inside handler" + id + "    "+ name);
+            Warehouse warehouse = new Warehouse(id);
+            warehouse.setWarehouse_name(name);
+
+            presenter.addWarehouseCompleted(warehouse);
+            dialog.dismiss();
+        }
+
+    };
 }

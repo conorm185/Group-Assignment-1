@@ -42,4 +42,9 @@ public class MainActivityPresenter implements MainActivityMVP.Presenter {
         model.setWarehouseName(warehouse.getWarehouse_id(),warehouse.getWarehouse_name());
         view.showWarehouses(model.getWarehouseIds());
     }
+
+    @Override
+    public void addWarehouseClicked() {
+        view.showAddNewWarehouse();
+    }
 }

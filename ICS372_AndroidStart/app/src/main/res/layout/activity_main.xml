@@ -39,7 +39,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Select Warehouse" />
+                android:text="Select WH" />
 
             <Spinner
                 android:id="@+id/spinner"
@@ -243,13 +243,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
-
-        <Button
-            android:id="@+id/viewWarehouseButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="View WH" />
 
         <Button
             android:id="@+id/editWarehouseButton"
