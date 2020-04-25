@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,25 +28,37 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import edu.metrostate.ics372_assignment3.model.Company;
 import edu.metrostate.ics372_assignment3.model.CompanyIO;
+import edu.metrostate.ics372_assignment3.model.Shipment;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
 
     private static final int CREATE_REQUEST_CODE = 40;
     private static final int OPEN_REQUEST_CODE = 41;
     private static final int SAVE_REQUEST_CODE = 42;
     private static final int WRITE_STORAGE_PERMISSION_REQUEST = 5;
-    private static TextView textView;
     private static Spinner spinner;
-    Button impButt, viewButt, exportButt, addButt; // names are temporary but bad jokes last forever. buttons.
+    Button impButt, exportButt, addButt; // names are temporary but bad jokes last forever. buttons.
     List<String> warehouseIDs;
     ArrayAdapter<String> spinnerArrayAdapter;
     private WarehouseApplication application;
     private Company company;
+
+
+    private Button addShipmentButton, toggleActiveInactiveButton, toggleRecieptButton, editWarehouseButton;
+    private TextView shipment_warehouse_id, shipment_shipment_id, shipment_method, shipment_weight, shipment_receipt, shipment_departure;
+    private ListView shipmentList;
+    private HashMap<String, Shipment> warehouse_contents;
+    private ArrayAdapter adapter;
+
+
 
     /**
      * Creates the view for the application
@@ -63,13 +76,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // buttons
         impButt = findViewById(R.id.importButton);
-        viewButt = findViewById(R.id.viewWarehouseButton);
         exportButt = findViewById(R.id.exportContentButton);
         addButt = findViewById(R.id.addWarehouseButton);
+        addShipmentButton = findViewById(R.id.addShipmentButton);
+        toggleActiveInactiveButton = findViewById(R.id.activeShipments);
+        toggleRecieptButton = findViewById(R.id.receiptButton);
+        editWarehouseButton = findViewById(R.id.editWarehouseButton);
+        shipment_warehouse_id = findViewById(R.id.textViewWarehouseID);
+        shipment_shipment_id = findViewById(R.id.textViewShipmentID);
+        shipment_method = findViewById(R.id.textViewShipmentMethod);
+        shipment_weight = findViewById(R.id.textViewShipmentWeight);
+        shipment_receipt = findViewById(R.id.textViewReceipt);
+        shipment_departure = findViewById(R.id.textViewDeparture);
 
-        textView = findViewById(R.id.TextView);
-        //https://mkyong.com/android/android-spinner-drop-down-list-example/
-        //https://android--code.blogspot.com/2015/08/android-spinner-add-item-dynamically.html
+
         spinner = findViewById(R.id.spinner);
         warehouseIDs = new ArrayList<>();
         // Initializing an ArrayAdapter
@@ -78,12 +98,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         spinner.setAdapter(spinnerArrayAdapter);
         spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
 
-        impButt.setOnClickListener(this);
-        viewButt.setOnClickListener(this);
-        exportButt.setOnClickListener(this);
-        addButt.setOnClickListener(this);
-
         updateSpinnerArray();
+        application.setCurrentWarehouseID(spinnerArrayAdapter.getItem(0));
+        /*application.setCurrentWarehouseID(spinner.getSelectedItem().toString());*/
 
         //  Check Storage Permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -95,20 +112,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
+
+
+
+        addShipmentButton.setOnClickListener(this);
+        toggleActiveInactiveButton.setOnClickListener(this);
+        toggleRecieptButton.setOnClickListener(this);
+        editWarehouseButton.setOnClickListener(this);
+        impButt.setOnClickListener(this);
+        exportButt.setOnClickListener(this);
+        addButt.setOnClickListener(this);
+
+        Log.e("here", application.getCurrentWarehouseID());
+        refreshShipmentList();
+
+        /*warehouse_id.setText(String.format("Warehouse ID: %s", application.getCurrentWarehouseID()));
+        warehouse_name.setText(String.format("Name: %s", company.getWarehouseName(application.getCurrentWarehouseID())));*/
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
         updateSpinnerArray();
+        refreshShipmentList();
     }
 
     // a method that is called to loadnew entries to the spinner list if they dont exist
     public void updateSpinnerArray() {
-        //query Company for its list of IDs
-        List<String> ids = application.getCompany().getWarehouseIds();
-        //loop through the list and check it is already in the warehouselist here
-        //if its not we add it
+        List<String> ids = company.getWarehouseIds();
         ids.forEach(i -> {
             if (!warehouseIDs.contains(i)) {
                 warehouseIDs.add(i);
@@ -125,15 +157,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, "importButton pressed", Toast.LENGTH_SHORT).show();
                 openFile(v);
                 break;
-            case R.id.viewWarehouseButton:
-                application.setCurrentWarehouseID(spinner.getSelectedItem().toString());
-                if (application.getCurrentWarehouseID() == null) {
-                    Toast.makeText(this, "No Warehouse Selected", Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent intentViewWarehouse = new Intent(this, ViewWarehouseActivity.class);
-                    startActivity(intentViewWarehouse);
-                }
-                break;
             case R.id.exportContentButton:
                 Toast.makeText(this, "export pressed", Toast.LENGTH_SHORT).show();
                 exportContent(v);
@@ -141,6 +164,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.addWarehouseButton:
                 Intent intentAddWarehouse = new Intent(this, AddWarehouseActivity.class);
                 startActivity(intentAddWarehouse);
+                break;
+            case R.id.addShipmentButton:
+                Intent intent = new Intent(this, AddShipmentActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.activeShipments:
+                Toast.makeText(this, "Shipment List Toggled", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.receiptButton:
+                Toast.makeText(this, "Reciept Status Toggled", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.editWarehouseButton:
+                Intent intentEditWarehouse = new Intent(this, EditWarehouseActivity.class);
+                startActivity(intentEditWarehouse);
                 break;
         }
     }
@@ -258,7 +295,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private String readFileContent(Uri uri) throws IOException {
-
         InputStream inputStream =
                 getContentResolver().openInputStream(uri);
         BufferedReader reader =
@@ -273,21 +309,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return stringBuilder.toString();
     }
 
-    // an action listene that is called when a warehouse id is selected
+
     class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
-
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-            // get the item selected
             String selected = parent.getItemAtPosition(pos).toString();
-            System.out.println("The warehouse selected is " + selected);
             application.setCurrentWarehouseID(selected);
-            System.out.println("Current warehouse is " + application.getCurrentWarehouseID());
+            refreshShipmentList();
         }
-
         @Override
         public void onNothingSelected(AdapterView<?> arg0) {
-            // TODO Auto-generated method stub
         }
 
+    }
+
+
+
+
+
+
+
+
+
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String current_shipment_id = parent.getItemAtPosition(position).toString();
+        refreshShipmentInfo(current_shipment_id);
+    }
+
+    public void refreshShipmentList() {
+        warehouse_contents = company.readWarehouseContent(application.getCurrentWarehouseID());
+        String[] shipment_id_list = warehouse_contents.keySet().toArray(new String[0]);
+        adapter = new ArrayAdapter<String>(this, R.layout.shipment_list_view, shipment_id_list);
+        shipmentList = findViewById(R.id.shipment_list_view);
+        shipmentList.setAdapter(adapter);
+        shipmentList.setOnItemClickListener(this::onItemClick);
+    }
+
+    public void refreshShipmentInfo(String shipment_id) {
+        Shipment current_shipment = warehouse_contents.get(shipment_id);
+        Date receipt = new Date(current_shipment.getReceipt_date());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
+        shipment_warehouse_id.setText(current_shipment.getWarehouse_id());
+        shipment_shipment_id.setText(current_shipment.getShipment_id());
+        shipment_method.setText(current_shipment.getShipment_method().toString());
+        shipment_weight.setText(String.format("%.2f lbs", current_shipment.getWeight()));
+        shipment_receipt.setText(formatter.format(receipt));
+        shipment_departure.setText("N/A");
     }
 }

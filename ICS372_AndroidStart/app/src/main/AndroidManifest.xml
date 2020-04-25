@@ -14,7 +14,6 @@
         android:theme="@style/AppTheme">
         <activity android:name=".EditWarehouseActivity" />
         <activity android:name=".AddWarehouseActivity" />
-        <activity android:name=".ViewWarehouseActivity" />
         <activity android:name=".AddShipmentActivity" />
         <!--<activity android:name=".StorageDemoActivity"/>-->
         <!--MainActivity-->
