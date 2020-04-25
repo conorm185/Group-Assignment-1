@@ -63,9 +63,7 @@ public class WarehouseApplication extends Application {
     }
 
     private void setExternalFileStorageURI() {
-        // read the external URI location from the internal file
         String uriString = readLocationURI();
-
         externalFileStorageURI = Uri.parse(uriString);
     }
 
@@ -88,7 +86,6 @@ public class WarehouseApplication extends Application {
         }
     }
 
-    // write file location URI to internal file storage
     public void writeLocationURI(String fileStorageURI) {
         // add-write text into file
         try {
@@ -108,7 +105,6 @@ public class WarehouseApplication extends Application {
         }
     }
 
-    // Read file location URI from internal file storage
     public String readLocationURI() {
         //reading text from file
         String s = "";
@@ -131,97 +127,4 @@ public class WarehouseApplication extends Application {
         }
         return s;
     }
-
-    public void writeFileContent(String textContent) {
-        System.out.println("In write file content");
-        System.out.println("Text content " + textContent);
-        System.out.println("URI " + externalFileStorageURI.toString());
-
-        try {
-            ParcelFileDescriptor pfd =
-                    getContentResolver().openFileDescriptor(externalFileStorageURI, "rwt");
-
-            FileOutputStream fileOutputStream =
-                    new FileOutputStream(
-                            pfd.getFileDescriptor());
-
-            fileOutputStream.write(textContent.getBytes());
-
-            fileOutputStream.close();
-            pfd.close();
-            Toast.makeText(this, "The storage file has been updated. ", Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void writeWarehouseDataToFile(Uri fileUri) throws IOException {
-        /*//String textContent = readFromExternalFileStorageURI();
-        System.out.println("URI " + fileUri.toString());
-        String warehouseJsonText = CompanyIO.exportContentToJSON(getCurrentWarehouseID());
-        //String saveFileName = String.format("%s.json", warehouse_id);
-        try{
-            ParcelFileDescriptor pfd =
-                    getContentResolver().
-                            openFileDescriptor(fileUri, "rwt");
-
-            FileOutputStream fileOutputStream =
-                    new FileOutputStream(
-                            pfd.getFileDescriptor());
-
-            fileOutputStream.write(warehouseJsonText.getBytes());
-
-            fileOutputStream.close();
-            pfd.close();
-            Toast.makeText(this, "The company data has been exported to external file. ", Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-    }
-
-    /*public void log(String text){
-        MainActivity.log(text);
-    }*/
-
-    public void importShipment(String content, String fileExtension) throws Exception {
-        /*CompanyIO.importShipments(content, fileExtension);*/
-    }
-
-    /*
-        public void exportContentToJSON(String warehouse_id) throws Exception {
-            String companyJsonText = CompanyIO.exportContentToJSON(warehouse_id);
-            String saveFileName = String.format("%s.json", warehouse_id);
-
-        }
-    */
-    private String readFromExternalFileStorageURI() throws IOException {
-        String storageContent = readFileContent(externalFileStorageURI);
-        System.out.println("Storage length is " + storageContent.length());
-        return storageContent;
-    }
-
-    private String readFileContent(Uri uri) throws IOException {
-
-        InputStream inputStream =
-                getContentResolver().openInputStream(uri);
-        BufferedReader reader =
-                new BufferedReader(new InputStreamReader(
-                        inputStream));
-        StringBuilder stringBuilder = new StringBuilder();
-        String currentline;
-        while ((currentline = reader.readLine()) != null) {
-            stringBuilder.append(currentline + "\n");
-        }
-        inputStream.close();
-        return stringBuilder.toString();
-    }
-
-    /*public String loadState() throws IOException {
-        return readFromExternalFileStorageURI();
-    }*/
-
 }

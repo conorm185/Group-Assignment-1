@@ -2,12 +2,17 @@ package edu.metrostate.ics372_assignment3.model;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.ParcelFileDescriptor;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -32,7 +37,8 @@ public class CompanyIO {
 
 
     public static void importShipments(Uri uri) throws Exception {
-        CompanyIO.importShipments(new File(uri.getPath()));
+        File file = new File(uri.getPath());
+        CompanyIO.importShipments(file);
     }
 
     /**
@@ -60,6 +66,7 @@ public class CompanyIO {
 		}
 	}
 
+	//remove
 	public static void importShipments(String fileContent, String fileExtension) throws Exception {
 		Warehouse temp = CompanyIO.parseWarehouse(fileContent, fileExtension);
 
@@ -96,17 +103,26 @@ public class CompanyIO {
      * @throws IOException
      * @return
      */
-	public static String exportContentToJSON(String warehouse_id) throws IOException {
+	public static String exportContentToJSON(String warehouse_id)  {
 		Warehouse warehouse = company.getWarehouse(warehouse_id);
-
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		return gson.toJson(warehouse);
-
-		/*try (FileWriter writer = new FileWriter(String.format("%s.json", warehouse_id));) {
-			writer.write(gson.toJson(warehouse));
-			log(String.format("warehouse%s: exported to %s.json", warehouse_id, warehouse_id));
-		}*/
 	}
+
+	public static void saveContentToJSON(Context context, Uri fileUri, String warehouse_id) {
+        String warehouseJsonText = CompanyIO.exportContentToJSON(warehouse_id);
+        try{
+            ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(fileUri, "rwt");
+            FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
+            fileOutputStream.write(warehouseJsonText.getBytes());
+            fileOutputStream.close();
+            pfd.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Method used to log actions throughout the software
@@ -114,7 +130,8 @@ public class CompanyIO {
      * @param entry the string/message to be logged/displayed
      */
     public static void log(String entry) {
-        File company_log = new File("company_log.txt");
+        Log.e("tag", entry);
+        /*File company_log = new File("company_log.txt");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(company_log, true))) {
@@ -123,7 +140,7 @@ public class CompanyIO {
             System.out.print(log_entry);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     /**
@@ -133,9 +150,8 @@ public class CompanyIO {
      * @return a string of the extention type
      */
     private static String getFileExtension(File file) {
-        // credit
-        // https://www.technicalkeeda.com/java-tutorials/get-file-extension-using-java
         String extension = "";
+
         try {
             if (file != null && file.exists()) {
                 String name = file.getName();
@@ -172,31 +188,25 @@ public class CompanyIO {
             default:
                 throw new Exception();
         }
-        System.out.println("Warehouse ID " + temp.getWarehouse_id());
         return temp;
     }
 
     private static Warehouse parseWarehouse(String fileContent, String fileExtension) throws Exception {
-        //String file_type = CompanyIO.getFileExtension(file);
         String file_type = fileExtension;
-        System.out.println("File type is " + file_type);
         Warehouse temp;
         Importable importer;
         switch (file_type) {
             case "json":
-                System.out.println("its json");
                 importer = new ImporterJSON();
                 temp = importer.parseWarehouse(fileContent);
                 break;
             case "xml":
-                System.out.println("its xml");
                 importer = new ImporterXML();
                 temp = importer.parseWarehouse(fileContent);
                 break;
             default:
                 throw new Exception();
         }
-        System.out.println("Warehouse ID " + temp.getWarehouse_id());
         return temp;
     }
 

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.metrostate.ics372_assignment3.model.Company;
+import edu.metrostate.ics372_assignment3.model.CompanyIO;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -143,6 +145,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * Create an intent and set the file type parameters of
+     * @param view
+     */
     public void openFile(View view) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -212,27 +218,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onActivityResult(requestCode, resultCode, resultData);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SAVE_REQUEST_CODE) {
-
-                if (resultData != null) {
-
-                    currentUri =
-                            resultData.getData();
-                    try {
-                        application.writeWarehouseDataToFile(currentUri);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    //Toast.makeText(this, "The file has been saved at " + currentUri.toString(), Toast.LENGTH_SHORT).show();
-                }
-            } else if (requestCode == OPEN_REQUEST_CODE) {
-
                 if (resultData != null) {
                     currentUri = resultData.getData();
-
+                    CompanyIO.saveContentToJSON(this,currentUri,application.getCurrentWarehouseID());
+                }
+            } else if (requestCode == OPEN_REQUEST_CODE) {
+                if (resultData != null) {
+                    currentUri = resultData.getData();
                     try {
-                        // get file extension
-                        // https://stackoverflow.com/questions/53869269/get-file-name-and-extension-of-any-file-in-android
                         String path = new File(resultData.getData().getPath()).getAbsolutePath();
 
                         if (path != null) {
@@ -249,21 +242,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 filename = cursor.getString(idx);
                                 cursor.close();
                             }
-
                             String name = filename.substring(filename.lastIndexOf("."));
                             String extension = filename.substring(filename.lastIndexOf(".") + 1);
-                            System.out.println("The file name " + name + " extension is " + extension + " name is " + name);
-                            Toast.makeText(this, "The file name " + name + " extension is " + extension, Toast.LENGTH_SHORT).show();
-
-                            String content =
-                                    readFileContent(currentUri);
-                            application.importShipment(content, extension);
+                            String content = readFileContent(currentUri);
+                            CompanyIO.importShipments(content, extension);
                             updateSpinnerArray();
-                            //textView.append("The file has been imported into Company \n");
-                            //Toast.makeText(this, "The file has been opened", Toast.LENGTH_SHORT).show();
                         }
-                    } catch (IOException e) {
-                        // Handle error here
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -271,8 +255,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
         }
-
-        //content://com.android.providers.downloads.documents/document/29
     }
 
     private String readFileContent(Uri uri) throws IOException {
