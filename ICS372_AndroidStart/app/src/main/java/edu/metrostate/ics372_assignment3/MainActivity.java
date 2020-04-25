@@ -43,20 +43,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
     private static final int OPEN_REQUEST_CODE = 41;
     private static final int SAVE_REQUEST_CODE = 42;
     private static final int WRITE_STORAGE_PERMISSION_REQUEST = 5;
+
+    private Button impButt, exportButt, addButt,addShipmentButton, toggleActiveInactiveButton, toggleRecieptButton, editWarehouseButton;
+    private TextView shipment_warehouse_id, shipment_shipment_id, shipment_method, shipment_weight, shipment_receipt, shipment_departure;
+
+    private ArrayAdapter adapter;
     private  Spinner spinner;
-    private Button impButt, exportButt, addButt; // names are temporary but bad jokes last forever. buttons.
-    ArrayAdapter<String> spinnerArrayAdapter;
+    private ArrayAdapter<String> spinnerArrayAdapter;
+    private ListView shipmentList;
 
     private WarehouseApplication application;
     private Company company;
-    private List<String> warehouseIDs;
-
-
-    private Button addShipmentButton, toggleActiveInactiveButton, toggleRecieptButton, editWarehouseButton;
-    private TextView shipment_warehouse_id, shipment_shipment_id, shipment_method, shipment_weight, shipment_receipt, shipment_departure;
-    private ListView shipmentList;
     private HashMap<String, Shipment> warehouse_contents;
-    private ArrayAdapter adapter;
+    private List<String> warehouseIDs;
 
 
     /**
@@ -351,5 +350,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
     @Override
     public void showEditWarehouse() {
 
+    }
+
+    @Override
+    public void showShipments(String[] shipment_id_list) {
+        //should replace refreshShipmentList
+    }
+
+    @Override
+    public void showWarehouses(ArrayList<String> warehouseIds) {
+        //should replace updateSpinnerArray
     }
 }

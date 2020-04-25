@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import edu.metrostate.ics372_assignment3.model.Shipment;
+import edu.metrostate.ics372_assignment3.model.Warehouse;
 
 public interface MainActivityMVP {
 
@@ -21,6 +22,10 @@ public interface MainActivityMVP {
         void showAddNewShipment();
         void showAddNewWarehouse();
         void showEditWarehouse();
+
+        void showShipments(String[] shipment_id_list);
+
+        void showWarehouses(ArrayList<String> warehouseIds);
     }
 
     /**
@@ -30,6 +35,13 @@ public interface MainActivityMVP {
      */
     interface Presenter {
         void setView(View view);
+
+        void addShipmentCompleted(Shipment shipment);
+
+        void addWarehouseCompleted(Warehouse warehouse);
+
+        void editWarehouseCompleted(Warehouse warehouse);
+
 
 
         /*void addBookClicked();
