@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -38,18 +37,19 @@ import edu.metrostate.ics372_assignment3.model.Company;
 import edu.metrostate.ics372_assignment3.model.CompanyIO;
 import edu.metrostate.ics372_assignment3.model.Shipment;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener,AdapterView.OnItemSelectedListener {
 
     private static final int CREATE_REQUEST_CODE = 40;
     private static final int OPEN_REQUEST_CODE = 41;
     private static final int SAVE_REQUEST_CODE = 42;
     private static final int WRITE_STORAGE_PERMISSION_REQUEST = 5;
-    private static Spinner spinner;
-    Button impButt, exportButt, addButt; // names are temporary but bad jokes last forever. buttons.
-    List<String> warehouseIDs;
+    private  Spinner spinner;
+    private Button impButt, exportButt, addButt; // names are temporary but bad jokes last forever. buttons.
     ArrayAdapter<String> spinnerArrayAdapter;
+
     private WarehouseApplication application;
     private Company company;
+    private List<String> warehouseIDs;
 
 
     private Button addShipmentButton, toggleActiveInactiveButton, toggleRecieptButton, editWarehouseButton;
@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ListView shipmentList;
     private HashMap<String, Shipment> warehouse_contents;
     private ArrayAdapter adapter;
-
 
 
     /**
@@ -96,11 +95,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         spinnerArrayAdapter = new ArrayAdapter<String>(
                 this, R.layout.support_simple_spinner_dropdown_item, warehouseIDs);
         spinner.setAdapter(spinnerArrayAdapter);
-        spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+        spinner.setOnItemSelectedListener(this);
 
         updateSpinnerArray();
         application.setCurrentWarehouseID(spinnerArrayAdapter.getItem(0));
-        /*application.setCurrentWarehouseID(spinner.getSelectedItem().toString());*/
 
         //  Check Storage Permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -111,10 +109,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     WRITE_STORAGE_PERMISSION_REQUEST);
         }
 
-
-
-
-
         addShipmentButton.setOnClickListener(this);
         toggleActiveInactiveButton.setOnClickListener(this);
         toggleRecieptButton.setOnClickListener(this);
@@ -123,12 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         exportButt.setOnClickListener(this);
         addButt.setOnClickListener(this);
 
-        Log.e("here", application.getCurrentWarehouseID());
         refreshShipmentList();
-
-        /*warehouse_id.setText(String.format("Warehouse ID: %s", application.getCurrentWarehouseID()));
-        warehouse_name.setText(String.format("Name: %s", company.getWarehouseName(application.getCurrentWarehouseID())));*/
-
     }
 
     @Override
@@ -138,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         refreshShipmentList();
     }
 
-    // a method that is called to loadnew entries to the spinner list if they dont exist
     public void updateSpinnerArray() {
         List<String> ids = company.getWarehouseIds();
         ids.forEach(i -> {
@@ -184,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * Create an intent and set the file type parameters of
+     *
      * @param view
      */
     public void openFile(View view) {
@@ -257,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (requestCode == SAVE_REQUEST_CODE) {
                 if (resultData != null) {
                     currentUri = resultData.getData();
-                    CompanyIO.saveContentToJSON(this,currentUri,application.getCurrentWarehouseID());
+                    CompanyIO.saveContentToJSON(this, currentUri, application.getCurrentWarehouseID());
                 }
             } else if (requestCode == OPEN_REQUEST_CODE) {
                 if (resultData != null) {
@@ -309,28 +298,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return stringBuilder.toString();
     }
 
-
-    class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
-        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-            String selected = parent.getItemAtPosition(pos).toString();
-            application.setCurrentWarehouseID(selected);
-            refreshShipmentList();
-        }
-        @Override
-        public void onNothingSelected(AdapterView<?> arg0) {
-        }
-
-    }
-
-
-
-
-
-
-
-
-
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String current_shipment_id = parent.getItemAtPosition(position).toString();
@@ -357,5 +324,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         shipment_weight.setText(String.format("%.2f lbs", current_shipment.getWeight()));
         shipment_receipt.setText(formatter.format(receipt));
         shipment_departure.setText("N/A");
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String selected = parent.getItemAtPosition(position).toString();
+        application.setCurrentWarehouseID(selected);
+        refreshShipmentList();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
