@@ -18,6 +18,9 @@ public interface MainActivityMVP {
     interface View {
         /*void showBooks(List<Book> books);
         void showAddNewBook();*/
+        void showAddNewShipment();
+        void showAddNewWarehouse();
+        void showEditWarehouse();
     }
 
     /**

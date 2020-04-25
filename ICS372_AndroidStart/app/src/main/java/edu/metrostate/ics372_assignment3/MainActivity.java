@@ -37,7 +37,7 @@ import edu.metrostate.ics372_assignment3.model.Company;
 import edu.metrostate.ics372_assignment3.model.CompanyIO;
 import edu.metrostate.ics372_assignment3.model.Shipment;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener,AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements MainActivityMVP.View,View.OnClickListener, AdapterView.OnItemClickListener,AdapterView.OnItemSelectedListener {
 
     private static final int CREATE_REQUEST_CODE = 40;
     private static final int OPEN_REQUEST_CODE = 41;
@@ -335,6 +335,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
+    public void showAddNewShipment() {
+
+    }
+
+    @Override
+    public void showAddNewWarehouse() {
+
+    }
+
+    @Override
+    public void showEditWarehouse() {
 
     }
 }
