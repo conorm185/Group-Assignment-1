@@ -73,4 +73,14 @@ public class MainActivityPresenter implements MainActivityMVP.Presenter {
     public String getWarehouseName(String current_warehouse_id) {
         return model.getWarehouseName(current_warehouse_id);
     }
+
+    @Override
+    public void toggleFreightReciept(String current_warehouse_id) {
+        model.toggleFreightReciept(current_warehouse_id);
+    }
+
+    @Override
+    public boolean getFreightReceiptStatus(String current_warehouse_id) {
+        return model.getFreightReceiptStatus(current_warehouse_id);
+    }
 }

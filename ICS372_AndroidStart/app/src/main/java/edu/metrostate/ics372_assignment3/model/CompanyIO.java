@@ -131,16 +131,6 @@ public class CompanyIO {
      */
     public static void log(String entry) {
         Log.e("tag", entry);
-        /*File company_log = new File("company_log.txt");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(company_log, true))) {
-            String log_entry = String.format("[%s]\t[%s]\n", formatter.format(now), entry);
-            writer.write(log_entry);
-            System.out.print(log_entry);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
     }
 
     /**

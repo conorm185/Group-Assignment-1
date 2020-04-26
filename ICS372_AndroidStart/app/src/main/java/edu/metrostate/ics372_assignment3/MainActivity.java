@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -41,23 +40,22 @@ import edu.metrostate.ics372_assignment3.model.CompanyIO;
 import edu.metrostate.ics372_assignment3.model.Shipment;
 import edu.metrostate.ics372_assignment3.model.Warehouse;
 
-public class MainActivity extends AppCompatActivity implements MainActivityMVP.View,View.OnClickListener, AdapterView.OnItemClickListener,AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements MainActivityMVP.View, View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
 
     private static final int CREATE_REQUEST_CODE = 40;
     private static final int OPEN_REQUEST_CODE = 41;
     private static final int SAVE_REQUEST_CODE = 42;
     private static final int WRITE_STORAGE_PERMISSION_REQUEST = 5;
 
-    private Button impButt, exportButt, addButt,addShipmentButton, toggleActiveInactiveButton, toggleRecieptButton, editWarehouseButton;
+    private Button impButt, exportButt, addButt, addShipmentButton, toggleActiveInactiveButton, toggleRecieptButton, editWarehouseButton;
     private TextView warehouse_name, shipment_warehouse_id, shipment_shipment_id, shipment_method, shipment_weight, shipment_receipt, shipment_departure;
 
     private ArrayAdapter adapter;
-    private  Spinner spinner;
+    private Spinner spinner;
     private ArrayAdapter<String> spinnerArrayAdapter;
     private ListView shipmentList;
 
     private WarehouseApplication application;
-    //private Company company;
     private MainActivityPresenter presenter;
     private HashMap<String, Shipment> warehouse_contents;
     private List<String> warehouseIDs;
@@ -65,6 +63,50 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
     private AlertDialog dialog;
 
     private String current_warehouse_id;
+    private DialogInterface.OnClickListener addWarehouseHandler = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            String id = ((TextView) MainActivity.this.dialog.findViewById(R.id.textViewWarehouseID)).getText().toString();
+            String name = ((TextView) MainActivity.this.dialog.findViewById(R.id.editTextWarehouseName)).getText().toString();
+
+            Warehouse warehouse = new Warehouse(id);
+            warehouse.setWarehouse_name(name);
+
+            presenter.addWarehouseCompleted(warehouse);
+            dialog.dismiss();
+        }
+
+    };
+    private DialogInterface.OnClickListener editWarehouseHandler = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            String name = ((TextView) MainActivity.this.dialog.findViewById(R.id.editTextWarehouseName)).getText().toString();
+
+            Warehouse warehouse = new Warehouse(current_warehouse_id);
+            warehouse.setWarehouse_name(name);
+
+            presenter.editWarehouseCompleted(warehouse);
+            dialog.dismiss();
+        }
+
+    };
+    private DialogInterface.OnClickListener addShipmentHandler = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            String shipment_id = ((TextView) MainActivity.this.dialog.findViewById(R.id.editTextShipmentId)).getText().toString();
+            String method_string = (String) ((Spinner) MainActivity.this.dialog.findViewById(R.id.spinnerShipmentMethod)).getSelectedItem();
+
+            Shipment.ShippingMethod method = Shipment.ShippingMethod.valueOf(method_string);
+            String weight_string = ((TextView) MainActivity.this.dialog.findViewById(R.id.editTextShipmentWeight)).getText().toString();
+            double weight = Double.parseDouble(weight_string);
+
+            Shipment shipment = new Shipment(current_warehouse_id, method, shipment_id, weight, System.currentTimeMillis());
+
+            presenter.addShipmentCompleted(shipment);
+            dialog.dismiss();
+        }
+
+    };
 
     /**
      * Creates the view for the application
@@ -100,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         spinner = findViewById(R.id.spinner);
         warehouseIDs = new ArrayList<>();
         // Initializing an ArrayAdapter
-        spinnerArrayAdapter = new ArrayAdapter<String>(
+        spinnerArrayAdapter = new ArrayAdapter<>(
                 this, R.layout.support_simple_spinner_dropdown_item, warehouseIDs);
         spinner.setAdapter(spinnerArrayAdapter);
         spinner.setOnItemSelectedListener(this);
@@ -170,7 +212,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
                 Toast.makeText(this, "Shipment List Toggled", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.receiptButton:
-                Toast.makeText(this, "Reciept Status Toggled", Toast.LENGTH_SHORT).show();
+                presenter.toggleFreightReciept(current_warehouse_id);
+                //presenter.getFreightReceiptStatus();
+                String status_string = "Warehouse " + current_warehouse_id + " receiving freight: "
+                        + presenter.getFreightReceiptStatus(current_warehouse_id);
+                Toast.makeText(this, status_string, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.editWarehouseButton:
                 presenter.editWarehouseClicked();
@@ -178,11 +224,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         }
     }
 
-    /**
-     * Create an intent and set the file type parameters of
-     *
-     * @param view
-     */
+
     public void openFile(View view) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -316,10 +358,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         if (current_warehouse_id != null) {
             warehouse_contents = presenter.readWarehouseContent(current_warehouse_id);
             String[] shipment_id_list = warehouse_contents.keySet().toArray(new String[0]);
-            adapter = new ArrayAdapter<String>(this, R.layout.shipment_list_view, shipment_id_list);
+            adapter = new ArrayAdapter<>(this, R.layout.shipment_list_view, shipment_id_list);
             shipmentList = findViewById(R.id.shipment_list_view);
             shipmentList.setAdapter(adapter);
-            shipmentList.setOnItemClickListener(this::onItemClick);
+            shipmentList.setOnItemClickListener(this);
             warehouse_name.setText(presenter.getWarehouseName(current_warehouse_id));
             if (!adapter.isEmpty())
                 refreshShipmentInfo((String) adapter.getItem(0));
@@ -344,7 +386,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
             shipment_method.setText(current_shipment.getShipment_method().toString());
             shipment_weight.setText(String.format("%.2f lbs", current_shipment.getWeight()));
             shipment_receipt.setText(formatter.format(receipt));
-            shipment_departure.setText("N/A");
+            if (current_shipment.getDeparture_date() == null || current_shipment.getDeparture_date() == 0) {
+                shipment_departure.setText("N/A");
+            } else {
+                shipment_departure.setText(formatter.format(current_shipment.getDeparture_date()));
+            }
         }
     }
 
@@ -355,7 +401,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         refreshShipmentList();
         if (!adapter.isEmpty()) {
             refreshShipmentInfo((String) shipmentList.getItemAtPosition(0));
-        } else{
+        } else {
             refreshShipmentInfo(null);
         }
     }
@@ -376,9 +422,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
     @Override
     public void showAddNewWarehouse() {
         dialog = new AlertDialog.Builder(MainActivity.this)
-            .setTitle("Add New Warehouse")
-            .setView(R.layout.fragment_add_warehouse)
-            .setPositiveButton("Add", addWarehouseHandler).show();
+                .setTitle("Add New Warehouse")
+                .setView(R.layout.fragment_add_warehouse)
+                .setPositiveButton("Add", addWarehouseHandler).show();
     }
 
     @Override
@@ -398,51 +444,4 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
     public void showWarehouses(ArrayList<String> warehouseIds) {
         updateSpinnerArray();
     }
-
-    private DialogInterface.OnClickListener addWarehouseHandler = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            String id = ((TextView)MainActivity.this.dialog.findViewById(R.id.textViewWarehouseID)).getText().toString();
-            String name = ((TextView)MainActivity.this.dialog.findViewById(R.id.editTextWarehouseName)).getText().toString();
-
-            Warehouse warehouse = new Warehouse(id);
-            warehouse.setWarehouse_name(name);
-
-            presenter.addWarehouseCompleted(warehouse);
-            dialog.dismiss();
-        }
-
-    };
-
-    private DialogInterface.OnClickListener editWarehouseHandler = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            String name = ((TextView)MainActivity.this.dialog.findViewById(R.id.editTextWarehouseName)).getText().toString();
-
-            Warehouse warehouse = new Warehouse(current_warehouse_id);
-            warehouse.setWarehouse_name(name);
-
-            presenter.editWarehouseCompleted(warehouse);
-            dialog.dismiss();
-        }
-
-    };
-
-    private DialogInterface.OnClickListener addShipmentHandler = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            String shipment_id = ((TextView)MainActivity.this.dialog.findViewById(R.id.editTextShipmentId)).getText().toString();
-            String method_string = (String) ((Spinner)MainActivity.this.dialog.findViewById(R.id.spinnerShipmentMethod)).getSelectedItem();
-
-            Shipment.ShippingMethod method = Shipment.ShippingMethod.valueOf(method_string);
-            String weight_string = ((TextView)MainActivity.this.dialog.findViewById(R.id.editTextShipmentWeight)).getText().toString();
-            double weight = Double.parseDouble(weight_string);
-
-            Shipment shipment = new Shipment(current_warehouse_id, method, shipment_id, weight, System.currentTimeMillis());
-
-            presenter.addShipmentCompleted(shipment);
-            dialog.dismiss();
-        }
-
-    };
 }

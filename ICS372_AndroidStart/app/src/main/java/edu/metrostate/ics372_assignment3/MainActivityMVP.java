@@ -52,6 +52,10 @@ public interface MainActivityMVP {
         HashMap<String, Shipment> readWarehouseContent(String current_warehouse_id);
 
         String getWarehouseName(String current_warehouse_id);
+
+        void toggleFreightReciept(String current_warehouse_id);
+
+        boolean getFreightReceiptStatus(String current_warehouse_id);
     }
 
     /**
