@@ -1,6 +1,7 @@
 package edu.metrostate.ics372_assignment3;
 
 import java.util.HashMap;
+import java.util.List;
 
 import edu.metrostate.ics372_assignment3.model.Shipment;
 import edu.metrostate.ics372_assignment3.model.Warehouse;
@@ -56,5 +57,20 @@ public class MainActivityPresenter implements MainActivityMVP.Presenter {
     @Override
     public void editWarehouseClicked() {
         view.showEditWarehouse();
+    }
+
+    @Override
+    public List<String> getWarehouseIds() {
+        return model.getWarehouseIds();
+    }
+
+    @Override
+    public HashMap<String, Shipment> readWarehouseContent(String current_warehouse_id) {
+        return model.readWarehouseContent(current_warehouse_id);
+    }
+
+    @Override
+    public String getWarehouseName(String current_warehouse_id) {
+        return model.getWarehouseName(current_warehouse_id);
     }
 }

@@ -2,6 +2,7 @@ package edu.metrostate.ics372_assignment3;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import edu.metrostate.ics372_assignment3.model.Shipment;
 import edu.metrostate.ics372_assignment3.model.Warehouse;
@@ -45,6 +46,12 @@ public interface MainActivityMVP {
         void addShipmentClicked();
 
         void editWarehouseClicked();
+
+        List<String> getWarehouseIds();
+
+        HashMap<String, Shipment> readWarehouseContent(String current_warehouse_id);
+
+        String getWarehouseName(String current_warehouse_id);
     }
 
     /**

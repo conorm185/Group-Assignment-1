@@ -57,12 +57,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
     private ListView shipmentList;
 
     private WarehouseApplication application;
-    private Company company;
+    //private Company company;
     private MainActivityPresenter presenter;
     private HashMap<String, Shipment> warehouse_contents;
     private List<String> warehouseIDs;
 
     private AlertDialog dialog;
+
+    private String current_warehouse_id;
 
     /**
      * Creates the view for the application
@@ -74,8 +76,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         application = (WarehouseApplication) getApplication();
-        application.setCompany();
-        company = application.getCompany();
 
         presenter = new MainActivityPresenter(Company.getInstance(this));
         presenter.setView(this);
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
 
         updateSpinnerArray();
         if (!spinnerArrayAdapter.isEmpty())
-            application.setCurrentWarehouseID(spinnerArrayAdapter.getItem(0));
+            this.current_warehouse_id = spinnerArrayAdapter.getItem(0);
 
         //  Check Storage Permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -134,12 +134,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         super.onResume();
         updateSpinnerArray();
         refreshShipmentList();
-        if (application.getCurrentWarehouseID() != null)
+        if (current_warehouse_id != null)
             refreshShipmentInfo((String) shipmentList.getSelectedItem());
     }
 
     public void updateSpinnerArray() {
-        List<String> ids = company.getWarehouseIds();
+        List<String> ids = presenter.getWarehouseIds();
         ids.forEach(i -> {
             if (!warehouseIDs.contains(i)) {
                 warehouseIDs.add(i);
@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         //https://developer.android.com/training/sharing/send
         intent.setType("text/json");
-        intent.putExtra(Intent.EXTRA_TITLE, application.getCurrentWarehouseID() + ".json");
+        intent.putExtra(Intent.EXTRA_TITLE, current_warehouse_id + ".json");
         startActivityForResult(intent, SAVE_REQUEST_CODE);
     }
 
@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
             if (requestCode == SAVE_REQUEST_CODE) {
                 if (resultData != null) {
                     currentUri = resultData.getData();
-                    CompanyIO.saveContentToJSON(this, currentUri, application.getCurrentWarehouseID());
+                    CompanyIO.saveContentToJSON(this, currentUri, current_warehouse_id);
                 }
             } else if (requestCode == OPEN_REQUEST_CODE) {
                 if (resultData != null) {
@@ -313,14 +313,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
     }
 
     public void refreshShipmentList() {
-        if (application.getCurrentWarehouseID() != null) {
-            warehouse_contents = company.readWarehouseContent(application.getCurrentWarehouseID());
+        if (current_warehouse_id != null) {
+            warehouse_contents = presenter.readWarehouseContent(current_warehouse_id);
             String[] shipment_id_list = warehouse_contents.keySet().toArray(new String[0]);
             adapter = new ArrayAdapter<String>(this, R.layout.shipment_list_view, shipment_id_list);
             shipmentList = findViewById(R.id.shipment_list_view);
             shipmentList.setAdapter(adapter);
             shipmentList.setOnItemClickListener(this::onItemClick);
-            warehouse_name.setText(company.getWarehouseName(application.getCurrentWarehouseID()));
+            warehouse_name.setText(presenter.getWarehouseName(current_warehouse_id));
             if (!adapter.isEmpty())
                 refreshShipmentInfo((String) adapter.getItem(0));
         }
@@ -328,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
 
     public void refreshShipmentInfo(String shipment_id) {
         if (shipment_id == null) {
-            shipment_warehouse_id.setText(application.getCurrentWarehouseID());
+            shipment_warehouse_id.setText(current_warehouse_id);
             shipment_shipment_id.setText("N/A");
             shipment_method.setText("N/A");
             shipment_weight.setText("N/A");
@@ -351,7 +351,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String selected = parent.getItemAtPosition(position).toString();
-        application.setCurrentWarehouseID(selected);
+        current_warehouse_id = selected;
         refreshShipmentList();
         if (!adapter.isEmpty()) {
             refreshShipmentInfo((String) shipmentList.getItemAtPosition(0));
@@ -419,7 +419,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         public void onClick(DialogInterface dialog, int which) {
             String name = ((TextView)MainActivity.this.dialog.findViewById(R.id.editTextWarehouseName)).getText().toString();
 
-            Warehouse warehouse = new Warehouse(application.getCurrentWarehouseID());
+            Warehouse warehouse = new Warehouse(current_warehouse_id);
             warehouse.setWarehouse_name(name);
 
             presenter.editWarehouseCompleted(warehouse);
@@ -438,7 +438,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
             String weight_string = ((TextView)MainActivity.this.dialog.findViewById(R.id.editTextShipmentWeight)).getText().toString();
             double weight = Double.parseDouble(weight_string);
 
-            Shipment shipment = new Shipment(application.getCurrentWarehouseID(), method, shipment_id, weight, System.currentTimeMillis());
+            Shipment shipment = new Shipment(current_warehouse_id, method, shipment_id, weight, System.currentTimeMillis());
 
             presenter.addShipmentCompleted(shipment);
             dialog.dismiss();
