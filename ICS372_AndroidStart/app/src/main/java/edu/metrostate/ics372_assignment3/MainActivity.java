@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         shipment_weight = findViewById(R.id.textViewShipmentWeight);
         shipment_receipt = findViewById(R.id.textViewReceipt);
         shipment_departure = findViewById(R.id.textViewDeparture);
-
+        shipmentList = findViewById(R.id.shipment_list_view);
 
         spinner = findViewById(R.id.spinner);
         warehouseIDs = new ArrayList<>();
@@ -106,7 +106,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         spinner.setOnItemSelectedListener(this);
 
         updateSpinnerArray();
-        application.setCurrentWarehouseID(spinnerArrayAdapter.getItem(0));
+        if (!spinnerArrayAdapter.isEmpty())
+            application.setCurrentWarehouseID(spinnerArrayAdapter.getItem(0));
 
         //  Check Storage Permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -133,7 +134,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         super.onResume();
         updateSpinnerArray();
         refreshShipmentList();
-        refreshShipmentInfo((String) shipmentList.getSelectedItem());
+        if (application.getCurrentWarehouseID() != null)
+            refreshShipmentInfo((String) shipmentList.getSelectedItem());
     }
 
     public void updateSpinnerArray() {
@@ -311,13 +313,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
     }
 
     public void refreshShipmentList() {
-        warehouse_contents = company.readWarehouseContent(application.getCurrentWarehouseID());
-        String[] shipment_id_list = warehouse_contents.keySet().toArray(new String[0]);
-        adapter = new ArrayAdapter<String>(this, R.layout.shipment_list_view, shipment_id_list);
-        shipmentList = findViewById(R.id.shipment_list_view);
-        shipmentList.setAdapter(adapter);
-        shipmentList.setOnItemClickListener(this::onItemClick);
-        warehouse_name.setText(company.getWarehouseName(application.getCurrentWarehouseID()));
+        if (application.getCurrentWarehouseID() != null) {
+            warehouse_contents = company.readWarehouseContent(application.getCurrentWarehouseID());
+            String[] shipment_id_list = warehouse_contents.keySet().toArray(new String[0]);
+            adapter = new ArrayAdapter<String>(this, R.layout.shipment_list_view, shipment_id_list);
+            shipmentList = findViewById(R.id.shipment_list_view);
+            shipmentList.setAdapter(adapter);
+            shipmentList.setOnItemClickListener(this::onItemClick);
+            warehouse_name.setText(company.getWarehouseName(application.getCurrentWarehouseID()));
+            if (!adapter.isEmpty())
+                refreshShipmentInfo((String) adapter.getItem(0));
+        }
     }
 
     public void refreshShipmentInfo(String shipment_id) {

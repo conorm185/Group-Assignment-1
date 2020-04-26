@@ -31,7 +31,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String SHIPMENT_COLUMN_DEPARTURE = "departure";
 
     public DBHelper(Context context) {
-        super(context, DATABASE_NAME, null, 1);
+        super(context, DATABASE_NAME, null, 2);
     }
 
     @Override
@@ -138,6 +138,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             company_contents.put(current_warehouse.hashCode(), current_warehouse);
         }
+        res.close();
         return company_contents;
     }
 
@@ -162,6 +163,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             warehouse_contents.add(current_shipment);
         }
+        res.close();
         return warehouse_contents;
     }
 }
