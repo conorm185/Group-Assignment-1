@@ -17,8 +17,6 @@ public interface MainActivityMVP {
      * method names would be: showProgressBar, updateData
      */
     interface View {
-        /*void showBooks(List<Book> books);
-        void showAddNewBook();*/
         void showAddNewShipment();
         void showAddNewWarehouse();
         void showEditWarehouse();
@@ -46,10 +44,7 @@ public interface MainActivityMVP {
 
         void addShipmentClicked();
 
-
-
-        /*void addBookClicked();
-        void addBookCompleted(String author, String title);*/
+        void editWarehouseClicked();
     }
 
     /**

@@ -13,19 +13,17 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textViewID"
+            android:id="@+id/textViewWarehouseIDLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Warehouse ID:" />
 
-        <EditText
-            android:id="@+id/editTextWarehouseID"
+        <TextView
+            android:id="@+id/textViewWarehouseID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textPersonName"
             android:text="####" />
     </LinearLayout>
 
@@ -51,27 +49,5 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:text="Name" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/BottomBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/submitButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Submit" />
-
-        <Button
-            android:id="@+id/cancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Cancel" />
     </LinearLayout>
 </RelativeLayout>

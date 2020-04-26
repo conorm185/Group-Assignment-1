@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -133,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         super.onResume();
         updateSpinnerArray();
         refreshShipmentList();
+        refreshShipmentInfo((String) shipmentList.getSelectedItem());
     }
 
     public void updateSpinnerArray() {
@@ -170,8 +170,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
                 Toast.makeText(this, "Reciept Status Toggled", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.editWarehouseButton:
-                Intent intentEditWarehouse = new Intent(this, EditWarehouseActivity.class);
-                startActivity(intentEditWarehouse);
+                presenter.editWarehouseClicked();
                 break;
         }
     }
@@ -337,6 +336,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         String selected = parent.getItemAtPosition(position).toString();
         application.setCurrentWarehouseID(selected);
         refreshShipmentList();
+        if (!adapter.isEmpty()) {
+            refreshShipmentInfo((String) shipmentList.getItemAtPosition(0));
+        }
     }
 
     @Override
@@ -362,7 +364,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
 
     @Override
     public void showEditWarehouse() {
-
+        dialog = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Add New Warehouse")
+                .setView(R.layout.fragment_edit_warehouse)
+                .setPositiveButton("Submit Edit", editWarehouseHandler).show();
     }
 
     @Override
@@ -378,13 +383,27 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
     private DialogInterface.OnClickListener addWarehouseHandler = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            String id = ((TextView)MainActivity.this.dialog.findViewById(R.id.editTextWarehouseID)).getText().toString();
+            String id = ((TextView)MainActivity.this.dialog.findViewById(R.id.textViewWarehouseID)).getText().toString();
             String name = ((TextView)MainActivity.this.dialog.findViewById(R.id.editTextWarehouseName)).getText().toString();
-            Log.e("here", "inside handler" + id + "    "+ name);
+
             Warehouse warehouse = new Warehouse(id);
             warehouse.setWarehouse_name(name);
 
             presenter.addWarehouseCompleted(warehouse);
+            dialog.dismiss();
+        }
+
+    };
+
+    private DialogInterface.OnClickListener editWarehouseHandler = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            String name = ((TextView)MainActivity.this.dialog.findViewById(R.id.editTextWarehouseName)).getText().toString();
+
+            Warehouse warehouse = new Warehouse(application.getCurrentWarehouseID());
+            warehouse.setWarehouse_name(name);
+
+            presenter.editWarehouseCompleted(warehouse);
             dialog.dismiss();
         }
 

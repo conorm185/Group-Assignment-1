@@ -38,7 +38,7 @@ public class AddWarehouseFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((TextView)getActivity().findViewById(R.id.editTextWarehouseID)).setText(warehouse.getWarehouse_id());
+        ((TextView)getActivity().findViewById(R.id.textViewWarehouseID)).setText(warehouse.getWarehouse_id());
         ((TextView)getActivity().findViewById(R.id.editTextWarehouseName)).setText(warehouse.getWarehouse_name());
     }
 

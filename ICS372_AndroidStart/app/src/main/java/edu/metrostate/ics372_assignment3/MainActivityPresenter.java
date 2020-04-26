@@ -52,4 +52,9 @@ public class MainActivityPresenter implements MainActivityMVP.Presenter {
     public void addShipmentClicked() {
         view.showAddNewShipment();
     }
+
+    @Override
+    public void editWarehouseClicked() {
+        view.showEditWarehouse();
+    }
 }
