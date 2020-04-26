@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -116,19 +117,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
                     WRITE_STORAGE_PERMISSION_REQUEST);
         }
 
-        addShipmentButton.setOnClickListener(this);
         toggleActiveInactiveButton.setOnClickListener(this);
         toggleRecieptButton.setOnClickListener(this);
         editWarehouseButton.setOnClickListener(this);
         impButt.setOnClickListener(this);
         exportButt.setOnClickListener(this);
-        //addButt.setOnClickListener(this);
-        addButt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.addWarehouseClicked();
-            }
-        });
+        addShipmentButton.setOnClickListener(this);
+        addButt.setOnClickListener(this);
 
         refreshShipmentList();
     }
@@ -163,8 +158,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
                 exportContent(v);
                 break;
             case R.id.addShipmentButton:
-                Intent intent = new Intent(this, AddShipmentActivity.class);
-                startActivity(intent);
+                presenter.addShipmentClicked();
+                break;
+            case R.id.addWarehouseButton:
+                presenter.addWarehouseClicked();
                 break;
             case R.id.activeShipments:
                 Toast.makeText(this, "Shipment List Toggled", Toast.LENGTH_SHORT).show();
@@ -349,7 +346,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
 
     @Override
     public void showAddNewShipment() {
-
+        dialog = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Add New Shipment")
+                .setView(R.layout.fragment_add_shipment)
+                .setPositiveButton("Add", addShipmentHandler).show();
     }
 
     @Override
@@ -367,7 +367,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
 
     @Override
     public void showShipments(String[] shipment_id_list) {
-        //should replace refreshShipmentList
+        refreshShipmentList();
     }
 
     @Override
@@ -385,6 +385,24 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
             warehouse.setWarehouse_name(name);
 
             presenter.addWarehouseCompleted(warehouse);
+            dialog.dismiss();
+        }
+
+    };
+
+    private DialogInterface.OnClickListener addShipmentHandler = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            String shipment_id = ((TextView)MainActivity.this.dialog.findViewById(R.id.editTextShipmentId)).getText().toString();
+            String method_string = (String) ((Spinner)MainActivity.this.dialog.findViewById(R.id.spinnerShipmentMethod)).getSelectedItem();
+
+            Shipment.ShippingMethod method = Shipment.ShippingMethod.valueOf(method_string);
+            String weight_string = ((TextView)MainActivity.this.dialog.findViewById(R.id.editTextShipmentWeight)).getText().toString();
+            double weight = Double.parseDouble(weight_string);
+
+            Shipment shipment = new Shipment(application.getCurrentWarehouseID(), method, shipment_id, weight, System.currentTimeMillis());
+
+            presenter.addShipmentCompleted(shipment);
             dialog.dismiss();
         }
 

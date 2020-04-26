@@ -44,6 +44,8 @@ public interface MainActivityMVP {
 
         void addWarehouseClicked();
 
+        void addShipmentClicked();
+
 
 
         /*void addBookClicked();

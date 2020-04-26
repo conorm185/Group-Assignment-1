@@ -1,14 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddShipmentFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/wareText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="20dp"
+        android:text="Warehouse ID">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/showWareIdText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="90dp"
+        android:layout_marginBottom="20dp"
+        android:text="TEMP">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/shipText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/wareText"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="20dp"
+        android:text="Shipment ID">
+
+    </TextView>
+
+    <EditText
+        android:id="@+id/editTextShipmentId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/showWareIdText"
+        android:layout_alignParentRight="true"
+        android:layout_margin="12dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Enter_Shipment_Id" />
+
+    <TextView
+        android:id="@+id/shipMethodText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/shipText"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="20dp"
+        android:text="Shipment Method">
+
+    </TextView>
+
+    <Spinner
+        android:id="@+id/spinnerShipmentMethod"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextShipmentId"
+        android:layout_alignParentRight="true"
+        android:drawSelectorOnTop="true"
+        android:entries="@array/methods">
+
+    </Spinner>
+
+    <TextView
+        android:id="@+id/weightText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/shipMethodText"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="20dp"
+        android:text="Weight(lbs)">
+
+    </TextView>
+
+    <EditText
+        android:id="@+id/editTextShipmentWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinnerShipmentMethod"
+        android:layout_alignParentRight="true"
+        android:layout_margin="12dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:text="Enter_Weight" />
+</RelativeLayout>
