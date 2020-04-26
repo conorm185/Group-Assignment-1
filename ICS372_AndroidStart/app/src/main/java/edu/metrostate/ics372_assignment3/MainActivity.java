@@ -31,6 +31,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -358,6 +360,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         if (current_warehouse_id != null) {
             warehouse_contents = presenter.readWarehouseContent(current_warehouse_id);
             String[] shipment_id_list = warehouse_contents.keySet().toArray(new String[0]);
+            Arrays.sort(shipment_id_list);
             adapter = new ArrayAdapter<>(this, R.layout.shipment_list_view, shipment_id_list);
             shipmentList = findViewById(R.id.shipment_list_view);
             shipmentList.setAdapter(adapter);

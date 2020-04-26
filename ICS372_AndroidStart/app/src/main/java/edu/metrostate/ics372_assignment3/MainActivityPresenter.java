@@ -1,5 +1,7 @@
 package edu.metrostate.ics372_assignment3;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -61,7 +63,9 @@ public class MainActivityPresenter implements MainActivityMVP.Presenter {
 
     @Override
     public List<String> getWarehouseIds() {
-        return model.getWarehouseIds();
+        ArrayList<String> ids = model.getWarehouseIds();
+        Collections.sort(ids);
+        return ids;
     }
 
     @Override
