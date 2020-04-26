@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
     private static final int WRITE_STORAGE_PERMISSION_REQUEST = 5;
 
     private Button impButt, exportButt, addButt,addShipmentButton, toggleActiveInactiveButton, toggleRecieptButton, editWarehouseButton;
-    private TextView shipment_warehouse_id, shipment_shipment_id, shipment_method, shipment_weight, shipment_receipt, shipment_departure;
+    private TextView warehouse_name, shipment_warehouse_id, shipment_shipment_id, shipment_method, shipment_weight, shipment_receipt, shipment_departure;
 
     private ArrayAdapter adapter;
     private  Spinner spinner;
@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         toggleActiveInactiveButton = findViewById(R.id.activeShipments);
         toggleRecieptButton = findViewById(R.id.receiptButton);
         editWarehouseButton = findViewById(R.id.editWarehouseButton);
+        warehouse_name = findViewById(R.id.textViewWarehouseName);
         shipment_warehouse_id = findViewById(R.id.textViewWarehouseID);
         shipment_shipment_id = findViewById(R.id.textViewShipmentID);
         shipment_method = findViewById(R.id.textViewShipmentMethod);
@@ -316,19 +317,29 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         shipmentList = findViewById(R.id.shipment_list_view);
         shipmentList.setAdapter(adapter);
         shipmentList.setOnItemClickListener(this::onItemClick);
+        warehouse_name.setText(company.getWarehouseName(application.getCurrentWarehouseID()));
     }
 
     public void refreshShipmentInfo(String shipment_id) {
-        Shipment current_shipment = warehouse_contents.get(shipment_id);
-        Date receipt = new Date(current_shipment.getReceipt_date());
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        if (shipment_id == null) {
+            shipment_warehouse_id.setText(application.getCurrentWarehouseID());
+            shipment_shipment_id.setText("N/A");
+            shipment_method.setText("N/A");
+            shipment_weight.setText("N/A");
+            shipment_receipt.setText("N/A");
+            shipment_departure.setText("N/A");
+        } else {
+            Shipment current_shipment = warehouse_contents.get(shipment_id);
+            Date receipt = new Date(current_shipment.getReceipt_date());
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-        shipment_warehouse_id.setText(current_shipment.getWarehouse_id());
-        shipment_shipment_id.setText(current_shipment.getShipment_id());
-        shipment_method.setText(current_shipment.getShipment_method().toString());
-        shipment_weight.setText(String.format("%.2f lbs", current_shipment.getWeight()));
-        shipment_receipt.setText(formatter.format(receipt));
-        shipment_departure.setText("N/A");
+            shipment_warehouse_id.setText(current_shipment.getWarehouse_id());
+            shipment_shipment_id.setText(current_shipment.getShipment_id());
+            shipment_method.setText(current_shipment.getShipment_method().toString());
+            shipment_weight.setText(String.format("%.2f lbs", current_shipment.getWeight()));
+            shipment_receipt.setText(formatter.format(receipt));
+            shipment_departure.setText("N/A");
+        }
     }
 
     @Override
@@ -338,6 +349,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         refreshShipmentList();
         if (!adapter.isEmpty()) {
             refreshShipmentInfo((String) shipmentList.getItemAtPosition(0));
+        } else{
+            refreshShipmentInfo(null);
         }
     }
 

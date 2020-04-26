@@ -54,11 +54,6 @@ public interface MainActivityMVP {
     interface Model {
         ArrayList<String> getWarehouseIds();
 
-        // these methods are internal
-        //protected Warehouse getWarehouse(String warehouse_id);
-        //protected HashMap<Integer, Warehouse> getWarehouses();
-        //private Company(Context context);
-
         boolean addIncomingShipment(Shipment shipment);
 
         boolean removeShipment(String shipment_id, String warehouse_id);
