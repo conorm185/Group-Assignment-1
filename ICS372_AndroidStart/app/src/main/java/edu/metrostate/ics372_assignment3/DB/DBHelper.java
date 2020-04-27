@@ -13,7 +13,10 @@ import java.util.HashMap;
 import edu.metrostate.ics372_assignment3.model.Shipment;
 import edu.metrostate.ics372_assignment3.model.Warehouse;
 
-
+/**
+ * The DB helper class manages all operations related to the database.
+ * It automatically manages the creation and update of the database.
+ */
 public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "CompanyDB.db";
 
@@ -34,6 +37,10 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, 2);
     }
 
+    /**
+     * Creates a database of warehouse and shipment data
+     * @param db the database that holds the information about the warehouses
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table warehouses " + "(id text primary key, name text,status integer)");
@@ -46,6 +53,13 @@ public class DBHelper extends SQLiteOpenHelper {
                 ", PRIMARY KEY (shipment_id,warehouse_id))");
     }
 
+    /**
+     * Used to update a database. Drops the old shipment and warehouse tables. Then takes a database
+     * and calls the onCreate method to change the information
+     * @param db database that needs to be updated
+     * @param oldVersion the old database version
+     * @param newVersion the new database version
+     **/
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS warehouses");
@@ -53,6 +67,12 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * Inserts a new warehouse by opening the database for reading and writing
+     * and then inserting the contents into the database
+     * @param id the id of the new warehouse
+     * @return returns true when the warehouse has sucessfully been added
+     */
     public boolean insertWarehouse(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -62,6 +82,17 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    /**
+     * Inserts a new shipment by opening the database for reading and writing
+     * and then inserting the contents into the database
+     * @param shipment_id
+     * @param warehouse_id
+     * @param method
+     * @param weight
+     * @param receipt
+     * @param departure
+     * @return returns true when the shipment has sucessfully been added
+     */
     public boolean insertShipment(String shipment_id, String warehouse_id, String method, double weight, long receipt, long departure) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -75,16 +106,36 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    /**
+     * Opens the database for reading and queries the table for the number of rows in the warehouse
+     * table
+     * @return returns the number of rows
+     */
     public int numberOfWarehouseRows() {
         SQLiteDatabase db = this.getReadableDatabase();
         return (int) DatabaseUtils.queryNumEntries(db, WAREHOUSE_TABLE_NAME);
     }
 
+    /**
+     * Opens the database for reading and queries the table fof the number of rows in the shipment
+     * table
+     * @return returns the number of rows
+     */
     public int numberOfShipmentRows() {
         SQLiteDatabase db = this.getReadableDatabase();
         return (int) DatabaseUtils.queryNumEntries(db, SHIPMENT_TABLE_NAME);
     }
 
+    /**
+     * Updates a shipment by opening the database for writing and then inserting the contents into the database
+     * @param shipment_id
+     * @param warehouse_id
+     * @param method
+     * @param weight
+     * @param receipt
+     * @param departure
+     * @return returns true when the shipment is sucessfully updated
+     */
     public boolean updateShipment(String shipment_id, String warehouse_id, String method, double weight, long receipt, long departure) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -96,6 +147,13 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    /**
+     * Updates a warehouse by opening the database for writing and then inserting the contents into the database
+     * @param id
+     * @param name
+     * @param status
+     * @return returns true when the warehouse is sucessfully updated
+     */
     public boolean updateWarehouse(String id, String name, Boolean status) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -105,16 +163,34 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    /**
+     * Deletes a warehouse by opening the database for writing, accessing the warehouse table,
+     * and deleting the row the warehouse is in
+     * @param id
+     * @return deletes the row the warehouse occurs in
+     */
     public Integer deleteWarehouse(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(WAREHOUSE_TABLE_NAME, "id = ? ", new String[]{id});
     }
 
+    /**
+     * Deletes a shipment by opening the database for writing, accessing the shipment table,
+     * and deleting the row the shipment is in
+     * @param shipment_id
+     * @param warehouse_id
+     * @return deletes the row the shipment occurs in
+     */
     public Integer deleteShipment(String shipment_id, String warehouse_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(SHIPMENT_TABLE_NAME, "shipment_id = ? AND warehouse_id = ?", new String[]{shipment_id, warehouse_id});
     }
 
+    /**
+     * Creates a HashMap by opening the database and reading each row of warehouses and putting them
+     * into the company_contents
+     * @return returns company_contents
+     */
     public HashMap<Integer, Warehouse> getAllWarehouses() {
         //ArrayList<String> array_list = new ArrayList<String>();
         HashMap<Integer, Warehouse> company_contents = new HashMap<Integer, Warehouse>();
@@ -142,6 +218,12 @@ public class DBHelper extends SQLiteOpenHelper {
         return company_contents;
     }
 
+    /**
+     * Creates an ArrayList of shipments by opening the database and reading each row of shipments
+     * and putting them into the warehouse_contents
+     * @param warehouse_id id of warehouse ArrayList of shipments should be made from
+     * @return warehouse_contents
+     */
     public ArrayList<Shipment> getWarehouseContents(String warehouse_id) {
         ArrayList<Shipment> warehouse_contents = new ArrayList<Shipment>();
 
