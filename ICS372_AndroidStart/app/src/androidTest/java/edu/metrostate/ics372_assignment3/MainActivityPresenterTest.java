@@ -13,7 +13,7 @@ import edu.metrostate.ics372_assignment3.model.Company;
 import edu.metrostate.ics372_assignment3.model.Shipment;
 import edu.metrostate.ics372_assignment3.model.Warehouse;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class MainActivityPresenterTest {
 

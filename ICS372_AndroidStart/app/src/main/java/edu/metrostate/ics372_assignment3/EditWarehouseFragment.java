@@ -1,15 +1,13 @@
 package edu.metrostate.ics372_assignment3;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import edu.metrostate.ics372_assignment3.model.Warehouse;
 
@@ -38,8 +36,6 @@ public class EditWarehouseFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((TextView)getActivity().findViewById(R.id.textViewWarehouseID)).setText(warehouse.getWarehouse_id());
-        ((TextView)getActivity().findViewById(R.id.editTextWarehouseName)).setText(warehouse.getWarehouse_name());
     }
 
 }

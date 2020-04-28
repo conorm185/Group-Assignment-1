@@ -103,7 +103,7 @@ public class Company implements MainActivityMVP.Model {
         Warehouse warehouse_from = this.getWarehouse(warehouse_id_from);
         Warehouse warehouse_to = this.getWarehouse(warehouse_id_from);
         Shipment s = (Shipment) warehouse_from.findActiveShipment(shipment_id).clone();
-        if (warehouse_from != null && warehouse_to != null && s != null && (s.getDeparture_date() == null || s.getDeparture_date() == 0 )) {
+        if (warehouse_from != null && warehouse_to != null && s != null && (s.getDeparture_date() == null || s.getDeparture_date() == 0)) {
             warehouse_from.deportShipment(shipment_id);
 
             CompanyIO.updateShipment(warehouse_from.findInactiveShipment(shipment_id));
@@ -244,7 +244,7 @@ public class Company implements MainActivityMVP.Model {
                 shipments_in_warehouse.put(shipment.getShipment_id(), (Shipment) shipment.clone());
             }
             for (Shipment shipment : warehouse.getWarehouse_contents_inactive()) {
-                shipments_in_warehouse.put(shipment.getShipment_id()+" Inactive", (Shipment) shipment.clone());
+                shipments_in_warehouse.put(shipment.getShipment_id() + " Inactive", (Shipment) shipment.clone());
             }
         }
         return shipments_in_warehouse;

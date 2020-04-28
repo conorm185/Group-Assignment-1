@@ -19,8 +19,11 @@ public interface MainActivityMVP {
      */
     interface View {
         void showAddNewShipment();
+
         void showAddNewWarehouse();
+
         void showEditWarehouse();
+
         void showMoveShipment();
 
         void showShipments(String[] shipment_id_list);

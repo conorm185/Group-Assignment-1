@@ -4,19 +4,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 import edu.metrostate.ics372_assignment3.DB.DBHelper;
@@ -50,68 +45,68 @@ public class CompanyIO {
      * @param file to be imported
      * @throws Exception
      */
-	public static void importShipments(File file) throws Exception {
-		Warehouse temp = CompanyIO.parseWarehouse(file);
+    public static void importShipments(File file) throws Exception {
+        Warehouse temp = CompanyIO.parseWarehouse(file);
 
-		CompanyIO.log(String.format("importing shipments from %s", file.getName()));
-		if (temp != null) { // if the .json was not empty
-			for (Shipment s : temp.getWarehouse_contents()) {
-				// Check shipment object for validity
-				s.validate(temp); // temp values
-				// validate(s); should replace any unparsed fields with default values
-				company.addIncomingShipment(s);
-			}
-		} else {
-			CompanyIO.log("import empty");
-		}
-	}
+        CompanyIO.log(String.format("importing shipments from %s", file.getName()));
+        if (temp != null) { // if the .json was not empty
+            for (Shipment s : temp.getWarehouse_contents()) {
+                // Check shipment object for validity
+                s.validate(temp); // temp values
+                // validate(s); should replace any unparsed fields with default values
+                company.addIncomingShipment(s);
+            }
+        } else {
+            CompanyIO.log("import empty");
+        }
+    }
 
-	//remove
-	public static void importShipments(String fileContent, String fileExtension) throws Exception {
-		Warehouse temp = CompanyIO.parseWarehouse(fileContent, fileExtension);
+    //remove
+    public static void importShipments(String fileContent, String fileExtension) throws Exception {
+        Warehouse temp = CompanyIO.parseWarehouse(fileContent, fileExtension);
 
-		CompanyIO.log(String.format("importing shipments from %s", fileExtension));
-		if (temp != null) { // if the .json was not empty
-			for (Shipment s : temp.getWarehouse_contents()) {
-				// Check shipment object for validity
-				s.validate(temp); // temp values
-				// validate(s); should replace any unparsed fields with default values
-				company.addIncomingShipment(s);
-			}
-		} else {
-			CompanyIO.log("import empty");
-		}
-	}
+        CompanyIO.log(String.format("importing shipments from %s", fileExtension));
+        if (temp != null) { // if the .json was not empty
+            for (Shipment s : temp.getWarehouse_contents()) {
+                // Check shipment object for validity
+                s.validate(temp); // temp values
+                // validate(s); should replace any unparsed fields with default values
+                company.addIncomingShipment(s);
+            }
+        } else {
+            CompanyIO.log("import empty");
+        }
+    }
 
-	/**
+    /**
      * Method that takes a warehouse id and gets an instance of a warehouse with
      * that id
      *
      * @param warehouseId id of warehouse being accessed
      * @return warehouse that was accessed with specific id
      */
-	public static Warehouse getWarehouse(String warehouseId) {
-		Warehouse warehouse = company.getWarehouse(warehouseId);
-		return warehouse;
-	}
+    public static Warehouse getWarehouse(String warehouseId) {
+        Warehouse warehouse = company.getWarehouse(warehouseId);
+        return warehouse;
+    }
 
-	/**
+    /**
      * Method that exports the contents of a specific warehouse to a JSON file and
      * logs the outocome
      *
      * @param warehouse_id id of warehouse whose contents need to be exported
-     * @throws IOException
      * @return
+     * @throws IOException
      */
-	public static String exportContentToJSON(String warehouse_id)  {
-		Warehouse warehouse = company.getWarehouse(warehouse_id);
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		return gson.toJson(warehouse);
-	}
+    public static String exportContentToJSON(String warehouse_id) {
+        Warehouse warehouse = company.getWarehouse(warehouse_id);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(warehouse);
+    }
 
-	public static void saveContentToJSON(Context context, Uri fileUri, String warehouse_id) {
+    public static void saveContentToJSON(Context context, Uri fileUri, String warehouse_id) {
         String warehouseJsonText = CompanyIO.exportContentToJSON(warehouse_id);
-        try{
+        try {
             ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(fileUri, "rwt");
             FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
             fileOutputStream.write(warehouseJsonText.getBytes());
@@ -200,7 +195,7 @@ public class CompanyIO {
         return temp;
     }
 
-    public static void setCompany(Company company){
+    public static void setCompany(Company company) {
         CompanyIO.company = company;
     }
 

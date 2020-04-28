@@ -1,21 +1,15 @@
 package edu.metrostate.ics372_assignment3;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
-
 import edu.metrostate.ics372_assignment3.model.Shipment;
-import edu.metrostate.ics372_assignment3.model.Warehouse;
 
 
 /**
@@ -41,7 +35,6 @@ public class AddShipmentFragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Log.e("here", "here" + Shipment.ShippingMethod.values().toString());
         super.onActivityCreated(savedInstanceState);
     }
 
