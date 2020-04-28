@@ -1,14 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MoveShipmentFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:id="@+id/TopBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/textViewDepartureShipmentIDLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Shipment ID: " />
+
+        <TextView
+            android:id="@+id/textViewDepartureShipmentID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="###" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/MidBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TopBar"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textViewDepartureIDLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="From Warehouse: " />
+
+        <TextView
+            android:id="@+id/textViewDepartureID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="###" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/MidBar"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textViewReceiptIDLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="To Warehouse: " />
+
+        <Spinner
+            android:id="@+id/spinnerWarehouseID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true">
+        </Spinner>
+
+    </LinearLayout>
+</RelativeLayout>

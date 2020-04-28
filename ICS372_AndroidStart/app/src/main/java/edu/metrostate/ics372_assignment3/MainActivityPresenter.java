@@ -62,6 +62,17 @@ public class MainActivityPresenter implements MainActivityMVP.Presenter {
     }
 
     @Override
+    public void moveShipmentClicked() { view.showMoveShipment(); }
+
+    @Override
+    public void moveShipmentCompleted(String current_shipment_id, String current_warehouse_id, String target_warehouse_id) {
+        model.moveShipment(current_shipment_id, current_warehouse_id, target_warehouse_id);
+        HashMap<String, Shipment> warehouse_contents = model.readWarehouseContent(current_warehouse_id);
+        String[] shipment_id_list = warehouse_contents.keySet().toArray(new String[0]);
+        view.showShipments(shipment_id_list);
+    }
+
+    @Override
     public List<String> getWarehouseIds() {
         ArrayList<String> ids = model.getWarehouseIds();
         Collections.sort(ids);

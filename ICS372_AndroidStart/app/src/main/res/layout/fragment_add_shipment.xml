@@ -48,7 +48,7 @@
         android:layout_margin="12dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Enter_Shipment_Id" />
+        android:text="" />
 
     <TextView
         android:id="@+id/shipMethodText"
@@ -92,5 +92,5 @@
         android:layout_margin="12dp"
         android:ems="10"
         android:inputType="numberDecimal"
-        android:text="Enter_Weight" />
+        android:text="" />
 </RelativeLayout>

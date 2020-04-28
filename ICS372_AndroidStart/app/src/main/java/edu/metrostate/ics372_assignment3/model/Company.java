@@ -99,37 +99,19 @@ public class Company implements MainActivityMVP.Model {
         }
     }
 
-    /**
-     * Method used to remove a shipment from a warehouse. Remove the shipment if the
-     * warehouse is found and is not null. Or else log an error message.
-     *
-     * @param shipment_id  shipment to be deleted
-     * @param warehouse_id warehouse the contains shipment to be deleted
-     */
-    public boolean removeShipment(String shipment_id, String warehouse_id) {
-        Warehouse warehouse = this.getWarehouse(warehouse_id);
-        if (warehouse != null) {
-            CompanyIO.removeShipment(shipment_id, warehouse_id);
-            return warehouse.removeShipment(shipment_id);
-        } else {
-            CompanyIO.log(String.format("Warehouse: %s not found", warehouse_id));
-            return false;
-        }
-    }
-
     public boolean moveShipment(String shipment_id, String warehouse_id_from, String warehouse_id_to) {
         Warehouse warehouse_from = this.getWarehouse(warehouse_id_from);
         Warehouse warehouse_to = this.getWarehouse(warehouse_id_from);
-        if (warehouse_from != null && warehouse_to != null && warehouse_from.findShipment(shipment_id) != null) {
-            Shipment s = warehouse_from.findShipment(shipment_id);
-            s.setDeparture_date(System.currentTimeMillis());
-            CompanyIO.updateShipment(s);
+        Shipment s = (Shipment) warehouse_from.findActiveShipment(shipment_id).clone();
+        if (warehouse_from != null && warehouse_to != null && s != null && (s.getDeparture_date() == null || s.getDeparture_date() == 0 )) {
+            warehouse_from.deportShipment(shipment_id);
 
-            Shipment s2 = (Shipment) s.clone();
-            s2.setWarehouse_id(warehouse_id_to);
-            s2.setReceipt_date(System.currentTimeMillis());
-            s2.setDeparture_date((long) 0);
-            CompanyIO.addShipment(s2);
+            CompanyIO.updateShipment(warehouse_from.findInactiveShipment(shipment_id));
+
+            s.setWarehouse_id(warehouse_id_to);
+            s.setReceipt_date(System.currentTimeMillis());
+            s.setDeparture_date(null);
+            addIncomingShipment(s);
 
             return true;
         } else {
@@ -260,6 +242,9 @@ public class Company implements MainActivityMVP.Model {
         if (warehouse != null) {
             for (Shipment shipment : warehouse.getWarehouse_contents()) {
                 shipments_in_warehouse.put(shipment.getShipment_id(), (Shipment) shipment.clone());
+            }
+            for (Shipment shipment : warehouse.getWarehouse_contents_inactive()) {
+                shipments_in_warehouse.put(shipment.getShipment_id()+" Inactive", (Shipment) shipment.clone());
             }
         }
         return shipments_in_warehouse;

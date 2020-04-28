@@ -32,7 +32,6 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -65,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
     private AlertDialog dialog;
 
     private String current_warehouse_id;
+    private String current_shipment_id;
+
     private DialogInterface.OnClickListener addWarehouseHandler = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -109,6 +110,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         }
 
     };
+    private DialogInterface.OnClickListener moveShipmentHandler = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            String target_warehouse_id = (String) ((Spinner) MainActivity.this.dialog.findViewById(R.id.spinnerWarehouseID)).getSelectedItem();
+
+            if (target_warehouse_id == null || target_warehouse_id.equalsIgnoreCase(current_warehouse_id)){
+                Toast.makeText(MainActivity.this, "Shipment already at selected warehouse", Toast.LENGTH_SHORT).show();
+            } else {
+                presenter.moveShipmentCompleted(current_shipment_id, current_warehouse_id, target_warehouse_id);
+            }
+            dialog.dismiss();
+        }
+
+    };
 
     /**
      * Creates the view for the application
@@ -128,13 +143,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         impButt = findViewById(R.id.importButton);
         exportButt = findViewById(R.id.exportContentButton);
         addButt = findViewById(R.id.addWarehouseButton);
-        addShipmentButton = findViewById(R.id.addShipmentButton);
-        toggleActiveInactiveButton = findViewById(R.id.activeShipments);
-        toggleRecieptButton = findViewById(R.id.receiptButton);
-        editWarehouseButton = findViewById(R.id.editWarehouseButton);
+        addShipmentButton = findViewById(R.id.addShipmentBtn);
+        toggleActiveInactiveButton = findViewById(R.id.moveShipmentBtn);
+        toggleRecieptButton = findViewById(R.id.receiptBtn);
+        editWarehouseButton = findViewById(R.id.editWarehouseBtn);
         warehouse_name = findViewById(R.id.textViewWarehouseName);
         shipment_warehouse_id = findViewById(R.id.textViewWarehouseID);
-        shipment_shipment_id = findViewById(R.id.textViewShipmentID);
+        shipment_shipment_id = findViewById(R.id.textViewDepartureShipmentID);
         shipment_method = findViewById(R.id.textViewShipmentMethod);
         shipment_weight = findViewById(R.id.textViewShipmentWeight);
         shipment_receipt = findViewById(R.id.textViewReceipt);
@@ -204,23 +219,29 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
                 Toast.makeText(this, "export pressed", Toast.LENGTH_SHORT).show();
                 exportContent(v);
                 break;
-            case R.id.addShipmentButton:
+            case R.id.addShipmentBtn:
                 presenter.addShipmentClicked();
                 break;
             case R.id.addWarehouseButton:
                 presenter.addWarehouseClicked();
                 break;
-            case R.id.activeShipments:
-                Toast.makeText(this, "Shipment List Toggled", Toast.LENGTH_SHORT).show();
+            case R.id.moveShipmentBtn:
+                if (current_shipment_id == null){
+                    Toast.makeText(this, "No Shipment Selected", Toast.LENGTH_SHORT).show();
+                } else if(current_shipment_id.contains("Inactive")){
+                    Toast.makeText(this, "Cannot move inactive shipment", Toast.LENGTH_SHORT).show();
+                } else {
+                    presenter.moveShipmentClicked();
+                }
                 break;
-            case R.id.receiptButton:
+            case R.id.receiptBtn:
                 presenter.toggleFreightReciept(current_warehouse_id);
                 //presenter.getFreightReceiptStatus();
                 String status_string = "Warehouse " + current_warehouse_id + " receiving freight: "
                         + presenter.getFreightReceiptStatus(current_warehouse_id);
                 Toast.makeText(this, status_string, Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.editWarehouseButton:
+            case R.id.editWarehouseBtn:
                 presenter.editWarehouseClicked();
                 break;
         }
@@ -380,6 +401,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
             shipment_receipt.setText("N/A");
             shipment_departure.setText("N/A");
         } else {
+            current_shipment_id = shipment_id;
             Shipment current_shipment = warehouse_contents.get(shipment_id);
             Date receipt = new Date(current_shipment.getReceipt_date());
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -433,9 +455,26 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
     @Override
     public void showEditWarehouse() {
         dialog = new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Add New Warehouse")
+                .setTitle("Edit Warehouse")
                 .setView(R.layout.fragment_edit_warehouse)
                 .setPositiveButton("Submit Edit", editWarehouseHandler).show();
+    }
+
+    @Override
+    public void showMoveShipment() {
+        ArrayAdapter id_adapter = new ArrayAdapter<>(this, R.layout.shipment_list_view, warehouseIDs);
+        View v = getLayoutInflater().inflate(R.layout.fragment_move_shipment, null);
+        Spinner spin = v.findViewById(R.id.spinnerWarehouseID);
+        spin.setAdapter(id_adapter);
+        TextView departure_id = v.findViewById(R.id.textViewDepartureID);
+        departure_id.setText(current_warehouse_id);
+        TextView departure_shipment_id = v.findViewById(R.id.textViewDepartureShipmentID);
+        departure_shipment_id.setText(current_shipment_id);
+        dialog = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Move Shipment")
+                .setView(v)
+                .setPositiveButton("Move Shipment", moveShipmentHandler).show();
+
     }
 
     @Override

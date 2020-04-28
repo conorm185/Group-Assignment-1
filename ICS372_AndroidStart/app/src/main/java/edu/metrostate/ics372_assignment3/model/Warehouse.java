@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 public class Warehouse {
     private ArrayList<Shipment> warehouse_contents;
+    private ArrayList<Shipment> warehouse_contents_inactive;
     private String warehouse_name;
     private String warehouse_id;
     private boolean receiving_freight;
@@ -20,6 +21,7 @@ public class Warehouse {
      */
     public Warehouse(String warehouse_id) {
         warehouse_contents = new ArrayList<Shipment>();
+        warehouse_contents_inactive = new ArrayList<Shipment>();
         this.warehouse_id = (warehouse_id == null) ? "" : warehouse_id;
         this.receiving_freight = true;
     }
@@ -47,6 +49,24 @@ public class Warehouse {
      */
     public void setWarehouse_contents(ArrayList<Shipment> warehouse_contents) {
         this.warehouse_contents = warehouse_contents;
+    }
+
+    /**
+     * get the contents of this warehouse in the form of an ArrayList
+     *
+     * @return the warehouse_contents
+     */
+    public ArrayList<Shipment> getWarehouse_contents_inactive() {
+        return warehouse_contents_inactive;
+    }
+
+    /**
+     * set the contents of this warehouse in the form of an ArrayList.
+     *
+     * @param warehouse_contents the warehouse_contents to set
+     */
+    public void setWarehouse_contents_inactive(ArrayList<Shipment> warehouse_contents) {
+        this.warehouse_contents_inactive = warehouse_contents;
     }
 
     /**
@@ -120,15 +140,17 @@ public class Warehouse {
     }
 
     /**
-     * method used to remove a shipment from the warehouse_contents collection
+     * move the shipment from active to inactive
      *
      * @param shipment_id the unique id of the shipment being removed
      * @return true if the shipment was removed from the warehouse_contents, and
      * false if the shipment was not removed
      */
-    public boolean removeShipment(String shipment_id) {
+    public boolean deportShipment(String shipment_id) {
         for (Shipment s : warehouse_contents) {
             if (s.getShipment_id().equalsIgnoreCase(shipment_id)) {
+                s.setDeparture_date(System.currentTimeMillis());
+                warehouse_contents_inactive.add(s);
                 warehouse_contents.remove(s);
                 return true;
             }
@@ -136,8 +158,17 @@ public class Warehouse {
         return false;
     }
 
-    public Shipment findShipment(String shipment_id) {
+    public Shipment findActiveShipment(String shipment_id) {
         for (Shipment s : warehouse_contents) {
+            if (s.getShipment_id().equalsIgnoreCase(shipment_id)) {
+                return s;
+            }
+        }
+        return null;
+    }
+
+    public Shipment findInactiveShipment(String shipment_id) {
+        for (Shipment s : warehouse_contents_inactive) {
             if (s.getShipment_id().equalsIgnoreCase(shipment_id)) {
                 return s;
             }

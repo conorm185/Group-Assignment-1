@@ -34,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String SHIPMENT_COLUMN_DEPARTURE = "departure";
 
     public DBHelper(Context context) {
-        super(context, DATABASE_NAME, null, 2);
+        super(context, DATABASE_NAME, null, 8);
     }
 
     /**
@@ -50,7 +50,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("create table shipments " + "(shipment_id text, warehouse_id text" +
                 ",method text,weight real,receipt integer,departure integer" +
-                ", PRIMARY KEY (shipment_id,warehouse_id))");
+                ", PRIMARY KEY (shipment_id,warehouse_id, receipt))");
     }
 
     /**
@@ -78,7 +78,11 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COMPANY_COLUMN_WAREHOUSE_ID, id);
         contentValues.put(COMPANY_COLUMN_FREIGHT_STATUS, true);
-        db.insert(WAREHOUSE_TABLE_NAME, null, contentValues);
+        try {
+            db.insert(WAREHOUSE_TABLE_NAME, null, contentValues);
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     }
 
@@ -102,7 +106,11 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(SHIPMENT_COLUMN_WEIGHT, weight);
         contentValues.put(SHIPMENT_COLUMN_RECEIPT, receipt);
         contentValues.put(SHIPMENT_COLUMN_DEPARTURE, departure);
-        db.insert(SHIPMENT_TABLE_NAME, null, contentValues);
+        try {
+            db.insert(SHIPMENT_TABLE_NAME, null, contentValues);
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     }
 
@@ -143,7 +151,11 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(SHIPMENT_COLUMN_WEIGHT, weight);
         contentValues.put(SHIPMENT_COLUMN_RECEIPT, receipt);
         contentValues.put(SHIPMENT_COLUMN_DEPARTURE, departure);
-        db.update(SHIPMENT_TABLE_NAME, contentValues, "shipment_id = ? AND warehouse_id = ?", new String[]{shipment_id, warehouse_id});
+        try {
+            db.update(SHIPMENT_TABLE_NAME, contentValues, "shipment_id = ? AND warehouse_id = ?", new String[]{shipment_id, warehouse_id});
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     }
 
@@ -159,7 +171,11 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COMPANY_COLUMN_WAREHOUSE_NAME, name);
         contentValues.put(COMPANY_COLUMN_FREIGHT_STATUS, status);
-        db.update(WAREHOUSE_TABLE_NAME, contentValues, "id = ? ", new String[]{id});
+        try {
+            db.update(WAREHOUSE_TABLE_NAME, contentValues, "id = ? ", new String[]{id});
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     }
 
@@ -210,7 +226,19 @@ public class DBHelper extends SQLiteOpenHelper {
             Warehouse current_warehouse = new Warehouse(warehouse_id);
             current_warehouse.setWarehouse_name(warehouse_name);
             current_warehouse.setReceiving_freight(receiving_freight);
-            current_warehouse.setWarehouse_contents(getWarehouseContents(warehouse_id));
+
+            ArrayList<Shipment> all_shipments = getWarehouseContents(warehouse_id);
+            ArrayList<Shipment> active = new ArrayList<>();
+            ArrayList<Shipment> inactive = new ArrayList<>();
+            for (Shipment s: all_shipments){
+                if (s.getDeparture_date() == null ||s.getDeparture_date() == 0){
+                    active.add(s);
+                } else {
+                    inactive.add(s);
+                }
+            }
+            current_warehouse.setWarehouse_contents((ArrayList<Shipment>) active.clone());
+            current_warehouse.setWarehouse_contents_inactive((ArrayList<Shipment>) inactive.clone());
 
             company_contents.put(current_warehouse.hashCode(), current_warehouse);
         }
@@ -230,7 +258,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String shipment_id;
         Shipment.ShippingMethod shipment_method;
         double weight;
-        Long receipt_date;
+        Long receipt_date, departure_date;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select * from shipments where warehouse_id = ?", new String[]{warehouse_id});
@@ -240,8 +268,10 @@ public class DBHelper extends SQLiteOpenHelper {
             shipment_method = Shipment.ShippingMethod.valueOf(res.getString(res.getColumnIndexOrThrow(SHIPMENT_COLUMN_SHIPPING_METHOD)));
             weight = res.getDouble(res.getColumnIndexOrThrow(SHIPMENT_COLUMN_WEIGHT));
             receipt_date = res.getLong(res.getColumnIndexOrThrow(SHIPMENT_COLUMN_RECEIPT));
+            departure_date = res.getLong(res.getColumnIndexOrThrow(SHIPMENT_COLUMN_DEPARTURE));
 
             Shipment current_shipment = new Shipment(warehouse_id, shipment_method, shipment_id, weight, receipt_date);
+            current_shipment.setDeparture_date(departure_date);
 
             warehouse_contents.add(current_shipment);
         }

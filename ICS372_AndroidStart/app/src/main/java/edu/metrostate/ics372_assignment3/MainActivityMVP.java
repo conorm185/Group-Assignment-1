@@ -21,6 +21,7 @@ public interface MainActivityMVP {
         void showAddNewShipment();
         void showAddNewWarehouse();
         void showEditWarehouse();
+        void showMoveShipment();
 
         void showShipments(String[] shipment_id_list);
 
@@ -56,6 +57,10 @@ public interface MainActivityMVP {
         void toggleFreightReciept(String current_warehouse_id);
 
         boolean getFreightReceiptStatus(String current_warehouse_id);
+
+        void moveShipmentClicked();
+
+        void moveShipmentCompleted(String current_shipment_id, String current_warehouse_id, String target_warehouse_id);
     }
 
     /**
@@ -66,8 +71,6 @@ public interface MainActivityMVP {
         ArrayList<String> getWarehouseIds();
 
         boolean addIncomingShipment(Shipment shipment);
-
-        boolean removeShipment(String shipment_id, String warehouse_id);
 
         boolean moveShipment(String shipment_id, String warehouse_id_from, String warehouse_id_to);
 
