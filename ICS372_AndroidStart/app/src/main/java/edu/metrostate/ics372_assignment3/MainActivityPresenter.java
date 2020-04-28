@@ -26,7 +26,7 @@ public class MainActivityPresenter implements MainActivityMVP.Presenter {
     }
 
     @Override
-    public void addShipmentCompleted(Shipment shipment){
+    public void addShipmentCompleted(Shipment shipment) {
         model.addIncomingShipment(shipment);
         HashMap<String, Shipment> warehouse_contents = model.readWarehouseContent(shipment.getWarehouse_id());
         String[] shipment_id_list = warehouse_contents.keySet().toArray(new String[0]);
@@ -34,15 +34,15 @@ public class MainActivityPresenter implements MainActivityMVP.Presenter {
     }
 
     @Override
-    public void addWarehouseCompleted(Warehouse warehouse){
+    public void addWarehouseCompleted(Warehouse warehouse) {
         model.addWarehouse(warehouse.getWarehouse_id());
-        model.setWarehouseName(warehouse.getWarehouse_id(),warehouse.getWarehouse_name());
+        model.setWarehouseName(warehouse.getWarehouse_id(), warehouse.getWarehouse_name());
         view.showWarehouses(model.getWarehouseIds());
     }
 
     @Override
-    public void editWarehouseCompleted(Warehouse warehouse){
-        model.setWarehouseName(warehouse.getWarehouse_id(),warehouse.getWarehouse_name());
+    public void editWarehouseCompleted(Warehouse warehouse) {
+        model.setWarehouseName(warehouse.getWarehouse_id(), warehouse.getWarehouse_name());
         view.showWarehouses(model.getWarehouseIds());
     }
 
@@ -62,7 +62,9 @@ public class MainActivityPresenter implements MainActivityMVP.Presenter {
     }
 
     @Override
-    public void moveShipmentClicked() { view.showMoveShipment(); }
+    public void moveShipmentClicked() {
+        view.showMoveShipment();
+    }
 
     @Override
     public void moveShipmentCompleted(String current_shipment_id, String current_warehouse_id, String target_warehouse_id) {

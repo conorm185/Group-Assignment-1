@@ -67,8 +67,7 @@
             android:id="@+id/spinnerWarehouseID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawSelectorOnTop="true">
-        </Spinner>
+            android:drawSelectorOnTop="true"></Spinner>
 
     </LinearLayout>
 </RelativeLayout>

@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         public void onClick(DialogInterface dialog, int which) {
             String target_warehouse_id = (String) ((Spinner) MainActivity.this.dialog.findViewById(R.id.spinnerWarehouseID)).getSelectedItem();
 
-            if (target_warehouse_id == null || target_warehouse_id.equalsIgnoreCase(current_warehouse_id)){
+            if (target_warehouse_id == null || target_warehouse_id.equalsIgnoreCase(current_warehouse_id)) {
                 Toast.makeText(MainActivity.this, "Shipment already at selected warehouse", Toast.LENGTH_SHORT).show();
             } else {
                 presenter.moveShipmentCompleted(current_shipment_id, current_warehouse_id, target_warehouse_id);
@@ -226,9 +226,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
                 presenter.addWarehouseClicked();
                 break;
             case R.id.moveShipmentBtn:
-                if (current_shipment_id == null){
+                if (current_shipment_id == null) {
                     Toast.makeText(this, "No Shipment Selected", Toast.LENGTH_SHORT).show();
-                } else if(current_shipment_id.contains("Inactive")){
+                } else if (current_shipment_id.contains("Inactive")) {
                     Toast.makeText(this, "Cannot move inactive shipment", Toast.LENGTH_SHORT).show();
                 } else {
                     presenter.moveShipmentClicked();
@@ -438,9 +438,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
 
     @Override
     public void showAddNewShipment() {
+        View v = getLayoutInflater().inflate(R.layout.fragment_add_shipment, null);
+        TextView warehouse_id = v.findViewById(R.id.showWareIdText);
+        warehouse_id.setText(current_warehouse_id);
+
         dialog = new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Add New Shipment")
-                .setView(R.layout.fragment_add_shipment)
+                .setView(v)
                 .setPositiveButton("Add", addShipmentHandler).show();
     }
 
@@ -454,9 +458,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
 
     @Override
     public void showEditWarehouse() {
+        View v = getLayoutInflater().inflate(R.layout.fragment_edit_warehouse, null);
+        TextView warehouse_id = v.findViewById(R.id.textViewWarehouseID);
+        warehouse_id.setText(current_warehouse_id);
+
         dialog = new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Edit Warehouse")
-                .setView(R.layout.fragment_edit_warehouse)
+                .setView(v)
                 .setPositiveButton("Submit Edit", editWarehouseHandler).show();
     }
 
@@ -485,5 +493,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
     @Override
     public void showWarehouses(ArrayList<String> warehouseIds) {
         updateSpinnerArray();
+        refreshShipmentList();
     }
 }

@@ -39,6 +39,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     /**
      * Creates a database of warehouse and shipment data
+     *
      * @param db the database that holds the information about the warehouses
      */
     @Override
@@ -56,7 +57,8 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * Used to update a database. Drops the old shipment and warehouse tables. Then takes a database
      * and calls the onCreate method to change the information
-     * @param db database that needs to be updated
+     *
+     * @param db         database that needs to be updated
      * @param oldVersion the old database version
      * @param newVersion the new database version
      **/
@@ -70,6 +72,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * Inserts a new warehouse by opening the database for reading and writing
      * and then inserting the contents into the database
+     *
      * @param id the id of the new warehouse
      * @return returns true when the warehouse has sucessfully been added
      */
@@ -89,6 +92,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * Inserts a new shipment by opening the database for reading and writing
      * and then inserting the contents into the database
+     *
      * @param shipment_id
      * @param warehouse_id
      * @param method
@@ -117,6 +121,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * Opens the database for reading and queries the table for the number of rows in the warehouse
      * table
+     *
      * @return returns the number of rows
      */
     public int numberOfWarehouseRows() {
@@ -127,6 +132,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * Opens the database for reading and queries the table fof the number of rows in the shipment
      * table
+     *
      * @return returns the number of rows
      */
     public int numberOfShipmentRows() {
@@ -136,6 +142,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     /**
      * Updates a shipment by opening the database for writing and then inserting the contents into the database
+     *
      * @param shipment_id
      * @param warehouse_id
      * @param method
@@ -161,6 +168,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     /**
      * Updates a warehouse by opening the database for writing and then inserting the contents into the database
+     *
      * @param id
      * @param name
      * @param status
@@ -182,6 +190,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * Deletes a warehouse by opening the database for writing, accessing the warehouse table,
      * and deleting the row the warehouse is in
+     *
      * @param id
      * @return deletes the row the warehouse occurs in
      */
@@ -193,6 +202,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * Deletes a shipment by opening the database for writing, accessing the shipment table,
      * and deleting the row the shipment is in
+     *
      * @param shipment_id
      * @param warehouse_id
      * @return deletes the row the shipment occurs in
@@ -205,6 +215,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * Creates a HashMap by opening the database and reading each row of warehouses and putting them
      * into the company_contents
+     *
      * @return returns company_contents
      */
     public HashMap<Integer, Warehouse> getAllWarehouses() {
@@ -230,8 +241,8 @@ public class DBHelper extends SQLiteOpenHelper {
             ArrayList<Shipment> all_shipments = getWarehouseContents(warehouse_id);
             ArrayList<Shipment> active = new ArrayList<>();
             ArrayList<Shipment> inactive = new ArrayList<>();
-            for (Shipment s: all_shipments){
-                if (s.getDeparture_date() == null ||s.getDeparture_date() == 0){
+            for (Shipment s : all_shipments) {
+                if (s.getDeparture_date() == null || s.getDeparture_date() == 0) {
                     active.add(s);
                 } else {
                     inactive.add(s);
@@ -249,6 +260,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * Creates an ArrayList of shipments by opening the database and reading each row of shipments
      * and putting them into the warehouse_contents
+     *
      * @param warehouse_id id of warehouse ArrayList of shipments should be made from
      * @return warehouse_contents
      */
