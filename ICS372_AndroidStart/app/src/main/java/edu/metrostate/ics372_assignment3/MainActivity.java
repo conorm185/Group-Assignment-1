@@ -41,6 +41,9 @@ import edu.metrostate.ics372_assignment3.model.CompanyIO;
 import edu.metrostate.ics372_assignment3.model.Shipment;
 import edu.metrostate.ics372_assignment3.model.Warehouse;
 
+/**
+ * The Main View of the application, handles all fragments and dialogs.  Makes calls to the presenter in order to affect the model
+ */
 public class MainActivity extends AppCompatActivity implements MainActivityMVP.View, View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
 
     private static final int CREATE_REQUEST_CODE = 40;
@@ -188,6 +191,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         refreshShipmentList();
     }
 
+    /**
+     * refreshes elements of the ui on Activity resume
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -197,6 +203,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
             refreshShipmentInfo((String) shipmentList.getSelectedItem());
     }
 
+    /**
+     * update the spinner array that stores warehouse IDs
+     */
     public void updateSpinnerArray() {
         List<String> ids = presenter.getWarehouseIds();
         ids.forEach(i -> {
@@ -207,6 +216,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         spinnerArrayAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Click listener that handles all of the on screen buttons.
+     * @param v the button that was clicked
+     */
     @Override
     public void onClick(View v) {
         //code for onclick listeners to move code out of onCreate. Toasts for debugging.
@@ -248,6 +261,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
     }
 
 
+    /**
+     * mothod to open a connection to a file for writing
+     * @param view
+     */
     public void openFile(View view) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -271,6 +288,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         startActivityForResult(intent, OPEN_REQUEST_CODE);
     }
 
+    /**
+     * method to begin a save operation to a file
+     * @param view
+     */
     public void exportContent(View view) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -308,6 +329,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         }
     }
 
+    /**
+     * method to import shipments from a file
+     *
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param resultData
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent resultData) {
@@ -356,6 +385,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         }
     }
 
+    /**
+     * method to read the string content of a file that has been opened
+     *
+     * @param uri
+     * @return
+     * @throws IOException
+     */
     private String readFileContent(Uri uri) throws IOException {
         InputStream inputStream =
                 getContentResolver().openInputStream(uri);
@@ -371,12 +407,23 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         return stringBuilder.toString();
     }
 
+    /**
+     * On click listener that handles when a shipment id is clicked in the ListView
+     *
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String current_shipment_id = parent.getItemAtPosition(position).toString();
         refreshShipmentInfo(current_shipment_id);
     }
 
+    /**
+     * refresh the ListView with an updated list of shipments inside the given warehouse
+     */
     public void refreshShipmentList() {
         if (current_warehouse_id != null) {
             warehouse_contents = presenter.readWarehouseContent(current_warehouse_id);
@@ -392,6 +439,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         }
     }
 
+    /**
+     * refresh the display shipment info whenever a new shipment is selected
+     *
+     * @param shipment_id the id of teh shipent being displayed
+     */
     public void refreshShipmentInfo(String shipment_id) {
         if (shipment_id == null) {
             shipment_warehouse_id.setText(current_warehouse_id);
@@ -419,6 +471,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         }
     }
 
+    /**
+     * update the current warehouse id when one is selected from the warehouse selecting spinner
+     * and fill the ListView with the shipments inside that warehouse
+     *
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String selected = parent.getItemAtPosition(position).toString();
@@ -431,11 +492,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         }
     }
 
+
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
 
+    /**
+     * display a add shipment dialog when the presenter sends the command to
+     */
     @Override
     public void showAddNewShipment() {
         View v = getLayoutInflater().inflate(R.layout.fragment_add_shipment, null);
@@ -448,6 +513,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
                 .setPositiveButton("Add", addShipmentHandler).show();
     }
 
+    /**
+     * display a add warehouse dialog when the presenter sends the command to
+     */
     @Override
     public void showAddNewWarehouse() {
         dialog = new AlertDialog.Builder(MainActivity.this)
@@ -456,6 +524,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
                 .setPositiveButton("Add", addWarehouseHandler).show();
     }
 
+    /**
+     * display a edit warehouse dialog when the presenter sends the command to
+     */
     @Override
     public void showEditWarehouse() {
         View v = getLayoutInflater().inflate(R.layout.fragment_edit_warehouse, null);
@@ -468,6 +539,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
                 .setPositiveButton("Submit Edit", editWarehouseHandler).show();
     }
 
+    /**
+     * display a move shipment dialog when the presenter sends the command to
+     */
     @Override
     public void showMoveShipment() {
         ArrayAdapter id_adapter = new ArrayAdapter<>(this, R.layout.shipment_list_view, warehouseIDs);
@@ -485,11 +559,21 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
 
     }
 
+    /**
+     * update the shipment list when the presenter says it is needed
+     *
+     * @param shipment_id_list
+     */
     @Override
     public void showShipments(String[] shipment_id_list) {
         refreshShipmentList();
     }
 
+    /**
+     * update the warehouse id list when the presenter says it is needed
+     *
+     * @param warehouseIds
+     */
     @Override
     public void showWarehouses(ArrayList<String> warehouseIds) {
         updateSpinnerArray();
