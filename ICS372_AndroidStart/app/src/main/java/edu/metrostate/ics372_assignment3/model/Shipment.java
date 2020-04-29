@@ -19,8 +19,6 @@ public class Shipment implements Cloneable {
     private Long receipt_date;
     private Long departure_date;
 
-    // private String unit;
-
     /**
      * Shipment constructor
      *
@@ -144,10 +142,19 @@ public class Shipment implements Cloneable {
         }
     }
 
+    /**
+     * get the departure date of a shipment
+     * @return departure_date a long value in ms of the departure date
+     */
     public Long getDeparture_date() {
         return departure_date;
     }
 
+    /**
+     * set the departure date of a shipment
+     *
+     * @param departure_date a long value in ms of the departure date
+     */
     public void setDeparture_date(Long departure_date) {
         this.departure_date = departure_date;
     }
@@ -173,7 +180,7 @@ public class Shipment implements Cloneable {
      * Override of the equals method. Two Shipments are equal if they have the same
      * shipment_id (ignoring case)
      *
-     * @param the Object being compared against this one
+     * @param obj the Object being compared against this one
      * @return true if these shipments have the same shipment_id
      */
     @Override
@@ -253,10 +260,6 @@ public class Shipment implements Cloneable {
 
         return true;
     }
-
-    // used on a shipment, takes a warehouse (used in CompanyIO). Goes through
-    // checking values and giving anything its missing a value.
-    // Date is taken care of in setter.
 
     /**
      * ShippingMethod enum

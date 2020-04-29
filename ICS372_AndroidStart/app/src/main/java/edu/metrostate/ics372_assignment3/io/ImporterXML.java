@@ -131,6 +131,12 @@ public class ImporterXML implements Importable {
         return warehouse;
     }
 
+    /**
+     * Mothod to parse an XML string into a useable warehouse object
+     * @param fileContent a string in XML format
+     * @return  warehouse, a warehouse filled with every shipment in the XML file
+     * @throws Exception
+     */
     @Override
     public Warehouse parseWarehouse(String fileContent) throws Exception {
         Warehouse warehouse = null;

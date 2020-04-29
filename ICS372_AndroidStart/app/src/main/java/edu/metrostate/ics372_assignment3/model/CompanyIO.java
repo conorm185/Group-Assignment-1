@@ -30,12 +30,6 @@ public class CompanyIO {
     private static DBHelper database;
     private static Company company;
 
-
-    public static void importShipments(Uri uri) throws Exception {
-        File file = new File(uri.getPath());
-        CompanyIO.importShipments(file);
-    }
-
     /**
      * Method that attempts to import a JSON file by parsing the file into a
      * temporary file/warehouse if the file/warehouse is not empty it loops through
@@ -61,7 +55,12 @@ public class CompanyIO {
         }
     }
 
-    //remove
+    /**
+     * Method to import shipments from a file
+     * @param fileContent the text content of the file
+     * @param fileExtension the format of the file
+     * @throws Exception
+     */
     public static void importShipments(String fileContent, String fileExtension) throws Exception {
         Warehouse temp = CompanyIO.parseWarehouse(fileContent, fileExtension);
 
@@ -104,6 +103,12 @@ public class CompanyIO {
         return gson.toJson(warehouse);
     }
 
+    /**
+     * method that exports the content of a warehouse to a file in JSON format
+     * @param context the context off where the call originates from
+     * @param fileUri   the file location
+     * @param warehouse_id  the id of the warehouse being exported
+     */
     public static void saveContentToJSON(Context context, Uri fileUri, String warehouse_id) {
         String warehouseJsonText = CompanyIO.exportContentToJSON(warehouse_id);
         try {
@@ -176,6 +181,13 @@ public class CompanyIO {
         return temp;
     }
 
+    /**
+     * Method that takes in a String of a files content and the name of the file and parses a warehouse from the input
+     * @param fileContent a string of the file's content
+     * @param fileExtension the file extension of the file
+     * @return temp, a warehouse filled with the info parsed from the file
+     * @throws Exception
+     */
     private static Warehouse parseWarehouse(String fileContent, String fileExtension) throws Exception {
         String file_type = fileExtension;
         Warehouse temp;
@@ -195,6 +207,11 @@ public class CompanyIO {
         return temp;
     }
 
+    /**
+     * Method to set the company object associated with this IO class
+     *
+     * @param company the company
+     */
     public static void setCompany(Company company) {
         CompanyIO.company = company;
     }
@@ -210,28 +227,60 @@ public class CompanyIO {
         return database.getAllWarehouses();
     }
 
+    /**
+     * access the database to store a shipment that has been added
+     *
+     * @param shipment the shipment
+     */
     public static void addShipment(Shipment shipment) {
         database.insertShipment(shipment.getShipment_id(), shipment.getWarehouse_id()
                 , shipment.getShipment_method().toString(), shipment.getWeight()
                 , shipment.getReceipt_date(), 0);
     }
 
+    /**
+     * remove a shipment from the database
+     *
+     * @param shipment_id the shipment being removed
+     * @param warehouse_id the warehouse it is being removed from
+     */
     public static void removeShipment(String shipment_id, String warehouse_id) {
         database.deleteShipment(shipment_id, warehouse_id);
     }
 
+    /**
+     * add a warehouse to the database
+     *
+     * @param warehouse_id the warehouse id
+     */
     public static void addWarehouse(String warehouse_id) {
         database.insertWarehouse(warehouse_id);
     }
 
+    /**
+     * remove a warehouse from the database
+     *
+     * @param warehouse_id the warehouse id
+     */
     public static void removeWarehouse(String warehouse_id) {
         database.deleteWarehouse(warehouse_id);
     }
 
+    /**
+     * update a warehouse inside the database
+     *
+     * @param warehouse_id the warehouse id
+     * @param warehouse_name    the warehouse name
+     * @param b the freight reciept status of the warehouse
+     */
     public static void updateWarehouse(String warehouse_id, String warehouse_name, boolean b) {
         database.updateWarehouse(warehouse_id, warehouse_name, b);
     }
 
+    /**
+     * update a shipment's fields inside the database
+     * @param shipment
+     */
     public static void updateShipment(Shipment shipment) {
         database.updateShipment(shipment.getShipment_id(), shipment.getWarehouse_id()
                 , shipment.getShipment_method().toString(), shipment.getWeight()

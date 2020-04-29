@@ -52,21 +52,21 @@ public class Warehouse {
     }
 
     /**
-     * get the contents of this warehouse in the form of an ArrayList
+     * get the inactive contents of this warehouse in the form of an ArrayList
      *
-     * @return the warehouse_contents
+     * @return the warehouse_contents_inactive a list of shipments in the warehouse
      */
     public ArrayList<Shipment> getWarehouse_contents_inactive() {
         return warehouse_contents_inactive;
     }
 
     /**
-     * set the contents of this warehouse in the form of an ArrayList.
+     * set the inactive contents of this warehouse in the form of an ArrayList.
      *
-     * @param warehouse_contents the warehouse_contents to set
+     * @param warehouse_contents_inactive the inactive shipments in this warehouse
      */
-    public void setWarehouse_contents_inactive(ArrayList<Shipment> warehouse_contents) {
-        this.warehouse_contents_inactive = warehouse_contents;
+    public void setWarehouse_contents_inactive(ArrayList<Shipment> warehouse_contents_inactive) {
+        this.warehouse_contents_inactive = warehouse_contents_inactive;
     }
 
     /**
@@ -158,6 +158,12 @@ public class Warehouse {
         return false;
     }
 
+    /**
+     * find an active shipment inside this warehouse
+     *
+     * @param shipment_id the shipment id of the shipment being searched for
+     * @return the shipment if found, otherwise null
+     */
     public Shipment findActiveShipment(String shipment_id) {
         for (Shipment s : warehouse_contents) {
             if (s.getShipment_id().equalsIgnoreCase(shipment_id)) {
@@ -167,6 +173,12 @@ public class Warehouse {
         return null;
     }
 
+    /**
+     * find an inactive shipment inside this warehouse
+     *
+     * @param shipment_id the shipment id of the shipment being searched for
+     * @return the shipment if found, otherwise null
+     */
     public Shipment findInactiveShipment(String shipment_id) {
         for (Shipment s : warehouse_contents_inactive) {
             if (s.getShipment_id().equalsIgnoreCase(shipment_id)) {

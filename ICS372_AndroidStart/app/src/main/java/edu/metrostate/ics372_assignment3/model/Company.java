@@ -68,6 +68,10 @@ public class Company implements MainActivityMVP.Model {
         return warehouses.get(warehouse_id.hashCode());
     }
 
+    /**
+     * get the hashmap of all warehouses stored insid company
+     * @return
+     */
     protected HashMap<Integer, Warehouse> getWarehouses() {
         return warehouses;
     }
@@ -99,6 +103,14 @@ public class Company implements MainActivityMVP.Model {
         }
     }
 
+    /**
+     * move a shipment from one warehouse to a different warehouse
+     *
+     * @param shipment_id the shipment id of the shipment being moved
+     * @param warehouse_id_from the warehouse id of the warehouse the shipment is departing from
+     * @param warehouse_id_to the warehouse id of the warehouse the shipment is arriving at
+     * @return true if the shipment was moved successfully
+     */
     public boolean moveShipment(String shipment_id, String warehouse_id_from, String warehouse_id_to) {
         Warehouse warehouse_from = this.getWarehouse(warehouse_id_from);
         Warehouse warehouse_to = this.getWarehouse(warehouse_id_from);

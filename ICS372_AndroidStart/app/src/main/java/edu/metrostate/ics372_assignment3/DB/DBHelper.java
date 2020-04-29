@@ -46,9 +46,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table warehouses " + "(id text primary key, name text,status integer)");
 
-        /*db.execSQL("create table shipments " + "(shipment_id text primary key, warehouse_id text" +
-                ",method text,weight real,receipt integer,departure integer)");*/
-
         db.execSQL("create table shipments " + "(shipment_id text, warehouse_id text" +
                 ",method text,weight real,receipt integer,departure integer" +
                 ", PRIMARY KEY (shipment_id,warehouse_id, receipt))");

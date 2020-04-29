@@ -33,6 +33,14 @@ public class ImporterJSON implements Importable {
         return temp;
     }
 
+    /**
+     * Method to parse a files content(as a string) into a useable warehouse
+     *
+     * @param fileContent a string of the entire file
+     * @return temp, a warehouse filled with every imported shipment
+     * @throws JsonSyntaxException
+     * @throws JsonIOException
+     */
     @Override
     public Warehouse parseWarehouse(String fileContent) throws JsonSyntaxException, JsonIOException {
         Gson gson = new Gson();
