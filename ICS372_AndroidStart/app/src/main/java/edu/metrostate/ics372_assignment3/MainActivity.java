@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMVP.V
         setContentView(R.layout.activity_main);
         application = (WarehouseApplication) getApplication();
 
-        presenter = new MainActivityPresenter(Company.getInstance(this));
+        presenter = new MainActivityPresenter(application.getModel());
         presenter.setView(this);
 
         // buttons
